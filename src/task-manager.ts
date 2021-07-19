@@ -44,7 +44,7 @@ export class TaskManager implements ChatTaskManager {
   createPublishMessageTask(
     member: Member,
     chatId: string,
-    message: ChatMessage,
+    message: Partial<ChatMessage>,
   ): Task<Actor, ChatMessage> {
     return new PublishMessageTask(
       member,

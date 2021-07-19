@@ -29,6 +29,7 @@ export class ItemNotFound extends GraaspItemChatError {
     );
   }
 }
+
 export class MemberCannotReadItem extends GraaspItemChatError {
   constructor(data?: unknown) {
     super(
@@ -36,6 +37,19 @@ export class MemberCannotReadItem extends GraaspItemChatError {
         code: 'GICERR002',
         statusCode: 403,
         message: 'Member cannot read item',
+      },
+      data,
+    );
+  }
+}
+
+export class InvalidRequest extends GraaspItemChatError {
+  constructor(data?: unknown) {
+    super(
+      {
+        code: 'GICERR003',
+        statusCode: 400,
+        message: 'Invalid request: undefined chatId or body',
       },
       data,
     );

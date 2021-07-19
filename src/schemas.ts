@@ -30,6 +30,17 @@ export default {
       },
       additionalProperties: false,
     },
+
+    // chat message properties required at creation
+    partialChatMessage: {
+      type: 'object',
+      required: ['chatId', 'body'],
+      properties: {
+        chatId: { $ref: 'http://graasp.org/#/definitions/uuid' },
+        body: { type: 'string' },
+      },
+      additionalProperties: false,
+    },
   },
 };
 
@@ -42,7 +53,7 @@ const getChat = {
 
 const publishMessage = {
   params: { $ref: 'http://graasp.org/chat/#/definitions/itemIdParam' },
-  body: { $ref: 'http://graasp.org/chat/#/definitions/chatMessage' },
+  body: { $ref: 'http://graasp.org/chat/#/definitions/partialChatMessage' },
   response: {
     201: { $ref: 'http://graasp.org/chat/#/definitions/chatMessage' },
   },

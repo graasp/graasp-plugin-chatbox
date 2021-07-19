@@ -48,7 +48,7 @@ const plugin: FastifyPluginAsync<GraaspChatPluginOptions> = async (
     },
   );
 
-  fastify.post<{ Params: { itemId: string }; Body: ChatMessage }>(
+  fastify.post<{ Params: { itemId: string }; Body: Partial<ChatMessage> }>(
     '/:itemId/chat',
     { schema: publishMessage },
     async ({ member, params: { itemId }, body, log }) => {

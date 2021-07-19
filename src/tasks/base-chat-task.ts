@@ -24,7 +24,7 @@ export abstract class BaseChatTask<R> implements Task<Actor, R> {
 
   status: TaskStatus;
   targetId: string;
-  data: IndividualResultType<R>;
+  data: Partial<IndividualResultType<R>>;
   preHookHandler: PreHookHandlerType<R>;
   postHookHandler: PostHookHandlerType<R>;
 

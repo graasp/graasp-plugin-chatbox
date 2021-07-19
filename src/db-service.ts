@@ -2,6 +2,24 @@ import { DatabaseTransactionConnectionType as TrxHandler, sql } from 'slonik';
 import { ChatMessage } from './interfaces/chat-message';
 
 export class ChatService {
+  // the 'safe' way to dynamically generate the columns names:
+  private static allColumns = sql.join(
+    [
+      ['chat_id', 'chatId'],
+      'creator',
+      ['created_at', 'createdAt'],
+      'body',
+    ].map((c) =>
+      !Array.isArray(c)
+        ? sql.identifier([c])
+        : sql.join(
+            c.map((cwa) => sql.identifier([cwa])),
+            sql` AS `,
+          ),
+    ),
+    sql`, `,
+  );
+
   /**
    * Retrieves all the messages of the given chat
    * @param chatId Id of chat to retrieve
@@ -13,7 +31,7 @@ export class ChatService {
     return transactionHandler
       .query<ChatMessage>(
         sql`
-            SELECT * FROM chat_message
+            SELECT ${ChatService.allColumns} FROM chat_message
             WHERE chat_id = ${chatId}
             ORDER BY created_at ASC
         `,
