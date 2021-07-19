@@ -42,16 +42,3 @@ export class MemberCannotReadItem extends GraaspItemChatError {
     );
   }
 }
-
-export class InvalidRequest extends GraaspItemChatError {
-  constructor(data?: unknown) {
-    super(
-      {
-        code: 'GICERR003',
-        statusCode: 400,
-        message: 'Invalid request: undefined chatId or body',
-      },
-      data,
-    );
-  }
-}

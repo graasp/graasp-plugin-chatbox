@@ -4,3 +4,6 @@ CREATE TABLE "chat_message" (
     "created_at" timestamp NOT NULL DEFAULT (NOW() AT TIME ZONE 'utc'),
     "body" character varying(500)
 );
+
+CREATE INDEX ON "chat_message" ("chat_id");     -- optimize lookup by item id
+CREATE INDEX ON "chat_message" ("created_at");  -- optimize order by datetime

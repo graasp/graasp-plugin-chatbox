@@ -41,14 +41,18 @@ export class ChatService {
 
   /**
    * Adds a message to the given chat
-   * @param chat Chat
    * @param message Message
    */
-  async publishMessage(message: ChatMessage, transactionHandler: TrxHandler) {
-    const { chatId, creator, createdAt, body } = message;
-    return transactionHandler.query<ChatMessage>(sql`
-            INSERT INTO chat_message (chat_id, creator, created_at, body)
-            VALUES (${chatId}, ${creator}, ${createdAt}, ${body})
-        `);
+  async publishMessage(message: Partial<ChatMessage>, transactionHandler: TrxHandler): Promise<ChatMessage> {
+    const { chatId, creator, body } = message;
+    return transactionHandler
+      .query<ChatMessage>(
+        sql`
+            INSERT INTO chat_message (chat_id, creator, body)
+            VALUES (${chatId}, ${creator}, ${body})
+            RETURNING ${ChatService.allColumns}
+        `,
+      )
+      .then(({ rows }) => rows[0]);
   }
 }

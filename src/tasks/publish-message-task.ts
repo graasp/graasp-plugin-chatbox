@@ -7,7 +7,6 @@ import {
 import { ChatService } from '../db-service';
 import { ChatMessage } from '../interfaces/chat-message';
 import {
-  InvalidRequest,
   ItemNotFound,
   MemberCannotReadItem,
 } from '../util/graasp-item-chat-error';
@@ -34,10 +33,6 @@ export class PublishMessageTask extends BaseChatTask<ChatMessage> {
   async run(handler: DatabaseTransactionHandler): Promise<void> {
     this.status = 'RUNNING';
 
-    if (!this.data.chatId || !this.data.body) {
-      throw new InvalidRequest(this.data);
-    }
-
     // get item for which we're fetching the chat
     const item = await this.itemService.get(this.targetId, handler);
     if (!item) throw new ItemNotFound(this.targetId);
@@ -50,19 +45,13 @@ export class PublishMessageTask extends BaseChatTask<ChatMessage> {
     );
     if (!hasRights) throw new MemberCannotReadItem(this.targetId);
 
-    // set author and time
-    const msg: ChatMessage = {
-      chatId: this.data.chatId,
-      creator: this.actor.id,
-      createdAt: new Date().toISOString(),
-      body: this.data.body,
-    };
-
+    // set author
+    this.data.creator = this.actor.id;
     // publish message
-    await this.chatService.publishMessage(msg, handler);
+    const res = await this.chatService.publishMessage(this.data, handler);
 
     // return chat message
-    this._result = msg;
+    this._result = res;
     this.status = 'OK';
   }
 }
