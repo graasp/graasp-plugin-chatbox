@@ -15,9 +15,7 @@ export default {
         id: { $ref: 'http://graasp.org/#/definitions/uuid' },
         messages: {
           type: 'array',
-          items: {
-            type: { $ref: '#/definitions/chatMessage' },
-          },
+          items: { $ref: '#/definitions/chatMessage' },
         },
       },
     },

@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "A chatbox back-end plugin for graasp",
   "main": "dist/service-api.js",
+  "types": "types/index.d.ts",
   "repository": "git@github.com:graasp/graasp-plugin-chatbox.git",
   "author": "Alexandre Chau <alexandre.chau@alumni.epfl.ch>",
   "license": "AGPL-3.0-or-later",
