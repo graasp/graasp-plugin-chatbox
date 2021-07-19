@@ -40,7 +40,7 @@ const plugin: FastifyPluginAsync<GraaspChatPluginOptions> = async (
   fastify.addSchema(common);
 
   fastify.get<{ Params: { itemId: string } }>(
-    '/:itemid/chat',
+    '/:itemId/chat',
     { schema: getChat },
     async ({ member, params: { itemId }, log }) => {
       const task = taskManager.createGetTask(member, itemId);
