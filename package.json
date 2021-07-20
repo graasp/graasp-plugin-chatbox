@@ -3,8 +3,13 @@
   "version": "1.0.0",
   "description": "A chatbox back-end plugin for graasp",
   "main": "dist/service-api.js",
+  "types": "dist/service-api.d.ts",
   "repository": "git@github.com:graasp/graasp-plugin-chatbox.git",
-  "author": "Alexandre Chau <alexandre.chau@alumni.epfl.ch>",
+  "author": "React EPFL",
+  "contributors": [
+    "Alexandre Chau",
+    "Juan Carlos Farah"
+  ],
   "license": "AGPL-3.0-or-later",
   "scripts": {
     "build": "tsc",
@@ -15,16 +20,18 @@
     "test:ci": "npx jest --ci --colors"
   },
   "dependencies": {
-    "fastify": "^3.19.1"
+    "fastify": "3.19.1"
   },
   "devDependencies": {
-    "@typescript-eslint/eslint-plugin": "^4.28.3",
-    "@typescript-eslint/parser": "^4.28.3",
-    "eslint": "^7.30.0",
-    "eslint-plugin-jest": "^24.3.6",
-    "jest": "^27.0.6",
-    "shx": "^0.3.3",
-    "ts-jest": "^27.0.3",
-    "typescript": "^4.3.5"
+    "@types/graasp": "git://github.com/graasp/graasp-types.git#master",
+    "@typescript-eslint/eslint-plugin": "4.28.4",
+    "@typescript-eslint/parser": "4.28.4",
+    "eslint": "7.31.0",
+    "eslint-plugin-jest": "24.3.6",
+    "jest": "27.0.6",
+    "shx": "0.3.3",
+    "slonik": "23.8.3",
+    "ts-jest": "27.0.3",
+    "typescript": "4.3.5"
   }
 }

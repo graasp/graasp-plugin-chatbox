@@ -7,18 +7,70 @@
  * in Graasp as a fastify server plugin
  */
 
-import { FastifyPluginAsync } from "fastify";
+import { FastifyPluginAsync } from 'fastify';
+import { ChatService } from './db-service';
+import { ChatMessage } from './interfaces/chat-message';
+import { ChatTaskManager } from './interfaces/chat-task-manager';
+import common, { getChat, publishMessage } from './schemas';
+import { TaskManager } from './task-manager';
+
+/**
+ * Decorate Fastify instance with chat services
+ */
+declare module 'fastify' {
+  interface FastifyInstance {
+    chat: {
+      taskManager: ChatTaskManager;
+      dbService: ChatService;
+    };
+  }
+}
 
 /**
  * Type definition for plugin options
  */
-interface GraaspChatboxPluginOptions {
+interface GraaspChatPluginOptions {
   prefix?: string;
 }
 
-const plugin: FastifyPluginAsync<GraaspChatboxPluginOptions> = async (
+const plugin: FastifyPluginAsync<GraaspChatPluginOptions> = async (
   fastify,
-  options
-) => {};
+  options,
+) => {
+  const {
+    items: { dbService: itemService },
+    itemMemberships: { dbService: itemMembershipsService },
+    taskRunner: runner,
+  } = fastify;
+
+  const chatService = new ChatService();
+  const taskManager = new TaskManager(
+    itemService,
+    itemMembershipsService,
+    chatService,
+  );
+
+  fastify.decorate('chat', { dbService: chatService, taskManager });
+
+  fastify.addSchema(common);
+
+  fastify.get<{ Params: { itemId: string } }>(
+    '/:itemId/chat',
+    { schema: getChat },
+    async ({ member, params: { itemId }, log }) => {
+      const task = taskManager.createGetTask(member, itemId);
+      return runner.runSingle(task, log);
+    },
+  );
+
+  fastify.post<{ Params: { itemId: string }; Body: Partial<ChatMessage> }>(
+    '/:itemId/chat',
+    { schema: publishMessage },
+    async ({ member, params: { itemId }, body, log }) => {
+      const task = taskManager.createPublishMessageTask(member, itemId, body);
+      return runner.runSingle(task, log);
+    },
+  );
+};
 
 export default plugin;
