@@ -34,9 +34,8 @@ export default {
     // chat message properties required at creation
     partialChatMessage: {
       type: 'object',
-      required: ['chatId', 'body'],
+      required: ['body'],
       properties: {
-        chatId: { $ref: 'http://graasp.org/#/definitions/uuid' },
         body: { type: 'string' },
       },
       additionalProperties: false,

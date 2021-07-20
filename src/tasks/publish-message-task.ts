@@ -45,7 +45,8 @@ export class PublishMessageTask extends BaseChatTask<ChatMessage> {
     );
     if (!hasRights) { throw new MemberCannotReadItem(this.targetId); }
 
-    // set author
+    // set chatId and author
+    this.data.chatId = item.id;
     this.data.creator = this.actor.id;
     // publish message
     const res = await this.chatService.publishMessage(this.data, handler);
