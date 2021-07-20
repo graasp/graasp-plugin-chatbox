@@ -20,7 +20,8 @@
     "test:ci": "npx jest --ci --colors"
   },
   "dependencies": {
-    "fastify": "3.19.1"
+    "fastify": "3.19.1",
+    "fastify-plugin": "3.0.0"
   },
   "devDependencies": {
     "@types/graasp": "git://github.com/graasp/graasp-types.git#master",

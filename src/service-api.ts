@@ -8,6 +8,7 @@
  */
 
 import { FastifyPluginAsync } from 'fastify';
+import fp from 'fastify-plugin';
 import { ChatService } from './db-service';
 import { ChatMessage } from './interfaces/chat-message';
 import { ChatTaskManager } from './interfaces/chat-task-manager';
@@ -73,4 +74,7 @@ const plugin: FastifyPluginAsync<GraaspChatPluginOptions> = async (
   );
 };
 
-export default plugin;
+export default fp(plugin, {
+  fastify: '3.x',
+  name: 'graasp-plugin-chatbox',
+});
