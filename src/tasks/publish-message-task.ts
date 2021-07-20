@@ -35,7 +35,7 @@ export class PublishMessageTask extends BaseChatTask<ChatMessage> {
 
     // get item for which we're fetching the chat
     const item = await this.itemService.get(this.targetId, handler);
-    if (!item) throw new ItemNotFound(this.targetId);
+    if (!item) { throw new ItemNotFound(this.targetId); }
 
     // verify if member has access to this chat
     const hasRights = await this.itemMembershipService.canRead(
@@ -43,7 +43,7 @@ export class PublishMessageTask extends BaseChatTask<ChatMessage> {
       item,
       handler,
     );
-    if (!hasRights) throw new MemberCannotReadItem(this.targetId);
+    if (!hasRights) { throw new MemberCannotReadItem(this.targetId); }
 
     // set author
     this.data.creator = this.actor.id;

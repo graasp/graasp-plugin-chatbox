@@ -6,4 +6,5 @@ CREATE TABLE "chat_message" (
 );
 
 CREATE INDEX ON "chat_message" ("chat_id");     -- optimize lookup by item id
+
 CREATE INDEX ON "chat_message" ("created_at");  -- optimize order by datetime
