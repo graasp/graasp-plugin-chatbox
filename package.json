@@ -13,10 +13,10 @@
   "license": "AGPL-3.0-or-later",
   "scripts": {
     "build": "tsc",
-    "prepare": "yarn build",
+    "prepare": "npm run build",
     "clean": "npx shx rm -rf dist/ coverage/",
     "lint": "npx eslint . --ext .js,.jsx,.ts,.tsx",
-    "test": "yarn build && npx jest",
+    "test": "npm run build && npx jest",
     "test:ci": "npx jest --ci --colors"
   },
   "dependencies": {
