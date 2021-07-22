@@ -11,26 +11,13 @@ import { FastifyPluginAsync } from 'fastify';
 import fp from 'fastify-plugin';
 import { ChatService } from './db-service';
 import { ChatMessage } from './interfaces/chat-message';
-import { ChatTaskManager } from './interfaces/chat-task-manager';
 import common, { getChat, publishMessage } from './schemas';
 import { TaskManager } from './task-manager';
 
 /**
- * Decorate Fastify instance with chat services
- */
-declare module 'fastify' {
-  interface FastifyInstance {
-    chat: {
-      taskManager: ChatTaskManager;
-      dbService: ChatService;
-    };
-  }
-}
-
-/**
  * Type definition for plugin options
  */
-interface GraaspChatPluginOptions {
+export interface GraaspChatPluginOptions {
   prefix?: string;
 }
 

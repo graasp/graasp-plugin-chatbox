@@ -13,6 +13,7 @@
   "license": "AGPL-3.0-or-later",
   "scripts": {
     "build": "tsc",
+    "build:types": "npx -p typescript tsc src/**/*.ts --declaration --target es6 --module commonjs --esModuleInterop  --emitDeclarationOnly --skipLibCheck --forceConsistentCasingInFileNames --outDir",
     "prepare": "npm run build",
     "clean": "npx shx rm -rf dist/ coverage/",
     "lint": "npx eslint . --ext .js,.jsx,.ts,.tsx",
