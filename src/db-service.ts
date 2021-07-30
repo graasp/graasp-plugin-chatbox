@@ -1,20 +1,9 @@
 import { DatabaseTransactionConnectionType as TrxHandler, sql } from 'slonik';
 import { ChatMessage } from './interfaces/chat-message';
-import { ChatTaskManager } from './interfaces/chat-task-manager';
-
 
 /**
- * Decorate Fastify instance with chat services
+ * Database layer for chat storage
  */
- declare module 'fastify' {
-  interface FastifyInstance {
-    chat: {
-      taskManager: ChatTaskManager;
-      dbService: ChatService;
-    };
-  }
-}
-
 export class ChatService {
   // the 'safe' way to dynamically generate the columns names:
   private static allColumns = sql.join(

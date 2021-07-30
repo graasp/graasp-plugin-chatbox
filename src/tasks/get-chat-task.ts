@@ -12,6 +12,9 @@ import {
 } from '../util/graasp-item-chat-error';
 import { BaseChatTask } from './base-chat-task';
 
+/**
+ * Task to retrieve a chat from the database
+ */
 export class GetChatTask extends BaseChatTask<Chat> {
   get name(): string {
     return GetChatTask.name;

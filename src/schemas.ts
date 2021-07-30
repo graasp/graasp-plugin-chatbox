@@ -1,3 +1,7 @@
+/**
+ * JSON schema definitions to validate requests and responses
+ * through Fastify's AJV instance
+ */
 export default {
   $id: 'http://graasp.org/chat/',
   definitions: {
@@ -43,6 +47,9 @@ export default {
   },
 };
 
+/**
+ * JSON schema on GET chat route for request and response
+ */
 const getChat = {
   params: { $ref: 'http://graasp.org/chat/#/definitions/itemIdParam' },
   response: {
@@ -50,6 +57,9 @@ const getChat = {
   },
 };
 
+/**
+ * JSON schema on POST publish message route for request and response
+ */
 const publishMessage = {
   params: { $ref: 'http://graasp.org/chat/#/definitions/itemIdParam' },
   body: { $ref: 'http://graasp.org/chat/#/definitions/partialChatMessage' },

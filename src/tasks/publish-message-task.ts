@@ -13,6 +13,9 @@ import {
 } from '../util/graasp-item-chat-error';
 import { BaseChatTask } from './base-chat-task';
 
+/**
+ * Task to publish a message on a given chat
+ */
 export class PublishMessageTask extends BaseChatTask<ChatMessage> {
   get name(): string {
     return PublishMessageTask.name;

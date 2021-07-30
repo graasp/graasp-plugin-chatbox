@@ -13,6 +13,9 @@ import {
 } from 'graasp';
 import { ChatService } from '../db-service';
 
+/**
+ * Abstract base task definition for operations on the chat database
+ */
 export abstract class BaseChatTask<R> implements Task<Actor, R> {
   protected itemService: ItemService;
   protected itemMembershipService: ItemMembershipService;
@@ -41,6 +44,9 @@ export abstract class BaseChatTask<R> implements Task<Actor, R> {
     this.chatService = chatService;
   }
 
+  /**
+   * Returns the name of the task
+   */
   abstract get name(): string;
   get result(): R {
     return this._result;
@@ -49,6 +55,11 @@ export abstract class BaseChatTask<R> implements Task<Actor, R> {
     return this._message;
   }
 
+  /**
+   * Perform the task
+   * @param handler database transaction handler
+   * @param log logger instance
+   */
   abstract run(
     handler: DatabaseTransactionHandler,
     log?: FastifyLoggerInstance,

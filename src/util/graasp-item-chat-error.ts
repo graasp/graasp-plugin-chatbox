@@ -1,5 +1,8 @@
 import { GraaspError, GraaspErrorDetails } from 'graasp';
 
+/**
+ * Errors thrown by the chat tasks
+ */
 export class GraaspItemChatError implements GraaspError {
   name: string;
   code: string;

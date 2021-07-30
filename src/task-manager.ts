@@ -12,6 +12,9 @@ import { ChatTaskManager } from './interfaces/chat-task-manager';
 import { GetChatTask } from './tasks/get-chat-task';
 import { PublishMessageTask } from './tasks/publish-message-task';
 
+/**
+ * Concrete implementation of the chat task manager
+ */
 export class TaskManager implements ChatTaskManager {
   private itemService: ItemService;
   private itemMembershipService: ItemMembershipService;
