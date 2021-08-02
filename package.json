@@ -22,10 +22,10 @@
   },
   "dependencies": {
     "fastify": "3.19.1",
-    "fastify-plugin": "3.0.0"
+    "fastify-plugin": "3.0.0",
+    "graasp-websockets": "git://github.com/graasp/graasp-websockets#v2"
   },
   "devDependencies": {
-    "@graasp/websockets": "git://github.com/graasp/graasp-websockets#v2",
     "@types/graasp": "git://github.com/graasp/graasp-types.git#master",
     "@typescript-eslint/eslint-plugin": "4.28.4",
     "@typescript-eslint/parser": "4.28.4",

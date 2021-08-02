@@ -7,7 +7,7 @@
  * in Graasp as a fastify server plugin
  */
 
-import { WebSocketService } from '@graasp/websockets';
+import { WebSocketService } from 'graasp-websockets';
 import { FastifyPluginAsync } from 'fastify';
 import fp from 'fastify-plugin';
 import { ChatService } from './db-service';

@@ -1,4 +1,4 @@
-import { AccessDenied, NotFound, WebSocketService } from '@graasp/websockets';
+import { AccessDenied, NotFound, WebSocketService } from 'graasp-websockets';
 import {
   Actor,
   DatabaseTransactionHandler,
