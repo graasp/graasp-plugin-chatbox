@@ -21,12 +21,12 @@
     "test:ci": "npx jest --ci --colors"
   },
   "dependencies": {
-    "fastify": "3.19.1",
-    "fastify-plugin": "3.0.0",
+    "fastify": "^3.19.0",
+    "fastify-plugin": "^3.0.0",
     "graasp-websockets": "git://github.com/graasp/graasp-websockets.git#master"
   },
   "devDependencies": {
-    "@types/graasp": "git://github.com/graasp/graasp-types.git#master",
+    "@types/graasp": "git://github.com/graasp/graasp-types.git#1/refactor-tasks",
     "@typescript-eslint/eslint-plugin": "4.28.4",
     "@typescript-eslint/parser": "4.28.4",
     "eslint": "7.31.0",
