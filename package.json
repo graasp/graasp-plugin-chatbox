@@ -26,7 +26,7 @@
     "graasp-websockets": "git://github.com/graasp/graasp-websockets.git#master"
   },
   "devDependencies": {
-    "@types/graasp": "git://github.com/graasp/graasp-types.git#1/refactor-tasks",
+    "@types/graasp": "git://github.com/graasp/graasp-types.git#master",
     "@typescript-eslint/eslint-plugin": "4.28.4",
     "@typescript-eslint/parser": "4.28.4",
     "eslint": "7.31.0",
