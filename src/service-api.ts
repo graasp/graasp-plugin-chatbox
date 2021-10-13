@@ -9,6 +9,7 @@
 
 import { WebSocketService } from 'graasp-websockets';
 import { FastifyPluginAsync } from 'fastify';
+import fp from 'fastify-plugin';
 import { ChatService } from './db-service';
 import { ChatMessage } from './interfaces/chat-message';
 import common, { getChat, publishMessage } from './schemas';
@@ -82,4 +83,7 @@ const plugin: FastifyPluginAsync<GraaspChatPluginOptions> = async (
   );
 };
 
-export default plugin;
+export default fp(plugin, {
+  fastify: '3.x',
+  name: 'graasp-plugin-chatbox',
+});
