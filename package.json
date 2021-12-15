@@ -2,7 +2,7 @@
   "name": "graasp-plugin-chatbox",
   "version": "1.0.0",
   "description": "A chatbox back-end plugin for graasp",
-  "main": "dist/service-api.js",
+  "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "repository": "git@github.com:graasp/graasp-plugin-chatbox.git",
   "author": "React EPFL",
@@ -19,11 +19,14 @@
     "clean": "npx shx rm -rf dist/ coverage/",
     "lint": "npx eslint . --ext .js,.jsx,.ts,.tsx",
     "test": "yarn build && npx jest",
+    "prettier:check": "prettier --check \"{src,test}/**/*.ts\"",
+    "prettier:write": "prettier --write \"{src,test}/**/*.ts\"",
     "test:ci": "npx jest --ci --colors"
   },
   "dependencies": {
     "fastify": "^3.19.0",
     "fastify-plugin": "^3.0.0",
+    "graasp-plugin-public": "github:graasp/graasp-plugin-public",
     "graasp-websockets": "github:graasp/graasp-websockets"
   },
   "devDependencies": {
@@ -31,8 +34,10 @@
     "@typescript-eslint/eslint-plugin": "4.28.4",
     "@typescript-eslint/parser": "4.28.4",
     "eslint": "7.31.0",
+    "eslint-config-prettier": "8.3.0",
     "eslint-plugin-jest": "24.3.6",
     "jest": "27.0.6",
+    "prettier": "2.5.1",
     "shx": "0.3.3",
     "slonik": "23.8.3",
     "ts-jest": "27.0.3",

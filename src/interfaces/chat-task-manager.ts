@@ -23,15 +23,17 @@ export interface ChatTaskManager<A extends Actor = Actor> {
    */
   createGetTask(actor: A, objectId: string): Task<A, Chat>;
 
+  createGetTaskSequence(actor: A, objectId: string): Task<Actor, unknown>[];
+
   /**
    * Factory for a task to publish a message in a chat
    * @param actor User performing the action
    * @param chatId Chat ID
    * @param message ChatMessage to add
    */
-  createPublishMessageTask(
+  createPublishMessageTaskSequence(
     actor: A,
     chatId: string,
     message: ChatMessage,
-  ): Task<A, ChatMessage>;
+  ): Task<A, unknown>[];
 }

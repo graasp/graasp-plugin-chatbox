@@ -5,7 +5,6 @@ import {
   IndividualResultType,
   ItemMembershipService,
   ItemService,
-  Member,
   PostHookHandlerType,
   PreHookHandlerType,
   Task,
@@ -23,7 +22,7 @@ export abstract class BaseChatTask<R> implements Task<Actor, R> {
   protected _result: R;
   protected _message: string;
 
-  readonly actor: Member;
+  readonly actor: Actor;
 
   status: TaskStatus;
   targetId: string;
@@ -31,8 +30,14 @@ export abstract class BaseChatTask<R> implements Task<Actor, R> {
   preHookHandler: PreHookHandlerType<R>;
   postHookHandler: PostHookHandlerType<R>;
 
+  input?: unknown;
+  skip?: boolean;
+
+  getInput?: () => unknown;
+  getResult?: () => unknown;
+
   constructor(
-    actor: Member,
+    actor: Actor,
     itemService: ItemService,
     itemMembershipService: ItemMembershipService,
     chatService: ChatService,
