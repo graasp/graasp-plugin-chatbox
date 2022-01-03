@@ -1,7 +1,9 @@
 import {
   Actor,
+  Item,
   ItemMembershipService,
   ItemService,
+  ItemTaskManager,
   Member,
   Task,
 } from 'graasp';
@@ -19,15 +21,19 @@ export class TaskManager implements ChatTaskManager {
   private itemService: ItemService;
   private itemMembershipService: ItemMembershipService;
   private chatService: ChatService;
+  private itemTaskManager: ItemTaskManager;
+  ItemTaskManager;
 
   constructor(
     itemService: ItemService,
     itemMembershipService: ItemMembershipService,
     chatService: ChatService,
+    itemTaskManager: ItemTaskManager,
   ) {
     this.itemService = itemService;
     this.itemMembershipService = itemMembershipService;
     this.chatService = chatService;
+    this.itemTaskManager = itemTaskManager;
   }
   getGetChatTaskname(): string {
     return GetChatTask.name;
@@ -35,7 +41,7 @@ export class TaskManager implements ChatTaskManager {
   getPublishMessageTaskName(): string {
     return PublishMessageTask.name;
   }
-  createGetTask(member: Member, objectId: string): Task<Actor, Chat> {
+  createGetTask(member: Actor, objectId: string): Task<Actor, Chat> {
     return new GetChatTask(
       member,
       objectId,
@@ -44,18 +50,36 @@ export class TaskManager implements ChatTaskManager {
       this.chatService,
     );
   }
-  createPublishMessageTask(
-    member: Member,
-    chatId: string,
-    message: Partial<ChatMessage>,
-  ): Task<Actor, ChatMessage> {
-    return new PublishMessageTask(
+  createGetTaskSequence(member: Member, objectId: string): Task<Actor, unknown>[] {
+    const t1 = this.itemTaskManager.createGetTaskSequence(member, objectId);
+    const t2 = new GetChatTask(
       member,
-      chatId,
-      message,
+      objectId,
       this.itemService,
       this.itemMembershipService,
       this.chatService,
     );
+
+    return [...t1, t2];
+  }
+  createPublishMessageTaskSequence(
+    member: Member,
+    chatId: string,
+    chatMessage: Partial<ChatMessage>,
+  ): Task<Actor, unknown>[] {
+    const t1 = this.itemTaskManager.createGetTaskSequence(member, chatId);
+    const t2 = new PublishMessageTask(
+      member,
+      this.itemService,
+      this.itemMembershipService,
+      this.chatService,
+      {
+        chatId,
+        chatMessage,
+      },
+    );
+    t2.getInput = () => ({ item: t1[0].result as Item });
+
+    return [...t1, t2];
   }
 }

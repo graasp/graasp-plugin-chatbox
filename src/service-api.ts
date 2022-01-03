@@ -34,7 +34,7 @@ const plugin: FastifyPluginAsync<GraaspChatPluginOptions> = async (
   options,
 ) => {
   const {
-    items: { dbService: itemService },
+    items: { dbService: itemService, taskManager: iTM },
     itemMemberships: { dbService: itemMembershipsService },
     taskRunner: runner,
     websockets,
@@ -46,6 +46,7 @@ const plugin: FastifyPluginAsync<GraaspChatPluginOptions> = async (
     itemService,
     itemMembershipsService,
     chatService,
+    iTM,
   );
 
   fastify.decorate('chat', { dbService: chatService, taskManager });
@@ -68,8 +69,8 @@ const plugin: FastifyPluginAsync<GraaspChatPluginOptions> = async (
     '/:itemId/chat',
     { schema: getChat },
     async ({ member, params: { itemId }, log }) => {
-      const task = taskManager.createGetTask(member, itemId);
-      return runner.runSingle(task, log);
+      const tasks = taskManager.createGetTaskSequence(member, itemId);
+      return runner.runSingleSequence(tasks, log);
     },
   );
 
@@ -77,8 +78,12 @@ const plugin: FastifyPluginAsync<GraaspChatPluginOptions> = async (
     '/:itemId/chat',
     { schema: publishMessage },
     async ({ member, params: { itemId }, body, log }) => {
-      const task = taskManager.createPublishMessageTask(member, itemId, body);
-      return runner.runSingle(task, log);
+      const tasks = taskManager.createPublishMessageTaskSequence(
+        member,
+        itemId,
+        body,
+      );
+      return runner.runSingleSequence(tasks, log);
     },
   );
 };

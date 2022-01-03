@@ -1,37 +1,41 @@
 import { FastifyLoggerInstance } from 'fastify';
 import {
   DatabaseTransactionHandler,
+  Item,
   ItemMembershipService,
   ItemService,
   Member,
 } from 'graasp';
 import { ChatService } from '../db-service';
 import { ChatMessage } from '../interfaces/chat-message';
-import {
-  ItemNotFound,
-  MemberCannotReadItem,
-} from '../util/graasp-item-chat-error';
 import { BaseChatTask } from './base-chat-task';
+
+type InputType = {
+  item?: Item;
+  chatId?: string;
+  chatMessage?: Partial<ChatMessage>;
+};
 
 /**
  * Task to publish a message on a given chat
  */
 export class PublishMessageTask extends BaseChatTask<ChatMessage> {
+  input?: InputType;
+  getInput?: () => InputType;
+
   get name(): string {
     return PublishMessageTask.name;
   }
 
   constructor(
     member: Member,
-    chatId: string,
-    data: Partial<ChatMessage>,
     itemService: ItemService,
     itemMembershipService: ItemMembershipService,
     chatService: ChatService,
+    input: InputType,
   ) {
     super(member, itemService, itemMembershipService, chatService);
-    this.targetId = chatId;
-    this.data = data;
+    this.input = input;
   }
 
   async run(
@@ -40,29 +44,17 @@ export class PublishMessageTask extends BaseChatTask<ChatMessage> {
   ): Promise<void> {
     this.status = 'RUNNING';
 
-    // get item for which we're fetching the chat
-    const item = await this.itemService.get(this.targetId, handler);
-    if (!item) {
-      throw new ItemNotFound(this.targetId);
-    }
+    const { chatId, chatMessage, item } = this.input;
 
-    // verify if member has access to this chat
-    const hasRights = await this.itemMembershipService.canRead(
-      this.actor.id,
-      item,
-      handler,
-    );
-    if (!hasRights) {
-      throw new MemberCannotReadItem(this.targetId);
-    }
+    this.targetId = chatId;
 
     // set chatId and author
-    this.data.chatId = item.id;
-    this.data.creator = this.actor.id;
+    chatMessage.chatId = item.id;
+    chatMessage.creator = this.actor.id;
 
     // publish message
-    await this.preHookHandler?.(this.data, this.actor, { log, handler });
-    const res = await this.chatService.publishMessage(this.data, handler);
+    await this.preHookHandler?.(chatMessage, this.actor, { log, handler });
+    const res = await this.chatService.publishMessage(chatMessage, handler);
     await this.postHookHandler?.(res, this.actor, { log, handler });
 
     // return chat message
