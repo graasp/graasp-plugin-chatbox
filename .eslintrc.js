@@ -3,10 +3,11 @@ module.exports = {
   parser: '@typescript-eslint/parser',
   plugins: ['@typescript-eslint', 'jest'],
   extends: [
-    'eslint:recommended',
-    'plugin:@typescript-eslint/recommended',
-    'plugin:jest/recommended',
     'prettier',
+    'eslint:recommended',
+    'plugin:jest/recommended',
+    'plugin:@typescript-eslint/eslint-recommended',
+    'plugin:@typescript-eslint/recommended',
   ],
   env: {
     node: true,
@@ -15,8 +16,15 @@ module.exports = {
     // force semi-colons: disable semi and enable TS semi
     semi: 'off',
     '@typescript-eslint/semi': ['error'],
-    // do not consider unused function parameters, as it may change semantics
-    '@typescript-eslint/no-unused-vars': ['error', { args: 'none' }],
+    'no-unused-vars': 'off',
+    '@typescript-eslint/no-unused-vars': [
+      'warn',
+      {
+        argsIgnorePattern: '^_',
+        varsIgnorePattern: '^_',
+        caughtErrorsIgnorePattern: '^_',
+      },
+    ],
     // allow explicit types even if inferrable
     '@typescript-eslint/no-inferrable-types': 'off',
   },

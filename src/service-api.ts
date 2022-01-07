@@ -31,7 +31,7 @@ export interface GraaspChatPluginOptions {
 
 const plugin: FastifyPluginAsync<GraaspChatPluginOptions> = async (
   fastify,
-  options,
+  _options,
 ) => {
   const {
     items: { dbService: itemService, taskManager: iTM },

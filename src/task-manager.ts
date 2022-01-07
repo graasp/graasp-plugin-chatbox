@@ -50,7 +50,10 @@ export class TaskManager implements ChatTaskManager {
       this.chatService,
     );
   }
-  createGetTaskSequence(member: Member, objectId: string): Task<Actor, unknown>[] {
+  createGetTaskSequence(
+    member: Member,
+    objectId: string,
+  ): Task<Actor, unknown>[] {
     const t1 = this.itemTaskManager.createGetTaskSequence(member, objectId);
     const t2 = new GetChatTask(
       member,
