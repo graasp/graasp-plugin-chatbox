@@ -17,7 +17,7 @@
     "prepare": "yarn build & yarn hooks:install",
     "prepack": "yarn build",
     "clean": "npx shx rm -rf dist/ coverage/",
-    "lint": "npx eslint . --ext .js,.jsx,.ts,.tsx",
+    "lint": "npx eslint . --ext .ts",
     "test": "exit 0",
     "prettier:check": "prettier --check \"{src,test}/**/*.ts\"",
     "prettier:write": "prettier --write \"{src,test}/**/*.ts\"",
