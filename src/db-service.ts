@@ -1,4 +1,4 @@
-import { DatabaseTransactionConnectionType as TrxHandler, sql } from 'slonik';
+import { DatabaseTransactionConnection as TrxHandler, sql } from 'slonik';
 import { ChatMessage } from './interfaces/chat-message';
 
 /**
