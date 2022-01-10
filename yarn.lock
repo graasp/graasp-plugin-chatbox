@@ -3429,12 +3429,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"graasp-item-tags@github:graasp/graasp-item-tags#15/updateDep":
+"graasp-item-tags@github:graasp/graasp-item-tags":
   version: 0.1.0
-  resolution: "graasp-item-tags@https://github.com/graasp/graasp-item-tags.git#commit=32ebe83bf4387dc15f63ddf64912160ea1e40cdf"
+  resolution: "graasp-item-tags@https://github.com/graasp/graasp-item-tags.git#commit=59a4a525b47acd73948a9b5fba70ece000073300"
   dependencies:
     http-status-codes: 2.2.0
-  checksum: 8ca61e13d0b169d92eb83b14d9a9ab1507e83341db428208a8914ff6747268e07c9f858c3a03c895bdda3fe41169283dca77751b4391674a8c69ed716834c45f
+  checksum: ebd32e6ef983f599a84f08246acb712aa656e89902920cd8b152ebedeff47ba91fa31e20dcf0e3c075b8f83497551d8975e1160dcce42962fa9b558803344469
   languageName: node
   linkType: hard
 
@@ -3452,7 +3452,7 @@ __metadata:
     eslint-plugin-jest: 25.3.4
     fastify: ^3.25.3
     fastify-plugin: ^3.0.0
-    graasp-plugin-public: "github:graasp/graasp-plugin-public#34/updateDep"
+    graasp-plugin-public: "github:graasp/graasp-plugin-public"
     graasp-websockets: "github:graasp/graasp-websockets"
     husky: 7.0.4
     jest: 27.4.7
@@ -3464,15 +3464,15 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"graasp-plugin-public@github:graasp/graasp-plugin-public#34/updateDep":
+"graasp-plugin-public@github:graasp/graasp-plugin-public":
   version: 0.1.0
-  resolution: "graasp-plugin-public@https://github.com/graasp/graasp-plugin-public.git#commit=62081546a602585ee90526736a449a555c89a1ab"
+  resolution: "graasp-plugin-public@https://github.com/graasp/graasp-plugin-public.git#commit=668dbccef04d5465655eb8ae44765d935b42c1fa"
   dependencies:
     fastify-cors: ^6.0.2
-    graasp-item-tags: "github:graasp/graasp-item-tags#15/updateDep"
+    graasp-item-tags: "github:graasp/graasp-item-tags"
     http-status-codes: ^2.2.0
     qs: ^6.10.2
-  checksum: 52c616e6b752874d69f7d6bbdd45362f975b73b1596f98967a4642eea4cd85bf57594a6013eb5b9bc678dcc457abedb0650c4503cc797fb182d88f3314e7433a
+  checksum: 276eed4964e0e4cc5f0fefc03938eac0e4972c88fa84769917bee6d5c6e47fdc4dc1d0a72becbcc747121ea2792249f60d36ee4699570c8369a5619f31c15c9a
   languageName: node
   linkType: hard
 
