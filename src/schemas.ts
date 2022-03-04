@@ -27,6 +27,7 @@ export default {
     chatMessage: {
       type: 'object',
       properties: {
+        id: { $ref: 'http://graasp.org/#/definitions/uuid' },
         chatId: { $ref: 'http://graasp.org/#/definitions/uuid' },
         creator: { $ref: 'http://graasp.org/#/definitions/uuid' },
         createdAt: { type: 'string' },
