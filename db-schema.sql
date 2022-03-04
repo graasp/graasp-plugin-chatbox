@@ -1,4 +1,5 @@
 CREATE TABLE "chat_message" (
+    "id" uuid DEFAULT uuid_generate_v4() PRIMARY KEY,                   -- id of chat message
     "chat_id" uuid REFERENCES "item" ("id") ON DELETE CASCADE,          -- id of item to which chat is attached
     "creator" uuid REFERENCES "member" ("id") ON DELETE SET NULL,       -- sender member
     "created_at" timestamp NOT NULL DEFAULT (NOW() AT TIME ZONE 'utc'),
