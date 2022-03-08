@@ -12,7 +12,7 @@ import { FastifyPluginAsync } from 'fastify';
 import fp from 'fastify-plugin';
 import { ChatService } from './db-service';
 import { ChatMessage } from './interfaces/chat-message';
-import common, { getChat, publishMessage } from './schemas';
+import common, { getChat, publishMessage, removeMessage } from './schemas';
 import { TaskManager } from './task-manager';
 import { registerChatWsHooks } from './ws/hooks';
 
@@ -82,6 +82,21 @@ const plugin: FastifyPluginAsync<GraaspChatPluginOptions> = async (
         member,
         itemId,
         body,
+      );
+      return runner.runSingleSequence(tasks, log);
+    },
+  );
+  // todo: remove this
+  console.log('I am the new maaaaaaaaaaaaaaaaaaaaaaaaaan !!!!!!!!!');
+  // delete message
+  fastify.delete<{ Params: { itemId: string, messageId: string } }>(
+    '/:itemId/chat/:messageId',
+    { schema: removeMessage },
+    async ({ member, params: { itemId, messageId }, log }) => {
+      const tasks = taskManager.createRemoveMessageTaskSequence(
+        member,
+        itemId,
+        messageId,
       );
       return runner.runSingleSequence(tasks, log);
     },

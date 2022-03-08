@@ -12,9 +12,9 @@ export class ChatService {
         !Array.isArray(c)
           ? sql.identifier([c])
           : sql.join(
-              c.map((cwa) => sql.identifier([cwa])),
-              sql` AS `,
-            ),
+            c.map((cwa) => sql.identifier([cwa])),
+            sql` AS `,
+          ),
     ),
     sql`, `,
   );
@@ -30,7 +30,8 @@ export class ChatService {
     return transactionHandler
       .query<ChatMessage>(
         sql`
-            SELECT ${ChatService.allColumns} FROM chat_message
+            SELECT ${ChatService.allColumns}
+            FROM chat_message
             WHERE chat_id = ${chatId}
             ORDER BY created_at ASC
         `,
@@ -52,7 +53,29 @@ export class ChatService {
         sql`
             INSERT INTO chat_message (chat_id, creator, body)
             VALUES (${chatId}, ${creator}, ${body})
-            RETURNING ${ChatService.allColumns}
+                RETURNING ${ChatService.allColumns}
+        `,
+      )
+      .then(({ rows }) => rows[0]);
+  }
+
+  /**
+   * Remove a message from the given chat
+   * @param chatId Id of chat
+   * @param messageId Id of the message
+   */
+  async deleteMessage(
+    chatId: string,
+    messageId: string,
+    transactionHandler: TrxHandler,
+  ): Promise<ChatMessage> {
+    return transactionHandler
+      .query<ChatMessage>(
+        sql`
+            DELETE
+            FROM chat_message
+            WHERE id = ${messageId}
+              AND chat_id = ${chatId} RETURNING ${ChatService.allColumns}
         `,
       )
       .then(({ rows }) => rows[0]);

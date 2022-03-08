@@ -13,6 +13,7 @@ import { ChatMessage } from './interfaces/chat-message';
 import { ChatTaskManager } from './interfaces/chat-task-manager';
 import { GetChatTask } from './tasks/get-chat-task';
 import { PublishMessageTask } from './tasks/publish-message-task';
+import { DeleteMessageTask } from "./tasks/delete-message-task";
 
 /**
  * Concrete implementation of the chat task manager
@@ -41,6 +42,9 @@ export class TaskManager implements ChatTaskManager {
   getPublishMessageTaskName(): string {
     return PublishMessageTask.name;
   }
+  getDeleteMessageTaskName(): string {
+    return DeleteMessageTask.name;
+  }
   createGetTask(member: Actor, objectId: string): Task<Actor, Chat> {
     return new GetChatTask(
       member,
@@ -50,6 +54,7 @@ export class TaskManager implements ChatTaskManager {
       this.chatService,
     );
   }
+
   createGetTaskSequence(
     member: Member,
     objectId: string,
@@ -65,6 +70,7 @@ export class TaskManager implements ChatTaskManager {
 
     return [...t1, t2];
   }
+
   createPublishMessageTaskSequence(
     member: Member,
     chatId: string,
@@ -79,6 +85,27 @@ export class TaskManager implements ChatTaskManager {
       {
         chatId,
         chatMessage,
+      },
+    );
+    t2.getInput = () => ({ item: t1[0].result as Item });
+
+    return [...t1, t2];
+  }
+
+  createRemoveMessageTaskSequence(
+    member: Member,
+    chatId: string,
+    messageId: string,
+  ): Task<Actor, unknown>[] {
+    const t1 = this.itemTaskManager.createGetTaskSequence(member, chatId);
+    const t2 = new DeleteMessageTask(
+      member,
+      this.itemService,
+      this.itemMembershipService,
+      this.chatService,
+      {
+        chatId,
+        messageId,
       },
     );
     t2.getInput = () => ({ item: t1[0].result as Item });

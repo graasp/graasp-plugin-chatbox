@@ -13,6 +13,15 @@ export default {
       },
     },
 
+    messageParam: {
+      type: 'object',
+      required: ['itemId', 'messageId'],
+      properties: {
+        itemId: { $ref: 'http://graasp.org/#/definitions/uuid' },
+        messageId: { $ref: 'http://graasp.org/#/definitions/uuid' },
+      },
+    },
+
     chat: {
       type: 'object',
       properties: {
@@ -69,4 +78,14 @@ const publishMessage = {
   },
 };
 
-export { getChat, publishMessage };
+/**
+ * JSON schema on DELETE remove message route for request and response
+ */
+const removeMessage = {
+  params: { $ref: 'http://graasp.org/chat/#/definitions/messageParam' },
+  response: {
+    200: { $ref: 'http://graasp.org/chat/#/definitions/chatMessage' },
+  },
+};
+
+export { getChat, publishMessage, removeMessage };
