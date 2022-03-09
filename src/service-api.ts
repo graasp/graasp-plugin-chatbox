@@ -86,8 +86,7 @@ const plugin: FastifyPluginAsync<GraaspChatPluginOptions> = async (
       return runner.runSingleSequence(tasks, log);
     },
   );
-  // todo: remove this
-  console.log('I am the new maaaaaaaaaaaaaaaaaaaaaaaaaan !!!!!!!!!');
+
   // delete message
   fastify.delete<{ Params: { itemId: string, messageId: string } }>(
     '/:itemId/chat/:messageId',
