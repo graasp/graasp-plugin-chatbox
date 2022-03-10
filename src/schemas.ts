@@ -40,6 +40,7 @@ export default {
         chatId: { $ref: 'http://graasp.org/#/definitions/uuid' },
         creator: { $ref: 'http://graasp.org/#/definitions/uuid' },
         createdAt: { type: 'string' },
+        updatedAt: { type: 'string' },
         body: { type: 'string' },
       },
       additionalProperties: false,
@@ -79,6 +80,17 @@ const publishMessage = {
 };
 
 /**
+ * JSON schema on PATCH message route for request and response
+ */
+const patchMessage = {
+  params: { $ref: 'http://graasp.org/chat/#/definitions/messageParam' },
+  body: { $ref: 'http://graasp.org/chat/#/definitions/partialChatMessage' },
+  response: {
+    200: { $ref: 'http://graasp.org/chat/#/definitions/chatMessage' },
+  },
+};
+
+/**
  * JSON schema on DELETE remove message route for request and response
  */
 const removeMessage = {
@@ -88,4 +100,4 @@ const removeMessage = {
   },
 };
 
-export { getChat, publishMessage, removeMessage };
+export { getChat, publishMessage, patchMessage, removeMessage };

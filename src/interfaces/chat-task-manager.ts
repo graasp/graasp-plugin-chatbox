@@ -17,6 +17,11 @@ export interface ChatTaskManager<A extends Actor = Actor> {
   getPublishMessageTaskName(): string;
 
   /**
+   * Returns the name of the patch message in chat task (write)
+   */
+  getPatchMessageTaskName(): string
+
+  /**
    * Returns the name of the delete message in chat task (write)
    */
   getDeleteMessageTaskName(): string;
@@ -40,5 +45,31 @@ export interface ChatTaskManager<A extends Actor = Actor> {
     actor: A,
     chatId: string,
     message: ChatMessage,
+  ): Task<A, unknown>[];
+
+  /**
+   * Factory for a task to publish a message in a chat
+   * @param actor User performing the action
+   * @param chatId Chat ID
+   * @param messageId Message ID
+   * @param message ChatMessage to update
+   */
+  createPatchMessageTaskSequence(
+    actor: A,
+    chatId: string,
+    messageId: string,
+    message: ChatMessage,
+  ): Task<A, unknown>[];
+
+  /**
+   * Factory for a task to delete a message in a chat
+   * @param actor User performing the action
+   * @param chatId Chat ID
+   * @param messageId Message ID to delete
+   */
+  createRemoveMessageTaskSequence(
+    actor: A,
+    chatId: string,
+    messageId: string,
   ): Task<A, unknown>[];
 }
