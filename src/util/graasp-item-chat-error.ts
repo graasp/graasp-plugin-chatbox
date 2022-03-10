@@ -45,3 +45,16 @@ export class MemberCannotReadItem extends GraaspItemChatError {
     );
   }
 }
+
+export class ChatMessageNotFound extends GraaspItemChatError {
+  constructor(data?: unknown) {
+    super(
+      {
+        code: 'GICERR003',
+        statusCode: 404,
+        message: 'Chat Message not found',
+      },
+      data,
+    );
+  }
+}

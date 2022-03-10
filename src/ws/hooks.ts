@@ -48,4 +48,17 @@ export function registerChatWsHooks(
       );
     },
   );
+
+  // on delete chat item, broadcast to item chat channel
+  const deleteMessageTaskname = chatTaskManager.getDeleteMessageTaskName();
+  runner.setTaskPostHookHandler<ChatMessage>(
+    deleteMessageTaskname,
+    (message) => {
+      websockets.publish(
+        itemChatTopic,
+        message.chatId,
+        ItemChatEvent('delete', message),
+      );
+    },
+  );
 }

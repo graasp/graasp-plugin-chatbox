@@ -17,6 +17,11 @@ export interface ChatTaskManager<A extends Actor = Actor> {
   getPublishMessageTaskName(): string;
 
   /**
+   * Returns the name of the delete message in chat task (write)
+   */
+  getDeleteMessageTaskName(): string;
+
+  /**
    * Factory for a task to get a chat
    * @param actor User performing the action
    * @param objectId Chat ID
