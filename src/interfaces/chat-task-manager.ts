@@ -48,7 +48,7 @@ export interface ChatTaskManager<A extends Actor = Actor> {
   ): Task<A, unknown>[];
 
   /**
-   * Factory for a task to publish a message in a chat
+   * Factory for a task to update a message in a chat
    * @param actor User performing the action
    * @param chatId Chat ID
    * @param messageId Message ID
