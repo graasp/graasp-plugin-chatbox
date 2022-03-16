@@ -7,7 +7,7 @@ import { ChatMessage } from './interfaces/chat-message';
 export class ChatService {
   // the 'safe' way to dynamically generate the columns names:
   private static allColumns = sql.join(
-    ['id', ['chat_id', 'chatId'], 'creator', ['created_at', 'createdAt'], 'body'].map(
+    ['id', ['chat_id', 'chatId'], 'creator', ['created_at', 'createdAt'], ['updated_at', 'updatedAt'], 'body'].map(
       (c) =>
         !Array.isArray(c)
           ? sql.identifier([c])
@@ -54,6 +54,27 @@ export class ChatService {
             INSERT INTO chat_message (chat_id, creator, body)
             VALUES (${chatId}, ${creator}, ${body})
                 RETURNING ${ChatService.allColumns}
+        `,
+      )
+      .then(({ rows }) => rows[0]);
+  }
+
+  /**
+   * Edit a message of the given chat
+   * @param message Message
+   */
+  async patchMessage(
+    message: Partial<ChatMessage>,
+    transactionHandler: TrxHandler,
+  ): Promise<ChatMessage> {
+    const { chatId, id, body } = message;
+    return transactionHandler
+      .query<ChatMessage>(
+        sql`
+            UPDATE chat_message
+            SET body = ${body}
+            WHERE chat_id = ${chatId}
+              AND id = ${id} RETURNING ${ChatService.allColumns};
         `,
       )
       .then(({ rows }) => rows[0]);

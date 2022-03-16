@@ -49,6 +49,19 @@ export function registerChatWsHooks(
     },
   );
 
+  // on update chat item, broadcast to item chat channel
+  const patchMessageTaskname = chatTaskManager.getPatchMessageTaskName();
+  runner.setTaskPostHookHandler<ChatMessage>(
+    patchMessageTaskname,
+    (message) => {
+      websockets.publish(
+        itemChatTopic,
+        message.chatId,
+        ItemChatEvent('update', message),
+      );
+    },
+  );
+
   // on delete chat item, broadcast to item chat channel
   const deleteMessageTaskname = chatTaskManager.getDeleteMessageTaskName();
   runner.setTaskPostHookHandler<ChatMessage>(

@@ -21,7 +21,7 @@ interface ChatEvent {
  */
 interface ItemChatEvent extends ChatEvent {
   kind: 'item';
-  op: 'publish' | 'delete';
+  op: 'publish' | 'delete' | 'update';
   message: ChatMessage;
 }
 

@@ -12,7 +12,7 @@ import { FastifyPluginAsync } from 'fastify';
 import fp from 'fastify-plugin';
 import { ChatService } from './db-service';
 import { ChatMessage } from './interfaces/chat-message';
-import common, { getChat, publishMessage, removeMessage } from './schemas';
+import common, { getChat, patchMessage, publishMessage, removeMessage } from './schemas';
 import { TaskManager } from './task-manager';
 import { registerChatWsHooks } from './ws/hooks';
 
@@ -81,6 +81,21 @@ const plugin: FastifyPluginAsync<GraaspChatPluginOptions> = async (
       const tasks = taskManager.createPublishMessageTaskSequence(
         member,
         itemId,
+        body,
+      );
+      return runner.runSingleSequence(tasks, log);
+    },
+  );
+
+  // patch message
+  fastify.patch<{ Params: { itemId: string, messageId: string } }>(
+    '/:itemId/chat/:messageId',
+    { schema: patchMessage },
+    async ({ member, params: { itemId, messageId }, body, log }) => {
+      const tasks = taskManager.createPatchMessageTaskSequence(
+        member,
+        itemId,
+        messageId,
         body,
       );
       return runner.runSingleSequence(tasks, log);

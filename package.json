@@ -8,7 +8,8 @@
   "author": "React EPFL",
   "contributors": [
     "Alexandre Chau",
-    "Juan Carlos Farah"
+    "Juan Carlos Farah",
+    "Basile Spaenlehauer"
   ],
   "license": "AGPL-3.0-or-later",
   "scripts": {
