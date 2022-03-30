@@ -15,6 +15,9 @@ import { ChatMessage } from './interfaces/chat-message';
 import common, { getChat, patchMessage, publishMessage, removeMessage } from './schemas';
 import { TaskManager } from './task-manager';
 import { registerChatWsHooks } from './ws/hooks';
+import { ActionHandlerInput, ActionService, ActionTaskManager, BaseAction } from 'graasp-plugin-actions';
+import { CLIENT_HOSTS } from './constants/constants';
+import { createChatActionHandler } from './handler/chat-action-handler';
 
 // hack to force compiler to discover websockets service
 declare module 'fastify' {
@@ -49,6 +52,7 @@ const plugin: FastifyPluginAsync<GraaspChatPluginOptions> = async (
     iTM,
   );
 
+  console.log('Local chatbox plugin');
   fastify.decorate('chat', { dbService: chatService, taskManager });
 
   fastify.addSchema(common);
@@ -64,6 +68,24 @@ const plugin: FastifyPluginAsync<GraaspChatPluginOptions> = async (
       db.pool,
     );
   }
+
+  // add actions
+  const actionService = new ActionService();
+  const actionTaskManager = new ActionTaskManager(actionService, CLIENT_HOSTS);
+  fastify.addHook('onResponse', async (request, reply) => {
+    // todo: save public actions?
+    if (request.member) {
+      // wrap the createItemActionHandler in a new function to provide it with the properties we already have
+      // todo: make better types -> use graasp constants or graasp types
+      const actionHandler = (actionInput: ActionHandlerInput): Promise<BaseAction[]> => createChatActionHandler(actionInput);
+      const createActionTask = actionTaskManager.createCreateTask(request.member, {
+        request,
+        reply,
+        handler: actionHandler,
+      });
+      await runner.runSingle(createActionTask);
+    }
+  });
 
   fastify.get<{ Params: { itemId: string } }>(
     '/:itemId/chat',
