@@ -52,7 +52,6 @@ const plugin: FastifyPluginAsync<GraaspChatPluginOptions> = async (
     iTM,
   );
 
-  console.log('Local chatbox plugin');
   fastify.decorate('chat', { dbService: chatService, taskManager });
 
   fastify.addSchema(common);
@@ -72,12 +71,12 @@ const plugin: FastifyPluginAsync<GraaspChatPluginOptions> = async (
   // add actions
   const actionService = new ActionService();
   const actionTaskManager = new ActionTaskManager(actionService, CLIENT_HOSTS);
-  fastify.addHook('onResponse', async (request, reply) => {
+  fastify.addHook('onSend', async (request, reply, payload) => {
     // todo: save public actions?
     if (request.member) {
       // wrap the createItemActionHandler in a new function to provide it with the properties we already have
       // todo: make better types -> use graasp constants or graasp types
-      const actionHandler = (actionInput: ActionHandlerInput): Promise<BaseAction[]> => createChatActionHandler(actionInput);
+      const actionHandler = (actionInput: ActionHandlerInput): Promise<BaseAction[]> => createChatActionHandler(payload as string, actionInput);
       const createActionTask = actionTaskManager.createCreateTask(request.member, {
         request,
         reply,

@@ -1,5 +1,9 @@
 export const VIEW_UNKNOWN_NAME = 'unknown';
 
+export enum ITEM_TYPES {
+  CHAT = 'chat',
+}
+
 // todo: get from graasp constants
 export const CLIENT_HOSTS = [
   {
@@ -33,7 +37,6 @@ export enum ACTION_TYPES {
 
 // todo: refactor from graasp utils? constants?
 // match uuid v4
-
 export const paths = {
   getChat: /^\/items\/[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[4][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}\/chat$/,
   postMessage: /^\/items\/[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[4][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}\/chat$/,
