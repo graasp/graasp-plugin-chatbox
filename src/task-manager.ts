@@ -13,8 +13,8 @@ import { ChatMessage } from './interfaces/chat-message';
 import { ChatTaskManager } from './interfaces/chat-task-manager';
 import { GetChatTask } from './tasks/get-chat-task';
 import { PublishMessageTask } from './tasks/publish-message-task';
-import { DeleteMessageTask } from "./tasks/delete-message-task";
-import { PatchMessageTask } from "./tasks/patch-message-task";
+import { DeleteMessageTask } from './tasks/delete-message-task';
+import { PatchMessageTask } from './tasks/patch-message-task';
 
 /**
  * Concrete implementation of the chat task manager

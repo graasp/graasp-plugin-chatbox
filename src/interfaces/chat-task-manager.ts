@@ -19,7 +19,7 @@ export interface ChatTaskManager<A extends Actor = Actor> {
   /**
    * Returns the name of the patch message in chat task (write)
    */
-  getPatchMessageTaskName(): string
+  getPatchMessageTaskName(): string;
 
   /**
    * Returns the name of the delete message in chat task (write)

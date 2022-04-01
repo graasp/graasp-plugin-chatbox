@@ -9,7 +9,7 @@ import {
 import { ChatService } from '../db-service';
 import { ChatMessage } from '../interfaces/chat-message';
 import { BaseChatTask } from './base-chat-task';
-import { ChatMessageNotFound } from "../util/graasp-item-chat-error";
+import { ChatMessageNotFound } from '../util/graasp-item-chat-error';
 
 type InputType = {
   item?: Item;
@@ -50,7 +50,11 @@ export class DeleteMessageTask extends BaseChatTask<ChatMessage> {
     this.targetId = messageId;
 
     // delete message
-    const res = await this.chatService.deleteMessage(chatId, messageId, handler);
+    const res = await this.chatService.deleteMessage(
+      chatId,
+      messageId,
+      handler,
+    );
     // action returns no entries which means the message was not found
     // do not run the post hook
     if (res) {
