@@ -8,6 +8,8 @@ describe('Utils test', () => {
   });
 
   it('should build chat url with messageId', () => {
-    expect(paths.patchMessage.test(buildChatUrl(ITEM_ID, MESSAGE_ID))).toBeTruthy();
+    expect(
+      paths.patchMessage.test(buildChatUrl(ITEM_ID, MESSAGE_ID)),
+    ).toBeTruthy();
   });
 });

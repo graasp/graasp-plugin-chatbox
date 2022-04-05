@@ -33,7 +33,7 @@
     "fastify": "^3.25.3",
     "fastify-plugin": "^3.0.0",
     "geoip-lite": "1.4.2",
-    "graasp-plugin-actions": "github:graasp/graasp-plugin-actions#e1a2931612ea2ed39394108e6eacb1263e51db8f",
+    "graasp-plugin-actions": "github:graasp/graasp-plugin-actions#13/makeCreateTaskGeneric",
     "graasp-plugin-public": "github:graasp/graasp-plugin-public",
     "graasp-websockets": "github:graasp/graasp-websockets"
   },

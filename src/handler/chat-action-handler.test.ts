@@ -1,15 +1,14 @@
 import { FastifyLoggerInstance, FastifyReply, FastifyRequest } from 'fastify';
-import { CLIENT_HOSTS, METHODS, ACTION_TYPES } from '../src/constants/constants';
+import { METHODS, ACTION_TYPES } from '../constants/constants';
 import { DatabaseTransactionHandler } from 'graasp';
-import { createChatActionHandler } from '../src/handler/chat-action-handler';
-import { ITEM_ID, MESSAGE_ID } from './fixtures/mock-constants';
-import { buildChatUrl, checkActionData, GRAASP_ACTOR } from './utils';
+import { createChatActionHandler } from './chat-action-handler';
+import { ITEM_ID, MESSAGE_ID } from '../../test/fixtures/mock-constants';
+import { buildChatUrl, checkActionData, GRAASP_ACTOR } from '../../test/utils';
 
 // dbHandler can be null as we do not use it with the mock itemService
 const dbTransactionHandler = null as unknown as DatabaseTransactionHandler;
 const reply = null as unknown as FastifyReply;
-const log = { debug: () => null } as unknown as FastifyLoggerInstance;
-const BUILDER_CLIENT_HOST = CLIENT_HOSTS[0];
+const log = { debug: jest.fn() } as unknown as FastifyLoggerInstance;
 const request = {
   url: buildChatUrl(ITEM_ID),
   method: METHODS.POST,
@@ -34,24 +33,6 @@ const actionInput = {
 };
 
 describe('Build actions', () => {
-  it('check geolocation and view properties', async () => {
-    // create a request with valid ip and headers to test view and geolocation
-    const geolocationAndViewRequest = {
-      ...request,
-      ip: '192.158.1.38',
-      headers: {
-        origin: `https://${BUILDER_CLIENT_HOST.hostname}`,
-      },
-    };
-
-    const actions = await createChatActionHandler(JSON.stringify(payload), {
-      ...actionInput,
-      request: geolocationAndViewRequest,
-    });
-    expect(actions[0].geolocation).toBeTruthy();
-    expect(actions[0].view).toEqual(BUILDER_CLIENT_HOST.name);
-  });
-
   it('should return empty actions array when path does not match', async () => {
     const invalidPathRequest = {
       ...request,

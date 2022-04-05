@@ -1,12 +1,14 @@
-import { ActionHandlerInput, BaseAction } from 'graasp-plugin-actions';
-import geoip from 'geoip-lite';
+import {
+  ActionHandlerInput,
+  BaseAction,
+  getGeolocationIp,
+  getView,
+} from 'graasp-plugin-actions';
 import {
   ACTION_TYPES,
-  CLIENT_HOSTS,
   ITEM_TYPES,
   METHODS,
   paths,
-  VIEW_UNKNOWN_NAME,
 } from '../constants/constants';
 import { Member } from 'graasp';
 
@@ -29,12 +31,8 @@ export const createChatActionHandler = async (
   // warning: this is really dependent on the url -> how to be more safe and dynamic?
   const itemId: string = (params as { itemId: string })?.itemId;
 
-  const geolocation = geoip.lookup(ip);
-
-  const view =
-    CLIENT_HOSTS.find(({ hostname: thisHN }) =>
-      headers?.origin?.includes(thisHN),
-    )?.name ?? VIEW_UNKNOWN_NAME;
+  const geolocation = getGeolocationIp(ip);
+  const view = getView(headers);
 
   const chatData = JSON.parse(payload);
 
