@@ -3258,13 +3258,13 @@ __metadata:
 
 "graasp-plugin-actions@github:graasp/graasp-plugin-actions#13/makeCreateTaskGeneric":
   version: 0.1.0
-  resolution: "graasp-plugin-actions@https://github.com/graasp/graasp-plugin-actions.git#commit=85831c32bbec245b193271919f0453b0018717cd"
+  resolution: "graasp-plugin-actions@https://github.com/graasp/graasp-plugin-actions.git#commit=7241643eaab4844aabeea44b2132d353fffded2a"
   dependencies:
     fluent-json-schema: 3.0.1
     geoip-lite: 1.4.2
     http-status-codes: 2.2.0
     uuid: 8.3.2
-  checksum: 63852dea73f9aa5fc7dc6ea563d0a51749ef9b8cf97a2c27bcadb21edd6192c12f856b4a26e5701dccd4f4e5c60478d525a83e9d7288eafc4e86c60ec12fe9c9
+  checksum: c6f02f5eeb2e369f590120084fa7193f58b60ee2b74b5268fae5cb16c5f46831fde03213d6812d953cafe66d8ef0f7e0dcc5bb901558408a206c293d29f87744
   languageName: node
   linkType: hard
 

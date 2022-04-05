@@ -1,8 +1,7 @@
 import {
   ActionHandlerInput,
   BaseAction,
-  getGeolocationIp,
-  getView,
+  getBaseAction,
 } from 'graasp-plugin-actions';
 import {
   ACTION_TYPES,
@@ -23,28 +22,25 @@ export const createChatActionHandler = async (
   actionInput: ActionHandlerInput,
 ): Promise<BaseAction[]> => {
   const { request, log } = actionInput;
-  // function called each time there is a request in the items in graasp (onResponse hook in graasp)
+  // function called each time there is a request in the chatbox in graasp-plugin-chatbox (onSend hook in graasp-plugin-chatbox)
   // identify and check the correct endpoint of the request
-  // check that the request is ok
-  const { headers, member, method, url, ip, params } = request;
+  const { method, url, params } = request;
+
+  const baseAction = getBaseAction(request);
 
   // warning: this is really dependent on the url -> how to be more safe and dynamic?
   const itemId: string = (params as { itemId: string })?.itemId;
-
-  const geolocation = getGeolocationIp(ip);
-  const view = getView(headers);
 
   const chatData = JSON.parse(payload);
 
   const actionsToSave = [];
   const actionBase = {
-    memberId: member.id,
-    memberType: member.type,
-    extra: { memberId: member.id, itemId, message: chatData },
-    view,
+    ...baseAction,
+    extra: {
+      message: chatData,
+    },
     itemId,
     itemType: ITEM_TYPES.CHAT,
-    geolocation,
   };
 
   // identify the endpoint with method and url
