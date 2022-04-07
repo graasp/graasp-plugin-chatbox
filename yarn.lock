@@ -31,36 +31,36 @@ __metadata:
   linkType: hard
 
 "@babel/core@npm:^7.1.0, @babel/core@npm:^7.12.3, @babel/core@npm:^7.7.2, @babel/core@npm:^7.8.0":
-  version: 7.17.8
-  resolution: "@babel/core@npm:7.17.8"
+  version: 7.17.9
+  resolution: "@babel/core@npm:7.17.9"
   dependencies:
     "@ampproject/remapping": ^2.1.0
     "@babel/code-frame": ^7.16.7
-    "@babel/generator": ^7.17.7
+    "@babel/generator": ^7.17.9
     "@babel/helper-compilation-targets": ^7.17.7
     "@babel/helper-module-transforms": ^7.17.7
-    "@babel/helpers": ^7.17.8
-    "@babel/parser": ^7.17.8
+    "@babel/helpers": ^7.17.9
+    "@babel/parser": ^7.17.9
     "@babel/template": ^7.16.7
-    "@babel/traverse": ^7.17.3
+    "@babel/traverse": ^7.17.9
     "@babel/types": ^7.17.0
     convert-source-map: ^1.7.0
     debug: ^4.1.0
     gensync: ^1.0.0-beta.2
-    json5: ^2.1.2
+    json5: ^2.2.1
     semver: ^6.3.0
-  checksum: 0e686b1be444d25494424065238931f2b3df908bf072b72bab973acfd6d27a481fc280c9cd8a3c6fe2c46beee50e0d2307468d8b15b64dc4036f025e75f6609d
+  checksum: 2d301e4561a170bb584a735ec412de8fdc40b2052e12380d4a5e36781be5af1fd2a60552e7f0764b0a491a242f20105265bd2a10ff57b30c2842684f02dbb5a2
   languageName: node
   linkType: hard
 
-"@babel/generator@npm:^7.17.3, @babel/generator@npm:^7.17.7, @babel/generator@npm:^7.7.2":
-  version: 7.17.7
-  resolution: "@babel/generator@npm:7.17.7"
+"@babel/generator@npm:^7.17.9, @babel/generator@npm:^7.7.2":
+  version: 7.17.9
+  resolution: "@babel/generator@npm:7.17.9"
   dependencies:
     "@babel/types": ^7.17.0
     jsesc: ^2.5.1
     source-map: ^0.5.0
-  checksum: e7344b9b4559115f2754ecc2ae9508412ea6a8f617544cd3d3f17cabc727bd30630765f96c8a4ebc8901ded1492a3a6c23d695a4f1e8f3042f860b30c891985c
+  checksum: afbdd4afbf731ba0a17e7e2d9a2291e6461259af887f88f1178f63514a86e9c18cec462ae8f9cd6df9ba15a18296f47b0e151202bb4f834f7338ac0c07ec8dc8
   languageName: node
   linkType: hard
 
@@ -87,23 +87,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/helper-function-name@npm:^7.16.7":
-  version: 7.16.7
-  resolution: "@babel/helper-function-name@npm:7.16.7"
+"@babel/helper-function-name@npm:^7.17.9":
+  version: 7.17.9
+  resolution: "@babel/helper-function-name@npm:7.17.9"
   dependencies:
-    "@babel/helper-get-function-arity": ^7.16.7
     "@babel/template": ^7.16.7
-    "@babel/types": ^7.16.7
-  checksum: fc77cbe7b10cfa2a262d7a37dca575c037f20419dfe0c5d9317f589599ca24beb5f5c1057748011159149eaec47fe32338c6c6412376fcded68200df470161e1
-  languageName: node
-  linkType: hard
-
-"@babel/helper-get-function-arity@npm:^7.16.7":
-  version: 7.16.7
-  resolution: "@babel/helper-get-function-arity@npm:7.16.7"
-  dependencies:
-    "@babel/types": ^7.16.7
-  checksum: 25d969fb207ff2ad5f57a90d118f6c42d56a0171022e200aaa919ba7dc95ae7f92ec71cdea6c63ef3629a0dc962ab4c78e09ca2b437185ab44539193f796e0c3
+    "@babel/types": ^7.17.0
+  checksum: a59b2e5af56d8f43b9b0019939a43774754beb7cb01a211809ca8031c71890999d07739e955343135ec566c4d8ff725435f1f60fb0af3bb546837c1f9f84f496
   languageName: node
   linkType: hard
 
@@ -180,34 +170,34 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/helpers@npm:^7.17.8":
-  version: 7.17.8
-  resolution: "@babel/helpers@npm:7.17.8"
+"@babel/helpers@npm:^7.17.9":
+  version: 7.17.9
+  resolution: "@babel/helpers@npm:7.17.9"
   dependencies:
     "@babel/template": ^7.16.7
-    "@babel/traverse": ^7.17.3
+    "@babel/traverse": ^7.17.9
     "@babel/types": ^7.17.0
-  checksum: 463dad58119fefebf2d0201bfa53ec9607aa00356908895640fc07589747fb3c2e0dfee4019f3e8c9781e57c9aa5dff4c72ec8d1b031c4ed8349f90b6aefe99d
+  checksum: 3c6db861e4c82fff2de3efb4ad12e32658c50c29920597cd0979390659b202e5849acd9542e0e2453167a52ccc30156ee4455d64d0e330f020d991d7551566f8
   languageName: node
   linkType: hard
 
 "@babel/highlight@npm:^7.16.7":
-  version: 7.16.10
-  resolution: "@babel/highlight@npm:7.16.10"
+  version: 7.17.9
+  resolution: "@babel/highlight@npm:7.17.9"
   dependencies:
     "@babel/helper-validator-identifier": ^7.16.7
     chalk: ^2.0.0
     js-tokens: ^4.0.0
-  checksum: 1f1bdd752a90844f4efc22166a46303fb651ba0fd75a06daba3ebae2575ab3edc1da9827c279872a3aaf305f50a18473c5fa1966752726a2b253065fd4c0745e
+  checksum: 7bdf10228f2e4d18f48f114411ed584380d356e7c168d7582c14abd8df9909b2fc09e0a7cd334f47c3eb0bc17e639e0c8d9688c6afd5d09a2bdbf0ac193b11fd
   languageName: node
   linkType: hard
 
-"@babel/parser@npm:^7.1.0, @babel/parser@npm:^7.14.7, @babel/parser@npm:^7.16.7, @babel/parser@npm:^7.17.3, @babel/parser@npm:^7.17.8":
-  version: 7.17.8
-  resolution: "@babel/parser@npm:7.17.8"
+"@babel/parser@npm:^7.1.0, @babel/parser@npm:^7.14.7, @babel/parser@npm:^7.16.7, @babel/parser@npm:^7.17.9":
+  version: 7.17.9
+  resolution: "@babel/parser@npm:7.17.9"
   bin:
     parser: ./bin/babel-parser.js
-  checksum: 1771808491982cc47baa888a997aef6b58308e3844c8c00f730f8fd97defe57d32cdbf46075cd49aaee310fa31f3d2c80a0d41b41a4ee0ff336ee09e2ff6c222
+  checksum: ea59c985ebfae7c0299c8ea63ed34903202f51665db8d59c55b4366e20270b74d7367a2c211fdd2db20f25750df89adcc85ab6c8692061c6459a88efb79f43e6
   languageName: node
   linkType: hard
 
@@ -365,21 +355,21 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/traverse@npm:^7.17.3, @babel/traverse@npm:^7.7.2":
-  version: 7.17.3
-  resolution: "@babel/traverse@npm:7.17.3"
+"@babel/traverse@npm:^7.17.3, @babel/traverse@npm:^7.17.9, @babel/traverse@npm:^7.7.2":
+  version: 7.17.9
+  resolution: "@babel/traverse@npm:7.17.9"
   dependencies:
     "@babel/code-frame": ^7.16.7
-    "@babel/generator": ^7.17.3
+    "@babel/generator": ^7.17.9
     "@babel/helper-environment-visitor": ^7.16.7
-    "@babel/helper-function-name": ^7.16.7
+    "@babel/helper-function-name": ^7.17.9
     "@babel/helper-hoist-variables": ^7.16.7
     "@babel/helper-split-export-declaration": ^7.16.7
-    "@babel/parser": ^7.17.3
+    "@babel/parser": ^7.17.9
     "@babel/types": ^7.17.0
     debug: ^4.1.0
     globals: ^11.1.0
-  checksum: 780d7ecf711758174989794891af08d378f81febdb8932056c0d9979524bf0298e28f8e7708a872d7781151506c28f56c85c63ea3f1f654662c2fcb8a3eb9fdc
+  checksum: d907c71d1617589cc0cddc9837cb27bcb9b8f2117c379e13e72653745abe01da24e8c072bd0c91b9db33323ddb1086722756fbc50b487b2608733baf9dd6fd2c
   languageName: node
   linkType: hard
 
@@ -937,13 +927,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@npmcli/move-file@npm:^1.1.2":
-  version: 1.1.2
-  resolution: "@npmcli/move-file@npm:1.1.2"
+"@npmcli/move-file@npm:^2.0.0":
+  version: 2.0.0
+  resolution: "@npmcli/move-file@npm:2.0.0"
   dependencies:
     mkdirp: ^1.0.4
     rimraf: ^3.0.2
-  checksum: c96381d4a37448ea280951e46233f7e541058cf57a57d4094dd4bdcaae43fa5872b5f2eb6bfb004591a68e29c5877abe3cdc210cb3588cbf20ab2877f31a7de7
+  checksum: 1388777b507b0c592d53f41b9d182e1a8de7763bc625fc07999b8edbc22325f074e5b3ec90af79c89d6987fdb2325bc66d59f483258543c14a43661621f841b0
   languageName: node
   linkType: hard
 
@@ -1050,8 +1040,8 @@ __metadata:
 
 "@types/graasp@github:graasp/graasp-types":
   version: 0.1.0
-  resolution: "@types/graasp@https://github.com/graasp/graasp-types.git#commit=c49643d52243f9819678a53cfe46080c17c321ba"
-  checksum: cabc5781ead8f3e9a2a1849b815ac0b4df7795fa871aec9efbc27a3d26119338819533301cccaa51ff87b74eb74a0d2a5595b18e840a6314eaf6698150722843
+  resolution: "@types/graasp@https://github.com/graasp/graasp-types.git#commit=1d2271ba341c4fe7c99bd7fee3288341ec9e58bb"
+  checksum: 637dbed54bbe59f4a0bdede7fd93aa88e0f8818aae1a2e57c75c88a3c8cd9d42c9c02df7f9f2e796efbe6fc351833d3fab6f54a42005daa0a8858ed6c91b7481
   languageName: node
   linkType: hard
 
@@ -1866,11 +1856,11 @@ __metadata:
   linkType: hard
 
 "cacache@npm:^16.0.2":
-  version: 16.0.3
-  resolution: "cacache@npm:16.0.3"
+  version: 16.0.4
+  resolution: "cacache@npm:16.0.4"
   dependencies:
     "@npmcli/fs": ^2.1.0
-    "@npmcli/move-file": ^1.1.2
+    "@npmcli/move-file": ^2.0.0
     chownr: ^2.0.0
     fs-minipass: ^2.1.0
     glob: ^7.2.0
@@ -1884,10 +1874,10 @@ __metadata:
     p-map: ^4.0.0
     promise-inflight: ^1.0.1
     rimraf: ^3.0.2
-    ssri: ^8.0.1
+    ssri: ^9.0.0
     tar: ^6.1.11
     unique-filename: ^1.1.1
-  checksum: 9bb9a0bd1b8bee3284c6fa9dcb4b28a62b528dd181f7cd482319611b5d6df295a3594dcefc24d1a4f16162bac50d6facc183ed21935f3d09af6d16f620ea54d3
+  checksum: f5ddd45e5b1ff5001f9d1fcbc95f1dc210e6b04fbaf92782dd16a514e9a8082efba6eac43dac3d881e2ab5829f5ad857d7deda58cbef235e93d075e8f378214a
   languageName: node
   linkType: hard
 
@@ -2419,9 +2409,9 @@ __metadata:
   linkType: hard
 
 "electron-to-chromium@npm:^1.4.84":
-  version: 1.4.103
-  resolution: "electron-to-chromium@npm:1.4.103"
-  checksum: ae5783cafb1f49e92946416fafc5af45d85e5a6847ce00f4cf4b4d2e54bca1d27b26699ea2cedf5b700c1a0190329e7ec20dc06198daa9f0c343044bc074ae75
+  version: 1.4.105
+  resolution: "electron-to-chromium@npm:1.4.105"
+  checksum: b7f41bb7c504ad1a24ca13a97c761832198461180f5371f8a08243141e759696c565080ad4ff6e30ff2344f3f3b4be19b85287e083beca68a4dbe2d4da91dc0a
   languageName: node
   linkType: hard
 
@@ -3256,9 +3246,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"graasp-plugin-actions@github:graasp/graasp-plugin-actions#13/makeCreateTaskGeneric":
+"graasp-plugin-actions@github:graasp/graasp-plugin-actions":
   version: 0.1.0
-  resolution: "graasp-plugin-actions@https://github.com/graasp/graasp-plugin-actions.git#commit=7241643eaab4844aabeea44b2132d353fffded2a"
+  resolution: "graasp-plugin-actions@https://github.com/graasp/graasp-plugin-actions.git#commit=de36238802685d5018ba5980ba3734bac12ca943"
   dependencies:
     fluent-json-schema: 3.0.1
     geoip-lite: 1.4.2
@@ -3284,7 +3274,7 @@ __metadata:
     fastify: ^3.25.3
     fastify-plugin: ^3.0.0
     geoip-lite: 1.4.2
-    graasp-plugin-actions: "github:graasp/graasp-plugin-actions#13/makeCreateTaskGeneric"
+    graasp-plugin-actions: "github:graasp/graasp-plugin-actions"
     graasp-plugin-public: "github:graasp/graasp-plugin-public"
     graasp-websockets: "github:graasp/graasp-websockets"
     husky: 7.0.4
@@ -3299,13 +3289,13 @@ __metadata:
 
 "graasp-plugin-public@github:graasp/graasp-plugin-public":
   version: 0.1.0
-  resolution: "graasp-plugin-public@https://github.com/graasp/graasp-plugin-public.git#commit=690102927a2c7cf78335a0cab633fa2fac9131a3"
+  resolution: "graasp-plugin-public@https://github.com/graasp/graasp-plugin-public.git#commit=b5eade70bc8add60800876044dc68de932831d15"
   dependencies:
     fastify-cors: ^6.0.2
     graasp-item-tags: "github:graasp/graasp-item-tags"
     http-status-codes: ^2.2.0
     qs: ^6.10.2
-  checksum: 5393af38efe2d0f89709310797a4a20e4aa002e289bef01ebb2f03e845d2c5dcb7d4181d9eeb6ff2c42079cb8ea8b48c8101425dfad05664c47f0fae18b40d95
+  checksum: e35570fa478e8fab2eddc44055cd60b4fe114df330dc8bdafbfbd578690fdad20d5ee73bf5616975e61d308efe5f632d031df6bb13636e26e67845f5dfef0a55
   languageName: node
   linkType: hard
 
@@ -4431,7 +4421,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"json5@npm:2.x, json5@npm:^2.1.2":
+"json5@npm:2.x, json5@npm:^2.2.1":
   version: 2.2.1
   resolution: "json5@npm:2.2.1"
   bin:
@@ -4603,7 +4593,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"lru-cache@npm:^7.7.1":
+"lru-cache@npm:^7.4.0, lru-cache@npm:^7.7.1":
   version: 7.7.3
   resolution: "lru-cache@npm:7.7.3"
   checksum: 1789743a68a8db052564a9dd020f04ba0712327a43e08babc94f05e1c56ef75a03514cf4acab75ae90e3d5d16ae02c7bf0f34754968dc5b8c2c3bc2d92c21745
@@ -4627,8 +4617,8 @@ __metadata:
   linkType: hard
 
 "make-fetch-happen@npm:^10.0.3":
-  version: 10.1.1
-  resolution: "make-fetch-happen@npm:10.1.1"
+  version: 10.1.2
+  resolution: "make-fetch-happen@npm:10.1.2"
   dependencies:
     agentkeepalive: ^4.2.1
     cacache: ^16.0.2
@@ -4645,8 +4635,8 @@ __metadata:
     negotiator: ^0.6.3
     promise-retry: ^2.0.1
     socks-proxy-agent: ^6.1.1
-    ssri: ^8.0.1
-  checksum: 3f1b0acc2032061a01bb44458e07bbd5721e3fbfb5a1620eef38e7c7d022f2141373fc41a8056685441c70444d94e1479485492ac6e9e8ad5de87ea29ca9d9e4
+    ssri: ^9.0.0
+  checksum: 42825d119a7e4f5b1a8e7048a86d328cd36bb1ff875d155ce7079d9a0afdd310c198fb310096af358cfa9ecdf643cecf960380686792457dccb36e17efe89eb0
   languageName: node
   linkType: hard
 
@@ -5850,7 +5840,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"semver@npm:7.3.5, semver@npm:7.x, semver@npm:^7.2.1, semver@npm:^7.3.2, semver@npm:^7.3.4, semver@npm:^7.3.5":
+"semver@npm:7.3.5":
   version: 7.3.5
   resolution: "semver@npm:7.3.5"
   dependencies:
@@ -5858,6 +5848,17 @@ __metadata:
   bin:
     semver: bin/semver.js
   checksum: 5eafe6102bea2a7439897c1856362e31cc348ccf96efd455c8b5bc2c61e6f7e7b8250dc26b8828c1d76a56f818a7ee907a36ae9fb37a599d3d24609207001d60
+  languageName: node
+  linkType: hard
+
+"semver@npm:7.x, semver@npm:^7.2.1, semver@npm:^7.3.2, semver@npm:^7.3.4, semver@npm:^7.3.5":
+  version: 7.3.6
+  resolution: "semver@npm:7.3.6"
+  dependencies:
+    lru-cache: ^7.4.0
+  bin:
+    semver: bin/semver.js
+  checksum: 9845f96b22268190b30025e02feca391451f2bd49b2c51920c27cc56744f64cbe397df089018fdb347d4b4fd800eabbd85661870eb63eb28055d2b72e457f759
   languageName: node
   linkType: hard
 
@@ -6134,12 +6135,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ssri@npm:^8.0.1":
-  version: 8.0.1
-  resolution: "ssri@npm:8.0.1"
+"ssri@npm:^9.0.0":
+  version: 9.0.0
+  resolution: "ssri@npm:9.0.0"
   dependencies:
     minipass: ^3.1.1
-  checksum: bc447f5af814fa9713aa201ec2522208ae0f4d8f3bda7a1f445a797c7b929a02720436ff7c478fb5edc4045adb02b1b88d2341b436a80798734e2494f1067b36
+  checksum: bf33174232d07cc64e77ab1c51b55d28352273380c503d35642a19627e88a2c5f160039bb0a28608a353485075dda084dbf0390c7070f9f284559eb71d01b84b
   languageName: node
   linkType: hard
 
