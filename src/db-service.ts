@@ -7,11 +7,17 @@ import { ChatMessage } from './interfaces/chat-message';
 export class ChatService {
   // the 'safe' way to dynamically generate the columns names:
   private static allColumns = sql.join(
-    ['id', ['chat_id', 'chatId'], 'creator', ['created_at', 'createdAt'], ['updated_at', 'updatedAt'], 'body'].map(
-      (c) =>
-        !Array.isArray(c)
-          ? sql.identifier([c])
-          : sql.join(
+    [
+      'id',
+      ['chat_id', 'chatId'],
+      'creator',
+      ['created_at', 'createdAt'],
+      ['updated_at', 'updatedAt'],
+      'body',
+    ].map((c) =>
+      !Array.isArray(c)
+        ? sql.identifier([c])
+        : sql.join(
             c.map((cwa) => sql.identifier([cwa])),
             sql` AS `,
           ),

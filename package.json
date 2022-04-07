@@ -19,7 +19,8 @@
     "prepack": "yarn build",
     "clean": "npx shx rm -rf dist/ coverage/",
     "lint": "npx eslint \"{src,test}/**/*.ts\"",
-    "test": "exit 0",
+    "test": "jest",
+    "test:watch": "yarn test --watchAll",
     "prettier:check": "prettier --check \"{src,test}/**/*.ts\"",
     "prettier:write": "prettier --write \"{src,test}/**/*.ts\"",
     "test:ci": "npx jest --ci --colors",
@@ -31,6 +32,8 @@
   "dependencies": {
     "fastify": "^3.25.3",
     "fastify-plugin": "^3.0.0",
+    "geoip-lite": "1.4.2",
+    "graasp-plugin-actions": "github:graasp/graasp-plugin-actions",
     "graasp-plugin-public": "github:graasp/graasp-plugin-public",
     "graasp-websockets": "github:graasp/graasp-websockets"
   },
@@ -38,6 +41,7 @@
     "@commitlint/cli": "16.0.1",
     "@commitlint/config-conventional": "16.0.0",
     "@types/graasp": "github:graasp/graasp-types",
+    "@types/jest": "27.4.0",
     "@typescript-eslint/eslint-plugin": "5.9.0",
     "@typescript-eslint/parser": "5.9.0",
     "eslint": "8.6.0",

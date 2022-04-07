@@ -12,9 +12,22 @@ import { FastifyPluginAsync } from 'fastify';
 import fp from 'fastify-plugin';
 import { ChatService } from './db-service';
 import { ChatMessage } from './interfaces/chat-message';
-import common, { getChat, patchMessage, publishMessage, removeMessage } from './schemas';
+import common, {
+  getChat,
+  patchMessage,
+  publishMessage,
+  removeMessage,
+} from './schemas';
 import { TaskManager } from './task-manager';
 import { registerChatWsHooks } from './ws/hooks';
+import {
+  ActionHandlerInput,
+  ActionService,
+  ActionTaskManager,
+  BaseAction,
+} from 'graasp-plugin-actions';
+import { CLIENT_HOSTS } from './constants/constants';
+import { createChatActionHandler } from './handler/chat-action-handler';
 
 // hack to force compiler to discover websockets service
 declare module 'fastify' {
@@ -65,6 +78,30 @@ const plugin: FastifyPluginAsync<GraaspChatPluginOptions> = async (
     );
   }
 
+  // add actions
+  const actionService = new ActionService();
+  const actionTaskManager = new ActionTaskManager(actionService, CLIENT_HOSTS);
+  fastify.addHook('onSend', async (request, reply, payload) => {
+    // todo: save public actions?
+    if (request.member) {
+      // wrap the createItemActionHandler in a new function to provide it with the properties we already have
+      // todo: make better types -> use graasp constants or graasp types
+      const actionHandler = (
+        actionInput: ActionHandlerInput,
+      ): Promise<BaseAction[]> =>
+        createChatActionHandler(payload as string, actionInput);
+      const createActionTask = actionTaskManager.createCreateTask(
+        request.member,
+        {
+          request,
+          reply,
+          handler: actionHandler,
+        },
+      );
+      await runner.runSingle(createActionTask);
+    }
+  });
+
   fastify.get<{ Params: { itemId: string } }>(
     '/:itemId/chat',
     { schema: getChat },
@@ -88,7 +125,7 @@ const plugin: FastifyPluginAsync<GraaspChatPluginOptions> = async (
   );
 
   // patch message
-  fastify.patch<{ Params: { itemId: string, messageId: string } }>(
+  fastify.patch<{ Params: { itemId: string; messageId: string } }>(
     '/:itemId/chat/:messageId',
     { schema: patchMessage },
     async ({ member, params: { itemId, messageId }, body, log }) => {
@@ -103,7 +140,7 @@ const plugin: FastifyPluginAsync<GraaspChatPluginOptions> = async (
   );
 
   // delete message
-  fastify.delete<{ Params: { itemId: string, messageId: string } }>(
+  fastify.delete<{ Params: { itemId: string; messageId: string } }>(
     '/:itemId/chat/:messageId',
     { schema: removeMessage },
     async ({ member, params: { itemId, messageId }, log }) => {

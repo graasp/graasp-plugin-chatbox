@@ -9,7 +9,7 @@ import {
 import { ChatService } from '../db-service';
 import { ChatMessage } from '../interfaces/chat-message';
 import { BaseChatTask } from './base-chat-task';
-import { ChatMessageNotFound } from "../util/graasp-item-chat-error";
+import { ChatMessageNotFound } from '../util/graasp-item-chat-error';
 
 type InputType = {
   item?: Item;
