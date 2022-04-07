@@ -14,7 +14,7 @@ export const GRAASP_ACTOR = { id: '12345678-1234-1234-1234-123456789012' };
 export const checkActionData = (savedAction, args) => {
   const {
     actionType,
-    extraItemId,
+    message,
     itemType = ITEM_TYPES.CHAT,
     itemId = ITEM_ID,
     view = VIEW_UNKNOWN_NAME,
@@ -25,7 +25,6 @@ export const checkActionData = (savedAction, args) => {
   expect(savedAction.memberId).toEqual(memberId);
   expect(savedAction.actionType).toEqual(actionType);
   expect(savedAction.view).toEqual(view);
-  expect(savedAction.extra.itemId).toEqual(itemId ?? extraItemId);
-  expect(savedAction.extra.memberId).toEqual(memberId);
+  expect(savedAction.extra.message).toEqual(message);
   expect(savedAction.geolocation).toBeFalsy();
 };

@@ -72,8 +72,8 @@ describe('Build actions', () => {
     expect(savedActions.length).toEqual(1);
     checkActionData(savedActions[0], {
       actionType: ACTION_TYPES.CREATE,
+      message: postPayload,
     });
-    expect(savedActions[0].extra.message).toEqual(postPayload);
   });
 
   it('PATCH chat message', async () => {
@@ -100,8 +100,8 @@ describe('Build actions', () => {
     expect(savedActions.length).toEqual(1);
     checkActionData(savedActions[0], {
       actionType: ACTION_TYPES.UPDATE,
+      message: patchPayload,
     });
-    expect(savedActions[0].extra.message).toEqual(patchPayload);
   });
 
   it('DELETE chat message', async () => {
@@ -125,7 +125,7 @@ describe('Build actions', () => {
     expect(savedActions.length).toEqual(1);
     checkActionData(savedActions[0], {
       actionType: ACTION_TYPES.DELETE,
+      message: deletePayload,
     });
-    expect(savedActions[0].extra.message).toEqual(deletePayload);
   });
 });
