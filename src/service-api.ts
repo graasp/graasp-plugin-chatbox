@@ -16,7 +16,6 @@ import common, {
   getChat,
   patchMessage,
   publishMessage,
-  removeChat,
   removeMessage,
 } from './schemas';
 import { TaskManager } from './task-manager';
