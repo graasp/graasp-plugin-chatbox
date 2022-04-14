@@ -177,16 +177,6 @@ const plugin: FastifyPluginAsync<GraaspChatPluginOptions> = async (
     },
     { prefix: '/items' },
   );
-
-  // delete chat
-  fastify.delete<{ Params: { itemId: string } }>(
-    '/:itemId/chat/',
-    { schema: removeChat },
-    async ({ member, params: { itemId }, log }) => {
-      const tasks = taskManager.createRemoveChatTaskSequence(member, itemId);
-      return runner.runSingleSequence(tasks, log);
-    },
-  );
 };
 
 export default fp(plugin, {
