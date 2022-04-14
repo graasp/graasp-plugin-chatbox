@@ -46,6 +46,25 @@ export class ChatService {
   }
 
   /**
+   * Retrieves a message of the given chat
+   * @param messageId Id of the message to retrieve
+   */
+  async getMessage(
+    messageId: string,
+    transactionHandler: TrxHandler,
+  ): Promise<ChatMessage> {
+    return transactionHandler
+      .query<ChatMessage>(
+        sql`
+            SELECT ${ChatService.allColumns}
+            FROM chat_message
+            WHERE id = ${messageId}
+        `,
+      )
+      .then(({ rows }) => rows[0]);
+  }
+
+  /**
    * Adds a message to the given chat
    * @param message Message
    */
