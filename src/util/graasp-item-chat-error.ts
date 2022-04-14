@@ -59,11 +59,24 @@ export class ChatMessageNotFound extends GraaspItemChatError {
   }
 }
 
-export class MemberCanNotDeleteChat extends GraaspItemChatError {
+export class MemberCanNotDeleteMessage extends GraaspItemChatError {
   constructor(data?: unknown) {
     super(
       {
         code: 'GICERR004',
+        statusCode: 403,
+        message: 'Member can not delete messages that are not his own',
+      },
+      data,
+    );
+  }
+}
+
+export class MemberCanNotDeleteChat extends GraaspItemChatError {
+  constructor(data?: unknown) {
+    super(
+      {
+        code: 'GICERR005',
         statusCode: 403,
         message: 'Member has insufficient permissions to clear this chat',
       },

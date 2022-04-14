@@ -9,7 +9,10 @@ import {
 import { ChatService } from '../db-service';
 import { ChatMessage } from '../interfaces/chat-message';
 import { BaseChatTask } from './base-chat-task';
-import { ChatMessageNotFound } from '../util/graasp-item-chat-error';
+import {
+  ChatMessageNotFound,
+  MemberCanNotDeleteMessage,
+} from '../util/graasp-item-chat-error';
 
 type InputType = {
   item?: Item;
@@ -48,6 +51,13 @@ export class DeleteMessageTask extends BaseChatTask<ChatMessage> {
     const { chatId, messageId } = this.input;
 
     this.targetId = messageId;
+
+    const { creator } = await this.chatService.getMessage(messageId, handler);
+
+    // check that member requesting the deletion is the owner of the message
+    if (this.actor.id !== creator) {
+      throw new MemberCanNotDeleteMessage(messageId);
+    }
 
     // delete message
     const res = await this.chatService.deleteMessage(
