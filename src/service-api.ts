@@ -47,6 +47,7 @@ const plugin: FastifyPluginAsync<GraaspChatPluginOptions> = async (
   fastify,
   _options,
 ) => {
+  // isolate plugin content using fastify.register to ensure that the hooks will not be called when other routes match
   fastify.register(async function (fastify) {
     const {
       items: { dbService: itemService, taskManager: iTM },
