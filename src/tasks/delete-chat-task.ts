@@ -53,7 +53,6 @@ export class DeleteChatTask extends BaseChatTask<Chat> {
       item,
       handler,
     );
-    console.log('Can Admin', canAdmin, this.actor.id);
     // user does not have sufficient rights
     if (!canAdmin) {
       throw new MemberCanNotDeleteChat(chatId);
@@ -62,7 +61,7 @@ export class DeleteChatTask extends BaseChatTask<Chat> {
     const messages = await this.chatService.deleteChat(chatId, handler);
     await this.postHookHandler?.(chatId, this.actor, { log, handler });
     const chat: Chat = { id: this.targetId, messages };
-    console.log('chat', chat);
+
     // return chat message
     this._result = chat;
     this.status = 'OK';

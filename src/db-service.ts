@@ -143,9 +143,6 @@ export class ChatService {
             WHERE chat_id = ${chatId} RETURNING ${ChatService.allColumns}
         `,
       )
-      .then(({ rows }) => {
-        console.log(rows);
-        return rows.slice(0);
-      });
+      .then(({ rows }) => rows.slice(0));
   }
 }
