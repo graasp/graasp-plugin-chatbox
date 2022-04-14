@@ -49,134 +49,127 @@ const plugin: FastifyPluginAsync<GraaspChatPluginOptions> = async (
   _options,
 ) => {
   // isolate plugin content using fastify.register to ensure that the hooks will not be called when other routes match
-  fastify.register(
-    async function (fastify) {
-      const {
-        items: { dbService: itemService, taskManager: iTM },
-        itemMemberships: { dbService: itemMembershipsService },
-        taskRunner: runner,
-        websockets,
-        db,
-      } = fastify;
+  fastify.register(async function (fastify) {
+    const {
+      items: { dbService: itemService, taskManager: iTM },
+      itemMemberships: { dbService: itemMembershipsService },
+      taskRunner: runner,
+      websockets,
+      db,
+    } = fastify;
 
-      const chatService = new ChatService();
-      const taskManager = new TaskManager(
+    const chatService = new ChatService();
+    const taskManager = new TaskManager(
+      itemService,
+      itemMembershipsService,
+      chatService,
+      iTM,
+    );
+
+    fastify.decorate('chat', { dbService: chatService, taskManager });
+
+    fastify.addSchema(common);
+
+    // register websocket behaviours for chats
+    if (websockets) {
+      registerChatWsHooks(
+        websockets,
+        runner,
         itemService,
         itemMembershipsService,
-        chatService,
-        iTM,
+        taskManager,
+        db.pool,
       );
+    }
 
-      fastify.decorate('chat', { dbService: chatService, taskManager });
-
-      fastify.addSchema(common);
-
-      // register websocket behaviours for chats
-      if (websockets) {
-        registerChatWsHooks(
-          websockets,
-          runner,
-          itemService,
-          itemMembershipsService,
-          taskManager,
-          db.pool,
+    // add actions
+    const actionService = new ActionService();
+    const actionTaskManager = new ActionTaskManager(
+      actionService,
+      CLIENT_HOSTS,
+    );
+    fastify.addHook('onSend', async (request, reply, payload) => {
+      // todo: save public actions?
+      if (request.member) {
+        // wrap the createItemActionHandler in a new function to provide it with the properties we already have
+        // todo: make better types -> use graasp constants or graasp types
+        const actionHandler = (
+          actionInput: ActionHandlerInput,
+        ): Promise<BaseAction[]> =>
+          createChatActionHandler(payload as string, actionInput);
+        const createActionTask = actionTaskManager.createCreateTask(
+          request.member,
+          {
+            request,
+            reply,
+            handler: actionHandler,
+          },
         );
+        await runner.runSingle(createActionTask);
       }
+    });
 
-      // add actions
-      const actionService = new ActionService();
-      const actionTaskManager = new ActionTaskManager(
-        actionService,
-        CLIENT_HOSTS,
-      );
-      fastify.addHook('onSend', async (request, reply, payload) => {
-        // todo: save public actions?
-        if (request.member) {
-          // wrap the createItemActionHandler in a new function to provide it with the properties we already have
-          // todo: make better types -> use graasp constants or graasp types
-          const actionHandler = (
-            actionInput: ActionHandlerInput,
-          ): Promise<BaseAction[]> =>
-            createChatActionHandler(payload as string, actionInput);
-          const createActionTask = actionTaskManager.createCreateTask(
-            request.member,
-            {
-              request,
-              reply,
-              handler: actionHandler,
-            },
-          );
-          await runner.runSingle(createActionTask);
-        }
-      });
+    fastify.get<{ Params: { itemId: string } }>(
+      '/:itemId/chat',
+      { schema: getChat },
+      async ({ member, params: { itemId }, log }) => {
+        const tasks = taskManager.createGetTaskSequence(member, itemId);
+        return runner.runSingleSequence(tasks, log);
+      },
+    );
 
-      fastify.get<{ Params: { itemId: string } }>(
-        '/:itemId/chat',
-        { schema: getChat },
-        async ({ member, params: { itemId }, log }) => {
-          const tasks = taskManager.createGetTaskSequence(member, itemId);
-          return runner.runSingleSequence(tasks, log);
-        },
-      );
+    fastify.post<{ Params: { itemId: string }; Body: Partial<ChatMessage> }>(
+      '/:itemId/chat',
+      { schema: publishMessage },
+      async ({ member, params: { itemId }, body, log }) => {
+        const tasks = taskManager.createPublishMessageTaskSequence(
+          member,
+          itemId,
+          body,
+        );
+        return runner.runSingleSequence(tasks, log);
+      },
+    );
 
-      fastify.post<{ Params: { itemId: string }; Body: Partial<ChatMessage> }>(
-        '/:itemId/chat',
-        { schema: publishMessage },
-        async ({ member, params: { itemId }, body, log }) => {
-          const tasks = taskManager.createPublishMessageTaskSequence(
-            member,
-            itemId,
-            body,
-          );
-          return runner.runSingleSequence(tasks, log);
-        },
-      );
+    // patch message
+    fastify.patch<{ Params: { itemId: string; messageId: string } }>(
+      '/:itemId/chat/:messageId',
+      { schema: patchMessage },
+      async ({ member, params: { itemId, messageId }, body, log }) => {
+        const tasks = taskManager.createPatchMessageTaskSequence(
+          member,
+          itemId,
+          messageId,
+          body,
+        );
+        return runner.runSingleSequence(tasks, log);
+      },
+    );
 
-      // patch message
-      fastify.patch<{ Params: { itemId: string; messageId: string } }>(
-        '/:itemId/chat/:messageId',
-        { schema: patchMessage },
-        async ({ member, params: { itemId, messageId }, body, log }) => {
-          const tasks = taskManager.createPatchMessageTaskSequence(
-            member,
-            itemId,
-            messageId,
-            body,
-          );
-          return runner.runSingleSequence(tasks, log);
-        },
-      );
+    // delete message
+    fastify.delete<{ Params: { itemId: string; messageId: string } }>(
+      '/:itemId/chat/:messageId',
+      { schema: removeMessage },
+      async ({ member, params: { itemId, messageId }, log }) => {
+        const tasks = taskManager.createRemoveMessageTaskSequence(
+          member,
+          itemId,
+          messageId,
+        );
+        return runner.runSingleSequence(tasks, log);
+      },
+    );
 
-      // delete message
-      fastify.delete<{ Params: { itemId: string; messageId: string } }>(
-        '/:itemId/chat/:messageId',
-        { schema: removeMessage },
-        async ({ member, params: { itemId, messageId }, log }) => {
-          const tasks = taskManager.createRemoveMessageTaskSequence(
-            member,
-            itemId,
-            messageId,
-          );
-          return runner.runSingleSequence(tasks, log);
-        },
-      );
-
-      // delete chat
-      fastify.delete<{ Params: { itemId: string } }>(
-        '/:itemId/chat/',
-        { schema: removeChat },
-        async ({ member, params: { itemId }, log }) => {
-          console.log('inside the route');
-          const tasks = taskManager.createRemoveChatTaskSequence(
-            member,
-            itemId,
-          );
-          return runner.runSingleSequence(tasks, log);
-        },
-      );
-    },
-    { prefix: '/items' },
-  );
+    // delete chat
+    fastify.delete<{ Params: { itemId: string } }>(
+      '/:itemId/chat',
+      { schema: removeChat },
+      async ({ member, params: { itemId }, log }) => {
+        const tasks = taskManager.createRemoveChatTaskSequence(member, itemId);
+        return runner.runSingleSequence(tasks, log);
+      },
+    );
+  });
 };
 
 export default fp(plugin, {
