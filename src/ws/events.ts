@@ -13,7 +13,7 @@ export const itemChatTopic = 'chat/item';
 interface ChatEvent {
   kind: string;
   op: string;
-  message: ChatMessage;
+  message?: ChatMessage;
 }
 
 /**
@@ -21,8 +21,8 @@ interface ChatEvent {
  */
 interface ItemChatEvent extends ChatEvent {
   kind: 'item';
-  op: 'publish' | 'delete' | 'update';
-  message: ChatMessage;
+  op: 'publish' | 'delete' | 'update' | 'clear';
+  message?: ChatMessage;
 }
 
 /**
@@ -33,7 +33,7 @@ interface ItemChatEvent extends ChatEvent {
  */
 export const ItemChatEvent = (
   op: ItemChatEvent['op'],
-  message: ChatMessage,
+  message?: ChatMessage,
 ): ItemChatEvent => ({
   kind: 'item',
   op,

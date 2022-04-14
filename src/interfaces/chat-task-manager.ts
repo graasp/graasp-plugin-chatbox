@@ -9,7 +9,7 @@ export interface ChatTaskManager<A extends Actor = Actor> {
   /**
    * Returns the name of the get chat task (read)
    */
-  getGetChatTaskname(): string;
+  getGetChatTaskName(): string;
 
   /**
    * Returns the name of the publish message in chat task (write)
@@ -25,6 +25,11 @@ export interface ChatTaskManager<A extends Actor = Actor> {
    * Returns the name of the delete message in chat task (write)
    */
   getDeleteMessageTaskName(): string;
+
+  /**
+   * Returns the name of the delete chat task (write)
+   */
+  getDeleteChatTaskName(): string;
 
   /**
    * Factory for a task to get a chat

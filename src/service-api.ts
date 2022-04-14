@@ -16,6 +16,7 @@ import common, {
   getChat,
   patchMessage,
   publishMessage,
+  removeChat,
   removeMessage,
 } from './schemas';
 import { TaskManager } from './task-manager';
@@ -155,6 +156,16 @@ const plugin: FastifyPluginAsync<GraaspChatPluginOptions> = async (
           itemId,
           messageId,
         );
+        return runner.runSingleSequence(tasks, log);
+      },
+    );
+
+    // delete chat
+    fastify.delete<{ Params: { itemId: string } }>(
+      '/:itemId/chat/',
+      { schema: removeChat },
+      async ({ member, params: { itemId }, log }) => {
+        const tasks = taskManager.createRemoveChatTaskSequence(member, itemId);
         return runner.runSingleSequence(tasks, log);
       },
     );
