@@ -37,7 +37,6 @@ export class DeleteChatTask extends BaseChatTask<ChatMessage[]> {
   ) {
     super(member, itemService, itemMembershipService, chatService);
     this.input = input;
-    this.member = member;
   }
 
   async run(
@@ -55,6 +54,7 @@ export class DeleteChatTask extends BaseChatTask<ChatMessage[]> {
       item,
       handler,
     );
+    console.log('Can Admin', canAdmin, this.actor.id);
     // user does not have sufficient rights
     if (!canAdmin) {
       throw new MemberCanNotDeleteChat(chatId);
