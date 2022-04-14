@@ -7,9 +7,9 @@ import {
   Member,
 } from 'graasp';
 import { ChatService } from '../db-service';
-import { ChatMessage } from '../interfaces/chat-message';
 import { BaseChatTask } from './base-chat-task';
 import { MemberCanNotDeleteChat } from '../util/graasp-item-chat-error';
+import { Chat } from '../interfaces/chat';
 
 type InputType = {
   item?: Item;
@@ -19,10 +19,9 @@ type InputType = {
 /**
  * Task to delete a complete chat
  */
-export class DeleteChatTask extends BaseChatTask<ChatMessage[]> {
+export class DeleteChatTask extends BaseChatTask<Chat> {
   input?: InputType;
   getInput?: () => InputType;
-  member?: Member;
 
   get name(): string {
     return DeleteChatTask.name;
@@ -60,11 +59,12 @@ export class DeleteChatTask extends BaseChatTask<ChatMessage[]> {
       throw new MemberCanNotDeleteChat(chatId);
     }
     // delete message
-    const res = await this.chatService.deleteChat(chatId, handler);
+    const messages = await this.chatService.deleteChat(chatId, handler);
     await this.postHookHandler?.(chatId, this.actor, { log, handler });
-
+    const chat: Chat = { id: this.targetId, messages };
+    console.log('chat', chat);
     // return chat message
-    this._result = res;
+    this._result = chat;
     this.status = 'OK';
   }
 }

@@ -166,7 +166,9 @@ const plugin: FastifyPluginAsync<GraaspChatPluginOptions> = async (
       { schema: removeChat },
       async ({ member, params: { itemId }, log }) => {
         const tasks = taskManager.createRemoveChatTaskSequence(member, itemId);
-        return runner.runSingleSequence(tasks, log);
+        const result = runner.runSingleSequence(tasks, log);
+        console.log('service-api', result);
+        return result;
       },
     );
   });

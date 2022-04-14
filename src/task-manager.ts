@@ -148,7 +148,6 @@ export class TaskManager implements ChatTaskManager {
     chatId: string,
   ): Task<Actor, unknown>[] {
     const t1 = this.itemTaskManager.createGetTaskSequence(member, chatId);
-
     const t2 = new DeleteChatTask(
       member,
       this.itemService,

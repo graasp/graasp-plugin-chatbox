@@ -9,6 +9,7 @@ import {
 import { ChatMessage } from '../interfaces/chat-message';
 import { ChatTaskManager } from '../interfaces/chat-task-manager';
 import { ItemChatEvent, itemChatTopic } from './events';
+import { Chat } from '../interfaces/chat';
 
 export function registerChatWsHooks(
   websockets: WebSocketService,
@@ -77,7 +78,7 @@ export function registerChatWsHooks(
 
   // on delete chat, broadcast to item chat channel
   const deleteChatTaskName = chatTaskManager.getDeleteChatTaskName();
-  runner.setTaskPostHookHandler<string>(deleteChatTaskName, (chatId) => {
-    websockets.publish(itemChatTopic, chatId, ItemChatEvent('clear'));
+  runner.setTaskPostHookHandler<Chat>(deleteChatTaskName, (chat) => {
+    websockets.publish(itemChatTopic, chat.id, ItemChatEvent('clear'));
   });
 }
