@@ -15,7 +15,7 @@ import { GetChatTask } from './tasks/get-chat-task';
 import { PublishMessageTask } from './tasks/publish-message-task';
 import { DeleteMessageTask } from './tasks/delete-message-task';
 import { PatchMessageTask } from './tasks/patch-message-task';
-import { DeleteChatTask } from './tasks/delete-chat-task';
+import { ClearChatTask } from './tasks/clear-chat-task';
 
 /**
  * Concrete implementation of the chat task manager
@@ -49,8 +49,8 @@ export class TaskManager implements ChatTaskManager {
   getDeleteMessageTaskName(): string {
     return DeleteMessageTask.name;
   }
-  getDeleteChatTaskName(): string {
-    return DeleteMessageTask.name;
+  getClearChatTaskName(): string {
+    return ClearChatTask.name;
   }
   createGetTask(member: Actor, objectId: string): Task<Actor, Chat> {
     return new GetChatTask(
@@ -143,12 +143,12 @@ export class TaskManager implements ChatTaskManager {
     return [...t1, t2];
   }
 
-  createRemoveChatTaskSequence(
+  createClearChatTaskSequence(
     member: Member,
     chatId: string,
   ): Task<Actor, unknown>[] {
     const t1 = this.itemTaskManager.createGetTaskSequence(member, chatId);
-    const t2 = new DeleteChatTask(
+    const t2 = new ClearChatTask(
       member,
       this.itemService,
       this.itemMembershipService,

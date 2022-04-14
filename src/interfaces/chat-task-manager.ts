@@ -27,9 +27,9 @@ export interface ChatTaskManager<A extends Actor = Actor> {
   getDeleteMessageTaskName(): string;
 
   /**
-   * Returns the name of the delete chat task (write)
+   * Returns the name of the clear chat task (write)
    */
-  getDeleteChatTaskName(): string;
+  getClearChatTaskName(): string;
 
   /**
    * Factory for a task to get a chat
@@ -77,4 +77,11 @@ export interface ChatTaskManager<A extends Actor = Actor> {
     chatId: string,
     messageId: string,
   ): Task<A, unknown>[];
+
+  /**
+   * Factory for a task to clear a chat
+   * @param actor User performing the action
+   * @param chatId Chat ID
+   */
+  createClearChatTaskSequence(actor: A, chatId: string): Task<A, unknown>[];
 }

@@ -8,7 +8,7 @@ import {
 } from 'graasp';
 import { ChatService } from '../db-service';
 import { BaseChatTask } from './base-chat-task';
-import { MemberCanNotDeleteChat } from '../util/graasp-item-chat-error';
+import { MemberCanNotClearChat } from '../util/graasp-item-chat-error';
 import { Chat } from '../interfaces/chat';
 
 type InputType = {
@@ -17,14 +17,14 @@ type InputType = {
 };
 
 /**
- * Task to delete a complete chat
+ * Task to clear a complete chat
  */
-export class DeleteChatTask extends BaseChatTask<Chat> {
+export class ClearChatTask extends BaseChatTask<Chat> {
   input?: InputType;
   getInput?: () => InputType;
 
   get name(): string {
-    return DeleteChatTask.name;
+    return ClearChatTask.name;
   }
 
   constructor(
@@ -55,10 +55,10 @@ export class DeleteChatTask extends BaseChatTask<Chat> {
     );
     // user does not have sufficient rights
     if (!canAdmin) {
-      throw new MemberCanNotDeleteChat(chatId);
+      throw new MemberCanNotClearChat(chatId);
     }
     // delete message
-    const messages = await this.chatService.deleteChat(chatId, handler);
+    const messages = await this.chatService.clearChat(chatId, handler);
     await this.postHookHandler?.(chatId, this.actor, { log, handler });
     const chat: Chat = { id: this.targetId, messages };
 

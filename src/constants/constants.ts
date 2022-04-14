@@ -30,8 +30,8 @@ export enum METHODS {
 export enum ACTION_TYPES {
   CREATE = 'create',
   UPDATE = 'update',
-  DELETE = 'deleteMessage',
-  DELETE_CHAT = 'deleteChat',
+  DELETE = 'delete',
+  CLEAR = 'clear',
 }
 
 // todo: refactor from graasp utils? constants?
@@ -45,6 +45,6 @@ export const paths = {
     /^\/items\/[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[4][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}\/chat\/[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[4][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$/,
   deleteMessage:
     /^\/items\/[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[4][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}\/chat\/[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[4][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$/,
-  deleteChat:
+  clearChat:
     /^\/items\/[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[4][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}\/chat$/,
 };

@@ -101,13 +101,13 @@ const removeMessage = {
 };
 
 /**
- * JSON schema on DELETE remove message route for request and response
+ * JSON schema on DELETE clear chat route for request and response
  */
-const removeChat = {
+const clearChat = {
   params: { $ref: 'http://graasp.org/chat/#/definitions/itemIdParam' },
   response: {
     200: { $ref: 'http://graasp.org/chat/#/definitions/chat' },
   },
 };
 
-export { getChat, publishMessage, patchMessage, removeMessage, removeChat };
+export { getChat, publishMessage, patchMessage, removeMessage, clearChat };

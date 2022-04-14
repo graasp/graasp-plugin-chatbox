@@ -76,9 +76,9 @@ export function registerChatWsHooks(
     },
   );
 
-  // on delete chat, broadcast to item chat channel
-  const deleteChatTaskName = chatTaskManager.getDeleteChatTaskName();
-  runner.setTaskPostHookHandler<Chat>(deleteChatTaskName, (chat) => {
+  // on clear chat, broadcast to item chat channel
+  const clearChatTaskName = chatTaskManager.getClearChatTaskName();
+  runner.setTaskPostHookHandler<Chat>(clearChatTaskName, (chat) => {
     websockets.publish(itemChatTopic, chat.id, ItemChatEvent('clear'));
   });
 }

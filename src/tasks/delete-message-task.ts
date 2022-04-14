@@ -48,14 +48,19 @@ export class DeleteMessageTask extends BaseChatTask<ChatMessage> {
   ): Promise<void> {
     this.status = 'RUNNING';
 
-    const { chatId, messageId } = this.input;
+    const { chatId, messageId, item } = this.input;
 
     this.targetId = messageId;
 
     const { creator } = await this.chatService.getMessage(messageId, handler);
+    const canAdmin = await this.itemMembershipService.canAdmin(
+      this.actor.id,
+      item,
+      handler,
+    );
 
-    // check that member requesting the deletion is the owner of the message
-    if (this.actor.id !== creator) {
+    // check that member requesting the deletion is the owner of the message or that he has admin rights
+    if (this.actor.id !== creator && !canAdmin) {
       throw new MemberCanNotDeleteMessage(messageId);
     }
 

@@ -131,7 +131,7 @@ export class ChatService {
    * Remove all messages for the given chat
    * @param chatId Id of chat
    */
-  async deleteChat(
+  async clearChat(
     chatId: string,
     transactionHandler: TrxHandler,
   ): Promise<ChatMessage[]> {

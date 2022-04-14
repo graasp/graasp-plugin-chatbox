@@ -73,10 +73,10 @@ export const createChatActionHandler = async (
             actionType: ACTION_TYPES.DELETE,
           });
           break;
-        case paths.deleteChat.test(url):
+        case paths.clearChat.test(url):
           actionsToSave.push({
             ...actionBase,
-            actionType: ACTION_TYPES.DELETE_CHAT,
+            actionType: ACTION_TYPES.CLEAR,
           });
           break;
       }

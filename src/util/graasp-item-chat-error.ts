@@ -72,7 +72,7 @@ export class MemberCanNotDeleteMessage extends GraaspItemChatError {
   }
 }
 
-export class MemberCanNotDeleteChat extends GraaspItemChatError {
+export class MemberCanNotClearChat extends GraaspItemChatError {
   constructor(data?: unknown) {
     super(
       {

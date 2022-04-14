@@ -13,10 +13,10 @@ import fp from 'fastify-plugin';
 import { ChatService } from './db-service';
 import { ChatMessage } from './interfaces/chat-message';
 import common, {
+  clearChat,
   getChat,
   patchMessage,
   publishMessage,
-  removeChat,
   removeMessage,
 } from './schemas';
 import { TaskManager } from './task-manager';
@@ -160,12 +160,12 @@ const plugin: FastifyPluginAsync<GraaspChatPluginOptions> = async (
       },
     );
 
-    // delete chat
+    // clear chat
     fastify.delete<{ Params: { itemId: string } }>(
       '/:itemId/chat',
-      { schema: removeChat },
+      { schema: clearChat },
       async ({ member, params: { itemId }, log }) => {
-        const tasks = taskManager.createRemoveChatTaskSequence(member, itemId);
+        const tasks = taskManager.createClearChatTaskSequence(member, itemId);
         return runner.runSingleSequence(tasks, log);
       },
     );
