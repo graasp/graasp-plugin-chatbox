@@ -28,7 +28,7 @@ export abstract class BaseChatTask<R> implements Task<Actor, R> {
   targetId: string;
   data: Partial<IndividualResultType<R>>;
   preHookHandler: PreHookHandlerType<R>;
-  postHookHandler: PostHookHandlerType<R>;
+  postHookHandler: PostHookHandlerType<R | string>;
 
   input?: unknown;
   skip?: boolean;

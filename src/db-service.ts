@@ -107,4 +107,23 @@ export class ChatService {
       )
       .then(({ rows }) => rows[0]);
   }
+
+  /**
+   * Remove all messages for the given chat
+   * @param chatId Id of chat
+   */
+  async deleteChat(
+    chatId: string,
+    transactionHandler: TrxHandler,
+  ): Promise<ChatMessage[]> {
+    return transactionHandler
+      .query<ChatMessage>(
+        sql`
+            DELETE
+            FROM chat_message
+            WHERE chat_id = ${chatId} RETURNING ${ChatService.allColumns}
+        `,
+      )
+      .then(({ rows }) => rows.slice(0));
+  }
 }
