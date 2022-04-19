@@ -15,6 +15,7 @@ export const checkActionData = (savedAction, args) => {
   const {
     actionType,
     message,
+    chatId,
     itemType = ITEM_TYPES.CHAT,
     itemId = ITEM_ID,
     view = VIEW_UNKNOWN_NAME,
@@ -25,6 +26,11 @@ export const checkActionData = (savedAction, args) => {
   expect(savedAction.memberId).toEqual(memberId);
   expect(savedAction.actionType).toEqual(actionType);
   expect(savedAction.view).toEqual(view);
-  expect(savedAction.extra.message).toEqual(message);
+  if (message) {
+    expect(savedAction.extra.message).toEqual(message);
+  }
+  if (chatId) {
+    expect(savedAction.extra.chatId).toEqual(chatId);
+  }
   expect(savedAction.geolocation).toBeFalsy();
 };

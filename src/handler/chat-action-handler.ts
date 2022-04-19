@@ -77,6 +77,7 @@ export const createChatActionHandler = async (
           actionsToSave.push({
             ...actionBase,
             actionType: ACTION_TYPES.CLEAR,
+            extra: { chatId: chatData?.id },
           });
           break;
       }

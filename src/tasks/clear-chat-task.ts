@@ -58,12 +58,12 @@ export class ClearChatTask extends BaseChatTask<Chat> {
       throw new MemberCanNotClearChat(chatId);
     }
     // delete message
-    const messages = await this.chatService.clearChat(chatId, handler);
-    await this.postHookHandler?.(chatId, this.actor, { log, handler });
-    const chat: Chat = { id: this.targetId, messages };
+    await this.chatService.clearChat(chatId, handler);
+    const clearedChat: Chat = { id: this.targetId, messages: [] };
+    await this.postHookHandler?.(clearedChat, this.actor, { log, handler });
 
     // return chat message
-    this._result = chat;
+    this._result = clearedChat;
     this.status = 'OK';
   }
 }
