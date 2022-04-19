@@ -55,7 +55,14 @@ export class PublishMessageTask extends BaseChatTask<ChatMessage> {
     // publish message
     await this.preHookHandler?.(chatMessage, this.actor, { log, handler });
     const res = await this.chatService.publishMessage(chatMessage, handler);
-    await this.postHookHandler?.(res, this.actor, { log, handler });
+    console.log(res);
+    const newChatMessage = {
+      ...res,
+      // replace updatedAt from null value to empty string
+      ...(res?.updatedAt ? null : { updatedAt: '' }),
+    };
+    console.log(newChatMessage);
+    await this.postHookHandler?.(newChatMessage, this.actor, { log, handler });
 
     // return chat message
     this._result = res;
