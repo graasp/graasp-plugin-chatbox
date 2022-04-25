@@ -49,18 +49,6 @@ export class DeleteMessageTask extends BaseChatTask<ChatMessage> {
 
     this.targetId = messageId;
 
-    // const { creator } = await this.chatService.getMessage(messageId, handler);
-    // const canAdmin = await this.itemMembershipService.canAdmin(
-    //   this.actor.id,
-    //   item,
-    //   handler,
-    // );
-    //
-    // // check that member requesting the deletion is the owner of the message or that he has admin rights
-    // if (this.actor.id !== creator && !canAdmin) {
-    //   throw new MemberCanNotDeleteMessage(messageId);
-    // }
-
     // delete message
     const res = await this.chatService.deleteMessage(
       chatId,

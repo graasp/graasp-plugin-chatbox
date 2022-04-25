@@ -140,7 +140,7 @@ export class TaskManager implements ChatTaskManager {
     messageId: string,
   ): Task<Actor, unknown>[] {
     const t1 = this.itemTaskManager.createGetTaskSequence(member, chatId);
-    // get message to check th creator
+    // get message to check the creator
     const t2 = new GetMessageTask(
       member,
       this.itemService,
@@ -148,7 +148,6 @@ export class TaskManager implements ChatTaskManager {
       this.chatService,
       { messageId },
     );
-    console.log(PermissionLevel, PermissionLevel.Admin);
     // check if the member can admin the message
     const t3 = this.itemMembershipTaskManager.createGetMemberItemMembershipTask(
       member,

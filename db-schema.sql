@@ -3,7 +3,7 @@ CREATE TABLE "chat_message" (
     "chat_id" uuid REFERENCES "item" ("id") ON DELETE CASCADE,          -- id of item to which chat is attached
     "creator" uuid REFERENCES "member" ("id") ON DELETE SET NULL,       -- sender member
     "created_at" timestamp NOT NULL DEFAULT (NOW() AT TIME ZONE 'utc'),
-    "updated_at" timestamp,                                             -- NULL by default, only set by trigger on update
+    "updated_at" timestamp NOT NULL DEFAULT (NOW() AT TIME ZONE 'utc'), -- same as created_at by default, changed by trigger on UPDATE
     "body" character varying(500)
 );
 
@@ -16,4 +16,4 @@ CREATE INDEX ON "chat_message" ("created_at");      -- optimize order by datetim
 CREATE TRIGGER "chat_message_set_timestamp"
     BEFORE UPDATE ON "chat_message"
     FOR EACH ROW
-EXECUTE PROCEDURE trigger_set_timestamp();  -- already exists in database
+EXECUTE PROCEDURE trigger_set_timestamp();          -- already exists in database

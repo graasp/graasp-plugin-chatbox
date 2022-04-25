@@ -47,15 +47,6 @@ export class ClearChatTask extends BaseChatTask<Chat> {
 
     this.targetId = chatId;
 
-    // const canAdmin = await this.itemMembershipService.canAdmin(
-    //   this.actor.id,
-    //   item,
-    //   handler,
-    // );
-    // // user does not have sufficient rights
-    // if (!canAdmin) {
-    //   throw new MemberCanNotClearChat(chatId);
-    // }
     // delete message
     await this.chatService.clearChat(chatId, handler);
     const clearedChat: Chat = { id: this.targetId, messages: [] };

@@ -49,7 +49,7 @@ export class GetMessageTask extends BaseChatTask<ChatMessage> {
     if (!message) {
       throw new ChatMessageNotFound(messageId);
     }
-    console.log(message);
+
     // return chat
     this._result = message;
     this.status = 'OK';
