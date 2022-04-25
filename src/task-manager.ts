@@ -148,6 +148,7 @@ export class TaskManager implements ChatTaskManager {
       this.chatService,
       { messageId },
     );
+    console.log(PermissionLevel, PermissionLevel.Admin);
     // check if the member can admin the message
     const t3 = this.itemMembershipTaskManager.createGetMemberItemMembershipTask(
       member,

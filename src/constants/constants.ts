@@ -21,7 +21,7 @@ export const CLIENT_HOSTS = [
 ];
 
 // todo: get from graasp constants/utils
-export declare enum PermissionLevel {
+export enum PermissionLevel {
   Read = 'read',
   Write = 'write',
   Admin = 'admin',
