@@ -167,6 +167,7 @@ export class TaskManager implements ChatTaskManager {
     // skip the task if the member is creator of the message
     t3.getInput = () => {
       t3.skip = t2.result.creator == member.id;
+      return { item: t1[0].result as Item };
     };
 
     return [...t1, t2, t3, t4];
