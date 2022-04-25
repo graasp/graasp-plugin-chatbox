@@ -6,7 +6,6 @@ import {
   ItemService,
   ItemTaskManager,
   Member,
-  PermissionLevel,
   Task,
 } from 'graasp';
 import { ChatService } from './db-service';
@@ -19,6 +18,7 @@ import { DeleteMessageTask } from './tasks/delete-message-task';
 import { PatchMessageTask } from './tasks/patch-message-task';
 import { ClearChatTask } from './tasks/clear-chat-task';
 import { GetMessageTask } from './tasks/get-message-task';
+import { PermissionLevel } from './constants/constants';
 
 /**
  * Concrete implementation of the chat task manager

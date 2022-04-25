@@ -4,7 +4,7 @@ export enum ITEM_TYPES {
   CHAT = 'chat',
 }
 
-// todo: get from graasp constants
+// todo: get from graasp constants/utils
 export const CLIENT_HOSTS = [
   {
     name: 'builder',
@@ -19,6 +19,13 @@ export const CLIENT_HOSTS = [
     hostname: 'explorer.graasp.org',
   },
 ];
+
+// todo: get from graasp constants/utils
+export declare enum PermissionLevel {
+  Read = 'read',
+  Write = 'write',
+  Admin = 'admin',
+}
 
 export enum METHODS {
   GET = 'GET',
