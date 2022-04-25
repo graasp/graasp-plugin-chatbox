@@ -65,7 +65,7 @@ export class MemberCanNotDeleteMessage extends GraaspItemChatError {
       {
         code: 'GICERR004',
         statusCode: 403,
-        message: 'Member can not delete messages that are not his own',
+        message: 'Members can only delete their own messages',
       },
       data,
     );

@@ -52,7 +52,7 @@ const plugin: FastifyPluginAsync<GraaspChatPluginOptions> = async (
   fastify.register(async function (fastify) {
     const {
       items: { dbService: itemService, taskManager: iTM },
-      itemMemberships: { dbService: itemMembershipsService },
+      itemMemberships: { dbService: itemMembershipsService, taskManager: iMTM },
       taskRunner: runner,
       websockets,
       db,
@@ -64,6 +64,7 @@ const plugin: FastifyPluginAsync<GraaspChatPluginOptions> = async (
       itemMembershipsService,
       chatService,
       iTM,
+      iMTM,
     );
 
     fastify.decorate('chat', { dbService: chatService, taskManager });

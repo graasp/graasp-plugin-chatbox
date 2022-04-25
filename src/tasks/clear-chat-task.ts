@@ -8,7 +8,6 @@ import {
 } from 'graasp';
 import { ChatService } from '../db-service';
 import { BaseChatTask } from './base-chat-task';
-import { MemberCanNotClearChat } from '../util/graasp-item-chat-error';
 import { Chat } from '../interfaces/chat';
 
 type InputType = {
@@ -44,19 +43,19 @@ export class ClearChatTask extends BaseChatTask<Chat> {
   ): Promise<void> {
     this.status = 'RUNNING';
 
-    const { chatId, item } = this.input;
+    const { chatId } = this.input;
 
     this.targetId = chatId;
 
-    const canAdmin = await this.itemMembershipService.canAdmin(
-      this.actor.id,
-      item,
-      handler,
-    );
-    // user does not have sufficient rights
-    if (!canAdmin) {
-      throw new MemberCanNotClearChat(chatId);
-    }
+    // const canAdmin = await this.itemMembershipService.canAdmin(
+    //   this.actor.id,
+    //   item,
+    //   handler,
+    // );
+    // // user does not have sufficient rights
+    // if (!canAdmin) {
+    //   throw new MemberCanNotClearChat(chatId);
+    // }
     // delete message
     await this.chatService.clearChat(chatId, handler);
     const clearedChat: Chat = { id: this.targetId, messages: [] };
