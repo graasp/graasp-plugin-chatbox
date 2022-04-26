@@ -148,11 +148,17 @@ export class TaskManager implements ChatTaskManager {
       this.chatService,
       { messageId },
     );
+    t2.getInput = () => ({ item: t1[0].result as Item });
     // check if the member can admin the message
     const t3 = this.itemMembershipTaskManager.createGetMemberItemMembershipTask(
       member,
       { validatePermission: PermissionLevel.Admin },
     );
+    // skip the task if the member is creator of the message
+    t3.getInput = () => {
+      t3.skip = t2.result.creator === member.id;
+      return { item: t1[0].result as Item };
+    };
     const t4 = new DeleteMessageTask(
       member,
       this.itemService,
@@ -163,12 +169,6 @@ export class TaskManager implements ChatTaskManager {
         messageId,
       },
     );
-    t2.getInput = () => ({ item: t1[0].result as Item });
-    // skip the task if the member is creator of the message
-    t3.getInput = () => {
-      t3.skip = t2.result.creator == member.id;
-      return { item: t1[0].result as Item };
-    };
 
     return [...t1, t2, t3, t4];
   }
@@ -182,6 +182,7 @@ export class TaskManager implements ChatTaskManager {
       member,
       { validatePermission: PermissionLevel.Admin },
     );
+    t2.getInput = () => ({ item: t1[0].result as Item });
     const t3 = new ClearChatTask(
       member,
       this.itemService,
@@ -191,7 +192,6 @@ export class TaskManager implements ChatTaskManager {
         chatId,
       },
     );
-    t2.getInput = () => ({ item: t1[0].result as Item });
 
     return [...t1, t2, t3];
   }
