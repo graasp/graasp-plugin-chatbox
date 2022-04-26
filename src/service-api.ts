@@ -13,6 +13,7 @@ import fp from 'fastify-plugin';
 import { ChatService } from './db-service';
 import { ChatMessage } from './interfaces/chat-message';
 import common, {
+  clearChat,
   getChat,
   patchMessage,
   publishMessage,
@@ -51,7 +52,7 @@ const plugin: FastifyPluginAsync<GraaspChatPluginOptions> = async (
   fastify.register(async function (fastify) {
     const {
       items: { dbService: itemService, taskManager: iTM },
-      itemMemberships: { dbService: itemMembershipsService },
+      itemMemberships: { dbService: itemMembershipsService, taskManager: iMTM },
       taskRunner: runner,
       websockets,
       db,
@@ -63,6 +64,7 @@ const plugin: FastifyPluginAsync<GraaspChatPluginOptions> = async (
       itemMembershipsService,
       chatService,
       iTM,
+      iMTM,
     );
 
     fastify.decorate('chat', { dbService: chatService, taskManager });
@@ -155,6 +157,16 @@ const plugin: FastifyPluginAsync<GraaspChatPluginOptions> = async (
           itemId,
           messageId,
         );
+        return runner.runSingleSequence(tasks, log);
+      },
+    );
+
+    // clear chat
+    fastify.delete<{ Params: { itemId: string } }>(
+      '/:itemId/chat',
+      { schema: clearChat },
+      async ({ member, params: { itemId }, log }) => {
+        const tasks = taskManager.createClearChatTaskSequence(member, itemId);
         return runner.runSingleSequence(tasks, log);
       },
     );

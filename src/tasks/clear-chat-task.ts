@@ -7,24 +7,23 @@ import {
   Member,
 } from 'graasp';
 import { ChatService } from '../db-service';
-import { ChatMessage } from '../interfaces/chat-message';
 import { BaseChatTask } from './base-chat-task';
+import { Chat } from '../interfaces/chat';
 
 type InputType = {
   item?: Item;
   chatId?: string;
-  chatMessage?: Partial<ChatMessage>;
 };
 
 /**
- * Task to publish a message on a given chat
+ * Task to clear a complete chat
  */
-export class PublishMessageTask extends BaseChatTask<ChatMessage> {
+export class ClearChatTask extends BaseChatTask<Chat> {
   input?: InputType;
   getInput?: () => InputType;
 
   get name(): string {
-    return PublishMessageTask.name;
+    return ClearChatTask.name;
   }
 
   constructor(
@@ -44,24 +43,17 @@ export class PublishMessageTask extends BaseChatTask<ChatMessage> {
   ): Promise<void> {
     this.status = 'RUNNING';
 
-    const { chatId, chatMessage, item } = this.input;
+    const { chatId } = this.input;
 
     this.targetId = chatId;
 
-    // set chatId and author
-    chatMessage.chatId = item.id;
-    chatMessage.creator = this.actor.id;
-
-    // publish message
-    await this.preHookHandler?.(chatMessage, this.actor, { log, handler });
-    const newChatMessage = await this.chatService.publishMessage(
-      chatMessage,
-      handler,
-    );
-    await this.postHookHandler?.(newChatMessage, this.actor, { log, handler });
+    // delete message
+    await this.chatService.clearChat(chatId, handler);
+    const clearedChat: Chat = { id: this.targetId, messages: [] };
+    await this.postHookHandler?.(clearedChat, this.actor, { log, handler });
 
     // return chat message
-    this._result = newChatMessage;
+    this._result = clearedChat;
     this.status = 'OK';
   }
 }

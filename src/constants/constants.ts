@@ -4,7 +4,7 @@ export enum ITEM_TYPES {
   CHAT = 'chat',
 }
 
-// todo: get from graasp constants
+// todo: get from graasp constants/utils
 export const CLIENT_HOSTS = [
   {
     name: 'builder',
@@ -20,6 +20,13 @@ export const CLIENT_HOSTS = [
   },
 ];
 
+// todo: get from graasp constants/utils
+export enum PermissionLevel {
+  Read = 'read',
+  Write = 'write',
+  Admin = 'admin',
+}
+
 export enum METHODS {
   GET = 'GET',
   POST = 'POST',
@@ -31,6 +38,7 @@ export enum ACTION_TYPES {
   CREATE = 'create',
   UPDATE = 'update',
   DELETE = 'delete',
+  CLEAR = 'clear',
 }
 
 // todo: refactor from graasp utils? constants?
@@ -44,4 +52,6 @@ export const paths = {
     /^\/items\/[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[4][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}\/chat\/[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[4][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$/,
   deleteMessage:
     /^\/items\/[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[4][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}\/chat\/[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[4][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$/,
+  clearChat:
+    /^\/items\/[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[4][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}\/chat$/,
 };

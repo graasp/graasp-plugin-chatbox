@@ -13,6 +13,7 @@ describe('Constants', () => {
     expect(
       paths.deleteMessage.test(`/items/${id}/chat/${messageId}`),
     ).toBeTruthy();
+    expect(paths.clearChat.test(`/items/${id}/chat`)).toBeTruthy();
 
     expect(paths.getChat.test(`/items/${id}/chat?id=moredata`)).toBeFalsy();
     expect(paths.postMessage.test(`/items/${id}/chat?id=moredata`)).toBeFalsy();
@@ -22,5 +23,6 @@ describe('Constants', () => {
     expect(
       paths.deleteMessage.test(`/items/${id}/chat?id=moredata`),
     ).toBeFalsy();
+    expect(paths.clearChat.test(`/items/${id}/chat?id=moredata`)).toBeFalsy();
   });
 });

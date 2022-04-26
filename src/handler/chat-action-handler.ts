@@ -22,8 +22,8 @@ export const createChatActionHandler = async (
   actionInput: ActionHandlerInput,
 ): Promise<BaseAction[]> => {
   const { request, log } = actionInput;
-  // function called each time there is a request in the chatbox in graasp-plugin-chatbox (onSend hook in graasp-plugin-chatbox)
-  // identify and check the correct endpoint of the request
+  // function called each time there is a request in the chatbox in graasp-plugin-chatbox (onSend hook in
+  // graasp-plugin-chatbox) identify and check the correct endpoint of the request
   const { method, url, params } = request;
 
   const baseAction = getBaseAction(request);
@@ -71,6 +71,13 @@ export const createChatActionHandler = async (
           actionsToSave.push({
             ...actionBase,
             actionType: ACTION_TYPES.DELETE,
+          });
+          break;
+        case paths.clearChat.test(url):
+          actionsToSave.push({
+            ...actionBase,
+            actionType: ACTION_TYPES.CLEAR,
+            extra: { chatId: chatData?.id },
           });
           break;
       }

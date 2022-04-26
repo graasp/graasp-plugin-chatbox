@@ -9,6 +9,7 @@ import {
 import { ChatMessage } from '../interfaces/chat-message';
 import { ChatTaskManager } from '../interfaces/chat-task-manager';
 import { ItemChatEvent, itemChatTopic } from './events';
+import { Chat } from '../interfaces/chat';
 
 export function registerChatWsHooks(
   websockets: WebSocketService,
@@ -37,9 +38,9 @@ export function registerChatWsHooks(
   });
 
   // on new chat message published, broadcast to item chat channel
-  const publishMessageTaskname = chatTaskManager.getPublishMessageTaskName();
+  const publishMessageTaskName = chatTaskManager.getPublishMessageTaskName();
   runner.setTaskPostHookHandler<ChatMessage>(
-    publishMessageTaskname,
+    publishMessageTaskName,
     (message) => {
       websockets.publish(
         itemChatTopic,
@@ -50,9 +51,9 @@ export function registerChatWsHooks(
   );
 
   // on update chat item, broadcast to item chat channel
-  const patchMessageTaskname = chatTaskManager.getPatchMessageTaskName();
+  const patchMessageTaskName = chatTaskManager.getPatchMessageTaskName();
   runner.setTaskPostHookHandler<ChatMessage>(
-    patchMessageTaskname,
+    patchMessageTaskName,
     (message) => {
       websockets.publish(
         itemChatTopic,
@@ -63,9 +64,9 @@ export function registerChatWsHooks(
   );
 
   // on delete chat item, broadcast to item chat channel
-  const deleteMessageTaskname = chatTaskManager.getDeleteMessageTaskName();
+  const deleteMessageTaskName = chatTaskManager.getDeleteMessageTaskName();
   runner.setTaskPostHookHandler<ChatMessage>(
-    deleteMessageTaskname,
+    deleteMessageTaskName,
     (message) => {
       websockets.publish(
         itemChatTopic,
@@ -74,4 +75,10 @@ export function registerChatWsHooks(
       );
     },
   );
+
+  // on clear chat, broadcast to item chat channel
+  const clearChatTaskName = chatTaskManager.getClearChatTaskName();
+  runner.setTaskPostHookHandler<Chat>(clearChatTaskName, (chat) => {
+    websockets.publish(itemChatTopic, chat.id, ItemChatEvent('clear'));
+  });
 }

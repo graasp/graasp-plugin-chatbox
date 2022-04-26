@@ -33,7 +33,7 @@ export interface GraaspChatPluginOptions {
 const plugin: FastifyPluginAsync<GraaspChatPluginOptions> = async (fastify) => {
   const {
     items: { dbService: itemService, taskManager: iTM },
-    itemMemberships: { dbService: itemMembershipsService },
+    itemMemberships: { dbService: itemMembershipsService, taskManager: iMTM },
     taskRunner: runner,
     public: {
       items: { taskManager: pITM },
@@ -51,6 +51,7 @@ const plugin: FastifyPluginAsync<GraaspChatPluginOptions> = async (fastify) => {
     itemMembershipsService,
     chatService,
     iTM,
+    iMTM,
   );
 
   fastify.addSchema(common);

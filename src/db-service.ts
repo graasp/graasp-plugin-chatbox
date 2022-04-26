@@ -46,6 +46,25 @@ export class ChatService {
   }
 
   /**
+   * Retrieves a message of the given chat
+   * @param messageId Id of the message to retrieve
+   */
+  async getMessage(
+    messageId: string,
+    transactionHandler: TrxHandler,
+  ): Promise<ChatMessage> {
+    return transactionHandler
+      .query<ChatMessage>(
+        sql`
+            SELECT ${ChatService.allColumns}
+            FROM chat_message
+            WHERE id = ${messageId}
+        `,
+      )
+      .then(({ rows }) => rows[0]);
+  }
+
+  /**
    * Adds a message to the given chat
    * @param message Message
    */
@@ -106,5 +125,24 @@ export class ChatService {
         `,
       )
       .then(({ rows }) => rows[0]);
+  }
+
+  /**
+   * Remove all messages for the given chat
+   * @param chatId Id of chat
+   */
+  async clearChat(
+    chatId: string,
+    transactionHandler: TrxHandler,
+  ): Promise<ChatMessage[]> {
+    return transactionHandler
+      .query<ChatMessage>(
+        sql`
+            DELETE
+            FROM chat_message
+            WHERE chat_id = ${chatId} RETURNING ${ChatService.allColumns}
+        `,
+      )
+      .then(({ rows }) => rows.slice(0));
   }
 }

@@ -13,3 +13,5 @@ coverage/
 !.yarn/sdks
 !.yarn/versions
 /.idea/
+
+.DS_Store

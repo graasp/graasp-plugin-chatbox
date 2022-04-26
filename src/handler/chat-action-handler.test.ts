@@ -128,4 +128,29 @@ describe('Build actions', () => {
       message: deletePayload,
     });
   });
+
+  it('CLEAR chat', async () => {
+    const validClearRequest = {
+      ...request,
+      method: METHODS.DELETE,
+      url: buildChatUrl(ITEM_ID),
+    };
+    const clearPayload = {
+      id: ITEM_ID,
+      messages: [],
+    };
+    const savedActions = await createChatActionHandler(
+      JSON.stringify(clearPayload),
+      {
+        ...actionInput,
+        request: validClearRequest,
+      },
+    );
+    // should contain one action to save
+    expect(savedActions.length).toEqual(1);
+    checkActionData(savedActions[0], {
+      actionType: ACTION_TYPES.CLEAR,
+      chatId: ITEM_ID,
+    });
+  });
 });
