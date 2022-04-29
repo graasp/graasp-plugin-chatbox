@@ -9,12 +9,11 @@ import {
   METHODS,
   paths,
 } from '../constants/constants';
-import { DatabaseTransactionHandler, ItemService, Member } from 'graasp';
+import { ItemService, Member } from 'graasp';
 
 declare module 'fastify' {
   export interface FastifyRequest {
     member: Member;
-    dbHandler: DatabaseTransactionHandler;
   }
 }
 
@@ -23,10 +22,10 @@ export const createChatActionHandler = async (
   payload: string,
   actionInput: ActionHandlerInput,
 ): Promise<BaseAction[]> => {
-  const { request, log } = actionInput;
+  const { request, log, dbHandler } = actionInput;
   // function called each time there is a request in the chatbox in graasp-plugin-chatbox (onSend hook in
   // graasp-plugin-chatbox) identify and check the correct endpoint of the request
-  const { method, url, params, dbHandler } = request;
+  const { method, url, params } = request;
 
   console.log('db handler', dbHandler);
 

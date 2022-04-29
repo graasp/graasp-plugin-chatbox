@@ -1,4 +1,4 @@
-import { ITEM_TYPES, VIEW_UNKNOWN_NAME } from '../src/constants/constants';
+import { VIEW_UNKNOWN_NAME } from '../src/constants/constants';
 import { ITEM_ID, ITEM_TYPE } from './fixtures/mock-constants';
 
 export const buildChatUrl = (itemId, messageId?) => {
