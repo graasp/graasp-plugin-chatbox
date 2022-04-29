@@ -1,5 +1,5 @@
-import { ITEM_TYPES, VIEW_UNKNOWN_NAME } from '../src/constants/constants';
-import { ITEM_ID } from './fixtures/mock-constants';
+import { VIEW_UNKNOWN_NAME } from '../src/constants/constants';
+import { ITEM_ID, ITEM_TYPE } from './fixtures/mock-constants';
 
 export const buildChatUrl = (itemId, messageId?) => {
   let url = `/items/${itemId}/chat`;
@@ -16,7 +16,7 @@ export const checkActionData = (savedAction, args) => {
     actionType,
     message,
     chatId,
-    itemType = ITEM_TYPES.CHAT,
+    itemType = ITEM_TYPE,
     itemId = ITEM_ID,
     view = VIEW_UNKNOWN_NAME,
     memberId = GRAASP_ACTOR.id,

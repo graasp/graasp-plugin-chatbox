@@ -1,12 +1,19 @@
 import { FastifyLoggerInstance, FastifyReply, FastifyRequest } from 'fastify';
 import { METHODS, ACTION_TYPES } from '../constants/constants';
-import { DatabaseTransactionHandler } from 'graasp';
+import { DatabaseTransactionHandler, ItemService } from 'graasp';
 import { createChatActionHandler } from './chat-action-handler';
-import { ITEM_ID, MESSAGE_ID } from '../../test/fixtures/mock-constants';
+import {
+  ITEM_ID,
+  ITEM_TYPE,
+  MESSAGE_ID,
+} from '../../test/fixtures/mock-constants';
 import { buildChatUrl, checkActionData, GRAASP_ACTOR } from '../../test/utils';
 
 // dbHandler can be null as we do not use it with the mock itemService
 const dbTransactionHandler = null as unknown as DatabaseTransactionHandler;
+const itemService = {
+  get: jest.fn(() => ({ id: ITEM_ID, type: ITEM_TYPE })),
+} as unknown as ItemService;
 const reply = null as unknown as FastifyReply;
 const log = { debug: jest.fn() } as unknown as FastifyLoggerInstance;
 const request = {
@@ -39,6 +46,7 @@ describe('Build actions', () => {
       url: `/items/${ITEM_ID}`,
     };
     const savedActions = await createChatActionHandler(
+      itemService,
       JSON.stringify(payload),
       {
         ...actionInput,
@@ -62,6 +70,7 @@ describe('Build actions', () => {
       body: messageBody,
     };
     const savedActions = await createChatActionHandler(
+      itemService,
       JSON.stringify(postPayload),
       {
         ...actionInput,
@@ -90,6 +99,7 @@ describe('Build actions', () => {
       updatedAt: '2022-04-01T13:26:02.849Z',
     };
     const savedActions = await createChatActionHandler(
+      itemService,
       JSON.stringify(patchPayload),
       {
         ...actionInput,
@@ -115,6 +125,7 @@ describe('Build actions', () => {
       updatedAt: '2022-04-01T13:26:02.849Z',
     };
     const savedActions = await createChatActionHandler(
+      itemService,
       JSON.stringify(deletePayload),
       {
         ...actionInput,
@@ -140,6 +151,7 @@ describe('Build actions', () => {
       messages: [],
     };
     const savedActions = await createChatActionHandler(
+      itemService,
       JSON.stringify(clearPayload),
       {
         ...actionInput,
