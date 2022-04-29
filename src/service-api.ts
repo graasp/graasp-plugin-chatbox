@@ -53,6 +53,7 @@ const plugin: FastifyPluginAsync<GraaspChatPluginOptions> = async (
     const {
       items: { dbService: itemService, taskManager: iTM },
       itemMemberships: { dbService: itemMembershipsService, taskManager: iMTM },
+      members: { taskManager: memberTM },
       taskRunner: runner,
       websockets,
       db,
@@ -87,6 +88,9 @@ const plugin: FastifyPluginAsync<GraaspChatPluginOptions> = async (
     const actionService = new ActionService();
     const actionTaskManager = new ActionTaskManager(
       actionService,
+      iTM,
+      iMTM,
+      memberTM,
       CLIENT_HOSTS,
     );
     fastify.addHook('onSend', async (request, reply, payload) => {
@@ -97,7 +101,7 @@ const plugin: FastifyPluginAsync<GraaspChatPluginOptions> = async (
         const actionHandler = (
           actionInput: ActionHandlerInput,
         ): Promise<BaseAction[]> =>
-          createChatActionHandler(payload as string, actionInput);
+          createChatActionHandler(itemService, payload as string, actionInput);
         const createActionTask = actionTaskManager.createCreateTask(
           request.member,
           {

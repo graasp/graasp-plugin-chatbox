@@ -5,31 +5,36 @@ import {
 } from 'graasp-plugin-actions';
 import {
   ACTION_TYPES,
-  ITEM_TYPES,
+  CLIENT_HOSTS,
   METHODS,
   paths,
 } from '../constants/constants';
-import { Member } from 'graasp';
+import { DatabaseTransactionHandler, ItemService, Member } from 'graasp';
 
 declare module 'fastify' {
   export interface FastifyRequest {
     member: Member;
+    dbHandler: DatabaseTransactionHandler;
   }
 }
 
 export const createChatActionHandler = async (
+  itemService: ItemService,
   payload: string,
   actionInput: ActionHandlerInput,
 ): Promise<BaseAction[]> => {
   const { request, log } = actionInput;
   // function called each time there is a request in the chatbox in graasp-plugin-chatbox (onSend hook in
   // graasp-plugin-chatbox) identify and check the correct endpoint of the request
-  const { method, url, params } = request;
+  const { method, url, params, dbHandler } = request;
 
-  const baseAction = getBaseAction(request);
+  const baseAction = getBaseAction(request, CLIENT_HOSTS);
 
   // warning: this is really dependent on the url -> how to be more safe and dynamic?
   const itemId: string = (params as { itemId: string })?.itemId;
+
+  // get item from itemService (DB)
+  const item = await itemService.get(itemId, dbHandler);
 
   const chatData = JSON.parse(payload);
 
@@ -40,7 +45,7 @@ export const createChatActionHandler = async (
       message: chatData,
     },
     itemId,
-    itemType: ITEM_TYPES.CHAT,
+    itemType: item.type,
   };
 
   // identify the endpoint with method and url

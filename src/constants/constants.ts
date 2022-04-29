@@ -35,10 +35,10 @@ export enum METHODS {
 }
 
 export enum ACTION_TYPES {
-  CREATE = 'create',
-  UPDATE = 'update',
-  DELETE = 'delete',
-  CLEAR = 'clear',
+  CREATE = 'chat_create',
+  UPDATE = 'chat_update',
+  DELETE = 'chat_delete',
+  CLEAR = 'chat_clear',
 }
 
 // todo: refactor from graasp utils? constants?
