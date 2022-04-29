@@ -27,14 +27,11 @@ export const createChatActionHandler = async (
   // graasp-plugin-chatbox) identify and check the correct endpoint of the request
   const { method, url, params } = request;
 
-  console.log('db handler', dbHandler);
-
   const baseAction = getBaseAction(request, CLIENT_HOSTS);
 
   // warning: this is really dependent on the url -> how to be more safe and dynamic?
   const itemId: string = (params as { itemId: string })?.itemId;
-  console.log(itemId);
-  // get item from itemService (DB)
+
   const item = await itemService.get(itemId, dbHandler);
 
   const chatData = JSON.parse(payload);
