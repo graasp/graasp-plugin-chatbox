@@ -24,12 +24,3 @@ CREATE TRIGGER "chat_message_set_timestamp"
     ON "chat_message"
     FOR EACH ROW
     EXECUTE PROCEDURE trigger_set_timestamp();
-
--- test that the migration worked
--- created_at and updated_at should be the same for new messages
-/*
-insert into chat_message (chat_id, creator, body)
-values ('6261206b-5d68-41fe-9e56-fd311526936a',
-        '598db6fb-de8d-4ace-aae5-8c864b3378ec',
-        'message')
-*/
