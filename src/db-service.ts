@@ -29,6 +29,7 @@ export class ChatService {
   /**
    * Retrieves all the messages of the given chat
    * @param chatId Id of chat to retrieve
+   * @param transactionHandler database handler
    */
   async get(
     chatId: string,
@@ -49,6 +50,7 @@ export class ChatService {
   /**
    * Retrieves a message of the given chat
    * @param messageId Id of the message to retrieve
+   * @param transactionHandler database handler
    */
   async getMessage(
     messageId: string,
@@ -68,6 +70,7 @@ export class ChatService {
   /**
    * Adds a message to the given chat
    * @param message Message
+   * @param transactionHandler database handler
    */
   async publishMessage(
     message: Partial<ChatMessage>,
@@ -88,6 +91,7 @@ export class ChatService {
   /**
    * Edit a message of the given chat
    * @param message Message
+   * @param transactionHandler database handler
    */
   async patchMessage(
     message: Partial<ChatMessage>,
@@ -110,6 +114,7 @@ export class ChatService {
    * Remove a message from the given chat
    * @param chatId Id of chat
    * @param messageId Id of the message
+   * @param transactionHandler database handler
    */
   async deleteMessage(
     chatId: string,
@@ -131,6 +136,7 @@ export class ChatService {
   /**
    * Remove all messages for the given chat
    * @param chatId Id of chat
+   * @param transactionHandler database handler
    */
   async clearChat(
     chatId: string,

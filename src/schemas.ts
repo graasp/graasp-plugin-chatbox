@@ -51,7 +51,21 @@ export default {
       type: 'object',
       required: ['body'],
       properties: {
-        body: { type: 'string' },
+        body: {
+          type: 'object',
+          required: ['message'],
+          properties: {
+            message: {
+              type: 'string',
+            },
+            mentions: {
+              type: 'array',
+              items: {
+                type: 'string',
+              },
+            },
+          },
+        },
       },
       additionalProperties: false,
     },

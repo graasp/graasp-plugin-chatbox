@@ -16,7 +16,7 @@ import { BaseChatTask } from './base-chat-task';
 type InputType = {
   item?: Item;
   chatId?: string;
-  chatMessage?: Partial<ChatMessage>;
+  message?: string;
 };
 
 /**
@@ -47,13 +47,16 @@ export class PublishMessageTask extends BaseChatTask<ChatMessage> {
   ): Promise<void> {
     this.status = TaskStatus.RUNNING;
 
-    const { chatId, chatMessage, item } = this.input;
+    const { chatId, message, item } = this.input;
 
     this.targetId = chatId;
 
     // set chatId and author
-    chatMessage.chatId = item.id;
-    chatMessage.creator = this.actor.id;
+    const chatMessage: Partial<ChatMessage> = {
+      chatId: item.id,
+      creator: this.actor.id,
+      body: message,
+    };
 
     // publish message
     await this.preHookHandler?.(chatMessage, this.actor, { log, handler });

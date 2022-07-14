@@ -1,7 +1,7 @@
 import { Actor, Task } from '@graasp/sdk';
 
 import { Chat } from './chat';
-import { ChatMessage } from './chat-message';
+import { MessageBodyType } from './chat-message';
 
 /**
  * Task manager for chat operations
@@ -45,12 +45,12 @@ export interface ChatTaskManager<A extends Actor = Actor> {
    * Factory for a task to publish a message in a chat
    * @param actor User performing the action
    * @param chatId Chat ID
-   * @param message ChatMessage to add
+   * @param chatBody ChatMessage to add
    */
   createPublishMessageTaskSequence(
     actor: A,
     chatId: string,
-    message: ChatMessage,
+    chatBody: MessageBodyType,
   ): Task<A, unknown>[];
 
   /**
@@ -58,13 +58,13 @@ export interface ChatTaskManager<A extends Actor = Actor> {
    * @param actor User performing the action
    * @param chatId Chat ID
    * @param messageId Message ID
-   * @param message ChatMessage to update
+   * @param chatBody ChatMessage to update
    */
   createPatchMessageTaskSequence(
     actor: A,
     chatId: string,
     messageId: string,
-    message: ChatMessage,
+    chatBody: MessageBodyType,
   ): Task<A, unknown>[];
 
   /**

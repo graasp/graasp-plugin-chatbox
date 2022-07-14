@@ -19,7 +19,7 @@ import {
 
 import { ChatService } from './db-service';
 import { createChatActionHandler } from './handler/chat-action-handler';
-import { ChatMessage } from './interfaces/chat-message';
+import { MessageBodyType } from './interfaces/chat-message';
 import common, {
   clearChat,
   getChat,
@@ -122,7 +122,7 @@ const plugin: FastifyPluginAsync<GraaspChatPluginOptions> = async (
       },
     );
 
-    fastify.post<{ Params: { itemId: string }; Body: Partial<ChatMessage> }>(
+    fastify.post<{ Params: { itemId: string }; Body: MessageBodyType }>(
       '/:itemId/chat',
       { schema: publishMessage },
       async ({ member, params: { itemId }, body, log }) => {
@@ -136,7 +136,10 @@ const plugin: FastifyPluginAsync<GraaspChatPluginOptions> = async (
     );
 
     // patch message
-    fastify.patch<{ Params: { itemId: string; messageId: string } }>(
+    fastify.patch<{
+      Params: { itemId: string; messageId: string };
+      Body: MessageBodyType;
+    }>(
       '/:itemId/chat/:messageId',
       { schema: patchMessage },
       async ({ member, params: { itemId, messageId }, body, log }) => {
