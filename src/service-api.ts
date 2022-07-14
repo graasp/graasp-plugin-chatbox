@@ -19,7 +19,10 @@ import {
 
 import { ChatService } from './db-service';
 import { createChatActionHandler } from './handler/chat-action-handler';
-import { MessageBodyType } from './interfaces/chat-message';
+import {
+  PartialChatMessage,
+  PartialNewChatMessage,
+} from './interfaces/chat-message';
 import common, {
   clearChat,
   getChat,
@@ -122,14 +125,17 @@ const plugin: FastifyPluginAsync<GraaspChatPluginOptions> = async (
       },
     );
 
-    fastify.post<{ Params: { itemId: string }; Body: MessageBodyType }>(
+    fastify.post<{
+      Params: { itemId: string };
+      Body: Partial<PartialNewChatMessage>;
+    }>(
       '/:itemId/chat',
       { schema: publishMessage },
       async ({ member, params: { itemId }, body, log }) => {
         const tasks = taskManager.createPublishMessageTaskSequence(
           member,
           itemId,
-          body,
+          body.body,
         );
         return runner.runSingleSequence(tasks, log);
       },
@@ -138,7 +144,7 @@ const plugin: FastifyPluginAsync<GraaspChatPluginOptions> = async (
     // patch message
     fastify.patch<{
       Params: { itemId: string; messageId: string };
-      Body: MessageBodyType;
+      Body: Partial<PartialChatMessage>;
     }>(
       '/:itemId/chat/:messageId',
       { schema: patchMessage },
@@ -147,7 +153,7 @@ const plugin: FastifyPluginAsync<GraaspChatPluginOptions> = async (
           member,
           itemId,
           messageId,
-          body,
+          body.body,
         );
         return runner.runSingleSequence(tasks, log);
       },
