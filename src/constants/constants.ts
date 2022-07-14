@@ -1,31 +1,24 @@
-export const VIEW_UNKNOWN_NAME = 'unknown';
+import { Context } from '@graasp/sdk';
 
-export enum ITEM_TYPES {
-  CHAT = 'chat',
-}
+export const PLUGIN_NAME = 'graasp-plugin-chatbox';
+
+export const VIEW_UNKNOWN_NAME = 'unknown';
 
 // todo: get from graasp constants/utils
 export const CLIENT_HOSTS = [
   {
-    name: 'builder',
+    name: Context.BUILDER,
     hostname: 'builder.graasp.org',
   },
   {
-    name: 'player',
+    name: Context.PLAYER,
     hostname: 'player.graasp.org',
   },
   {
-    name: 'explorer',
+    name: Context.EXPLORER,
     hostname: 'explorer.graasp.org',
   },
 ];
-
-// todo: get from graasp constants/utils
-export enum PermissionLevel {
-  Read = 'read',
-  Write = 'write',
-  Admin = 'admin',
-}
 
 export enum METHODS {
   GET = 'GET',

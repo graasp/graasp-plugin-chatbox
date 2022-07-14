@@ -1,15 +1,16 @@
+import { ItemService, Member } from '@graasp/sdk';
 import {
   ActionHandlerInput,
   BaseAction,
   getBaseAction,
 } from 'graasp-plugin-actions';
+
 import {
   ACTION_TYPES,
   CLIENT_HOSTS,
   METHODS,
   paths,
 } from '../constants/constants';
-import { ItemService, Member } from 'graasp';
 
 declare module 'fastify' {
   export interface FastifyRequest {

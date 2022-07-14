@@ -1,15 +1,16 @@
-import { AccessDenied, NotFound, WebSocketService } from 'graasp-websockets';
 import {
   Actor,
   DatabaseTransactionHandler,
   ItemMembershipService,
   ItemService,
   TaskRunner,
-} from 'graasp';
+} from '@graasp/sdk';
+import { AccessDenied, NotFound, WebSocketService } from 'graasp-websockets';
+
+import { Chat } from '../interfaces/chat';
 import { ChatMessage } from '../interfaces/chat-message';
 import { ChatTaskManager } from '../interfaces/chat-task-manager';
 import { ItemChatEvent, itemChatTopic } from './events';
-import { Chat } from '../interfaces/chat';
 
 export function registerChatWsHooks(
   websockets: WebSocketService,

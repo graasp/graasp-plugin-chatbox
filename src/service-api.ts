@@ -6,11 +6,19 @@
  * Implements back-end functionalities for chatboxes
  * in Graasp as a fastify server plugin
  */
-
-import { WebSocketService } from 'graasp-websockets';
 import { FastifyPluginAsync } from 'fastify';
 import fp from 'fastify-plugin';
+
+import {
+  ActionHandlerInput,
+  ActionService,
+  ActionTaskManager,
+  BaseAction,
+} from 'graasp-plugin-actions';
+
+import { CLIENT_HOSTS } from './constants/constants';
 import { ChatService } from './db-service';
+import { createChatActionHandler } from './handler/chat-action-handler';
 import { ChatMessage } from './interfaces/chat-message';
 import common, {
   clearChat,
@@ -21,21 +29,6 @@ import common, {
 } from './schemas';
 import { TaskManager } from './task-manager';
 import { registerChatWsHooks } from './ws/hooks';
-import {
-  ActionHandlerInput,
-  ActionService,
-  ActionTaskManager,
-  BaseAction,
-} from 'graasp-plugin-actions';
-import { CLIENT_HOSTS } from './constants/constants';
-import { createChatActionHandler } from './handler/chat-action-handler';
-
-// hack to force compiler to discover websockets service
-declare module 'fastify' {
-  interface FastifyInstance {
-    websockets?: WebSocketService;
-  }
-}
 
 /**
  * Type definition for plugin options
