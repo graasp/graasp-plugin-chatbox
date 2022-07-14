@@ -30,8 +30,8 @@
     "post-commit": "git status"
   },
   "dependencies": {
-    "fastify": "^4.2.1",
-    "fastify-plugin": "^4.0.0",
+    "fastify": "^3.25.3",
+    "fastify-plugin": "^3.0.0",
     "graasp-plugin-actions": "github:graasp/graasp-plugin-actions",
     "graasp-plugin-public": "github:graasp/graasp-plugin-public",
     "graasp-websockets": "github:graasp/graasp-websockets"
