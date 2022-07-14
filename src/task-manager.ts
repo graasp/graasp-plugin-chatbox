@@ -10,7 +10,7 @@ import {
 } from 'graasp';
 import { ChatService } from './db-service';
 import { Chat } from './interfaces/chat';
-import { ChatMessage } from './interfaces/chat-message';
+import { MessageBodyType } from './interfaces/chat-message';
 import { ChatTaskManager } from './interfaces/chat-task-manager';
 import { GetChatTask } from './tasks/get-chat-task';
 import { PublishMessageTask } from './tasks/publish-message-task';
@@ -93,7 +93,7 @@ export class TaskManager implements ChatTaskManager {
   createPublishMessageTaskSequence(
     member: Member,
     chatId: string,
-    chatMessage: Partial<ChatMessage>,
+    chatBody: MessageBodyType,
   ): Task<Actor, unknown>[] {
     const t1 = this.itemTaskManager.createGetTaskSequence(member, chatId);
     const t2 = new PublishMessageTask(
@@ -103,7 +103,7 @@ export class TaskManager implements ChatTaskManager {
       this.chatService,
       {
         chatId,
-        chatMessage,
+        message: chatBody.message,
       },
     );
     t2.getInput = () => ({ item: t1[0].result as Item });
@@ -115,7 +115,7 @@ export class TaskManager implements ChatTaskManager {
     member: Member,
     chatId: string,
     messageId: string,
-    chatMessage: Partial<ChatMessage>,
+    chatBody: MessageBodyType,
   ): Task<Actor, unknown>[] {
     const t1 = this.itemTaskManager.createGetTaskSequence(member, chatId);
     const t2 = new PatchMessageTask(
@@ -126,7 +126,7 @@ export class TaskManager implements ChatTaskManager {
       {
         chatId,
         messageId,
-        chatMessage,
+        message: chatBody.message,
       },
     );
     t2.getInput = () => ({ item: t1[0].result as Item });

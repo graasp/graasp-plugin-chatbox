@@ -15,7 +15,7 @@ type InputType = {
   item?: Item;
   chatId?: string;
   messageId?: string;
-  chatMessage?: Partial<ChatMessage>;
+  message?: string;
 };
 
 /**
@@ -46,13 +46,16 @@ export class PatchMessageTask extends BaseChatTask<ChatMessage> {
   ): Promise<void> {
     this.status = 'RUNNING';
 
-    const { messageId, chatMessage, item } = this.input;
+    const { messageId, message, item } = this.input;
 
     this.targetId = messageId;
 
     // set chatMessage fields
-    chatMessage.chatId = item.id;
-    chatMessage.id = messageId;
+    const chatMessage: Partial<ChatMessage> = {
+      id: messageId,
+      chatId: item.id,
+      body: message,
+    };
 
     // patch message
     const res = await this.chatService.patchMessage(chatMessage, handler);
