@@ -10,18 +10,18 @@
 import { WebSocketService } from 'graasp-websockets';
 import { FastifyPluginAsync } from 'fastify';
 import fp from 'fastify-plugin';
-import { ChatService } from './db-service';
+import { ChatService } from './chat/db-service';
 import {
   PartialChatMessage,
   PartialNewChatMessage,
-} from './interfaces/chat-message';
+} from './chat/interfaces/chat-message';
 import common, {
   clearChat,
   getChat,
   patchMessage,
   publishMessage,
   removeMessage,
-} from './schemas';
+} from './chat/schemas';
 import { TaskManager } from './task-manager';
 import { registerChatWsHooks } from './ws/hooks';
 import {
@@ -31,7 +31,8 @@ import {
   BaseAction,
 } from 'graasp-plugin-actions';
 import { CLIENT_HOSTS } from './constants/constants';
-import { createChatActionHandler } from './handler/chat-action-handler';
+import { createChatActionHandler } from './chat/handler/chat-action-handler';
+import { MentionService } from './mentions/db-service';
 
 // hack to force compiler to discover websockets service
 declare module 'fastify' {
@@ -63,10 +64,12 @@ const plugin: FastifyPluginAsync<GraaspChatPluginOptions> = async (
     } = fastify;
 
     const chatService = new ChatService();
+    const mentionService = new MentionService();
     const taskManager = new TaskManager(
       itemService,
       itemMembershipsService,
       chatService,
+      mentionService,
       iTM,
       iMTM,
     );

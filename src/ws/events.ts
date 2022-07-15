@@ -2,7 +2,7 @@
  * Chat websocket events are registered under these topics
  */
 
-import { ChatMessage } from '../interfaces/chat-message';
+import { ChatMessage } from '../chat/interfaces/chat-message';
 
 // item chat messages
 export const itemChatTopic = 'chat/item';

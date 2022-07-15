@@ -8,7 +8,7 @@ import {
   CLIENT_HOSTS,
   METHODS,
   paths,
-} from '../constants/constants';
+} from '../../constants/constants';
 import { ItemService, Member } from 'graasp';
 
 declare module 'fastify' {

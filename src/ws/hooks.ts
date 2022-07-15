@@ -6,10 +6,10 @@ import {
   ItemService,
   TaskRunner,
 } from 'graasp';
-import { ChatMessage } from '../interfaces/chat-message';
-import { ChatTaskManager } from '../interfaces/chat-task-manager';
+import { ChatMessage } from '../chat/interfaces/chat-message';
+import { ChatTaskManager } from '../chat/interfaces/chat-task-manager';
 import { ItemChatEvent, itemChatTopic } from './events';
-import { Chat } from '../interfaces/chat';
+import { Chat } from '../chat/interfaces/chat';
 
 export function registerChatWsHooks(
   websockets: WebSocketService,
