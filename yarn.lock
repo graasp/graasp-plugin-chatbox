@@ -3740,9 +3740,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"graasp-plugin-actions@github:graasp/graasp-plugin-actions":
+"graasp-plugin-actions@github:graasp/graasp-plugin-actions#25-fix-create-hook":
   version: 0.1.0
-  resolution: "graasp-plugin-actions@https://github.com/graasp/graasp-plugin-actions.git#commit=9218dd3ee98c21845ec1fc4ff81fed314ad7e74b"
+  resolution: "graasp-plugin-actions@https://github.com/graasp/graasp-plugin-actions.git#commit=94b4a1e50668f6a6b570410e4ea17ce2e86701c9"
   dependencies:
     archiver: 5.3.1
     fluent-json-schema: 3.0.1
@@ -3751,7 +3751,7 @@ __metadata:
     graasp-plugin-file: "github:graasp/graasp-plugin-file"
     http-status-codes: 2.2.0
     uuid: 8.3.2
-  checksum: cc19c23a0a8235c8d05caa20b87a6fbdac164e5d5ad03be6073967928f4aa22847106a532a1ec00ac8591b208149020b4a8e650f02a61377b1b2df46abb8029f
+  checksum: 95dcd9e845a216a797ad0ffee286db73536c40696e1e1395cb753be4aa28adbc75c1999a03c8bfc92b84179980f9e5e8318a973dadaf095d2e1962aa24632be3
   languageName: node
   linkType: hard
 
@@ -3771,7 +3771,7 @@ __metadata:
     fastify: ^3.25.3
     fastify-plugin: ^3.0.0
     geoip-lite: 1.4.2
-    graasp-plugin-actions: "github:graasp/graasp-plugin-actions"
+    graasp-plugin-actions: "github:graasp/graasp-plugin-actions#25-fix-create-hook"
     graasp-plugin-public: "github:graasp/graasp-plugin-public"
     graasp-websockets: "github:graasp/graasp-websockets"
     husky: 7.0.4

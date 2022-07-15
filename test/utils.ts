@@ -1,5 +1,5 @@
 import { VIEW_UNKNOWN_NAME } from '../src/constants/constants';
-import { ITEM_ID, ITEM_TYPE } from './fixtures/mock-constants';
+import { ITEM_TYPE, ITEM_PATH } from './fixtures/mock-constants';
 
 export const buildChatUrl = (itemId, messageId?) => {
   let url = `/items/${itemId}/chat`;
@@ -16,12 +16,12 @@ export const checkActionData = (savedAction, args) => {
     actionType,
     message,
     chatId,
+    itemPath = ITEM_PATH,
     itemType = ITEM_TYPE,
-    itemId = ITEM_ID,
     view = VIEW_UNKNOWN_NAME,
     memberId = GRAASP_ACTOR.id,
   } = args;
-  expect(savedAction.itemId).toEqual(itemId);
+  expect(savedAction.itemPath).toEqual(itemPath);
   expect(savedAction.itemType).toEqual(itemType);
   expect(savedAction.memberId).toEqual(memberId);
   expect(savedAction.actionType).toEqual(actionType);
