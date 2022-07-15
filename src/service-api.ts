@@ -33,6 +33,12 @@ import {
 import { CLIENT_HOSTS } from './constants/constants';
 import { createChatActionHandler } from './chat/handler/chat-action-handler';
 import { MentionService } from './mentions/db-service';
+import {
+  clearAllMentions,
+  deleteMention,
+  getMentions,
+  patchMention,
+} from './mentions/schemas';
 
 // hack to force compiler to discover websockets service
 declare module 'fastify' {
@@ -183,6 +189,52 @@ const plugin: FastifyPluginAsync<GraaspChatPluginOptions> = async (
       { schema: clearChat },
       async ({ member, params: { itemId }, log }) => {
         const tasks = taskManager.createClearChatTaskSequence(member, itemId);
+        return runner.runSingleSequence(tasks, log);
+      },
+    );
+
+    // mentions
+    fastify.get(
+      '/mentions',
+      { schema: getMentions },
+      async ({ member, log }) => {
+        const task = taskManager.createGetMemberMentionsTask(member);
+        return runner.runSingle(task, log);
+      },
+    );
+
+    fastify.patch<{ Params: { mentionId: string }; Body: { status: string } }>(
+      '/mentions/:mentionId',
+      { schema: patchMention },
+      async ({ member, params: { mentionId }, body: { status }, log }) => {
+        const tasks = taskManager.createPatchMentionTaskSequence(
+          member,
+          mentionId,
+          status,
+        );
+        return runner.runSingleSequence(tasks, log);
+      },
+    );
+
+    // delete one mention by id
+    fastify.delete<{ Params: { mentionId: string } }>(
+      '/mentions/:mentionId',
+      { schema: deleteMention },
+      async ({ member, params: { mentionId }, log }) => {
+        const tasks = taskManager.createDeleteMentionTaskSequence(
+          member,
+          mentionId,
+        );
+        return runner.runSingleSequence(tasks, log);
+      },
+    );
+
+    // delete all mentions for a user
+    fastify.delete(
+      '/mentions',
+      { schema: clearAllMentions },
+      async ({ member, log }) => {
+        const tasks = taskManager.createClearAllMentionsTaskSequence(member);
         return runner.runSingleSequence(tasks, log);
       },
     );
