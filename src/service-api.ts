@@ -17,21 +17,22 @@ import {
   BaseAction,
 } from 'graasp-plugin-actions';
 
-import { ChatService } from './db-service';
-import { createChatActionHandler } from './handler/chat-action-handler';
+import { ChatService } from './chat/db-service';
+import { createChatActionHandler } from './chat/handler/chat-action-handler';
 import {
   PartialChatMessage,
   PartialNewChatMessage,
-} from './interfaces/chat-message';
+} from './chat/interfaces/chat-message';
 import common, {
   clearChat,
   getChat,
   patchMessage,
   publishMessage,
   removeMessage,
-} from './schemas';
+} from './chat/schemas';
 import { TaskManager } from './task-manager';
 import { registerChatWsHooks } from './ws/hooks';
+import { MentionService } from './mentions/db-service';
 
 /**
  * Type definition for plugin options
@@ -57,10 +58,12 @@ const plugin: FastifyPluginAsync<GraaspChatPluginOptions> = async (
     } = fastify;
 
     const chatService = new ChatService();
+    const mentionService = new MentionService();
     const taskManager = new TaskManager(
       itemService,
       itemMembershipsService,
       chatService,
+      mentionService,
       iTM,
       iMTM,
     );

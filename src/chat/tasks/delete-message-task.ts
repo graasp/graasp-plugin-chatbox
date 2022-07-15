@@ -11,25 +11,24 @@ import {
 
 import { ChatService } from '../db-service';
 import { ChatMessage } from '../interfaces/chat-message';
-import { ChatMessageNotFound } from '../util/graasp-item-chat-error';
+import { ChatMessageNotFound } from '../../util/graasp-item-chat-error';
 import { BaseChatTask } from './base-chat-task';
 
 type InputType = {
   item?: Item;
   chatId?: string;
   messageId?: string;
-  message?: string;
 };
 
 /**
  * Task to publish a message on a given chat
  */
-export class PatchMessageTask extends BaseChatTask<ChatMessage> {
+export class DeleteMessageTask extends BaseChatTask<ChatMessage> {
   input?: InputType;
   getInput?: () => InputType;
 
   get name(): string {
-    return PatchMessageTask.name;
+    return DeleteMessageTask.name;
   }
 
   constructor(
@@ -49,19 +48,16 @@ export class PatchMessageTask extends BaseChatTask<ChatMessage> {
   ): Promise<void> {
     this.status = TaskStatus.RUNNING;
 
-    const { messageId, message, item } = this.input;
+    const { chatId, messageId } = this.input;
 
     this.targetId = messageId;
 
-    // set chatMessage fields
-    const chatMessage: Partial<ChatMessage> = {
-      id: messageId,
-      chatId: item.id,
-      body: message,
-    };
-
-    // patch message
-    const res = await this.chatService.patchMessage(chatMessage, handler);
+    // delete message
+    const res = await this.chatService.deleteMessage(
+      chatId,
+      messageId,
+      handler,
+    );
     // action returns no entries which means the message was not found
     // do not run the post hook
     if (res) {

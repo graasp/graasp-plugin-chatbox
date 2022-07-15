@@ -12,9 +12,9 @@ import {
   ITEM_TYPE,
   MESSAGE_ID,
   MOCK_HOSTS,
-} from '../../test/fixtures/mock-constants';
-import { GRAASP_ACTOR, buildChatUrl, checkActionData } from '../../test/utils';
-import { ACTION_TYPES } from '../constants/constants';
+} from '../../../test/fixtures/mock-constants';
+import { GRAASP_ACTOR, buildChatUrl, checkActionData } from '../../../test/utils';
+import { ACTION_TYPES } from '../../constants/constants';
 import { createChatActionHandler } from './chat-action-handler';
 
 // dbHandler can be null as we do not use it with the mock itemService

@@ -7,9 +7,9 @@ import {
 } from '@graasp/sdk';
 import { AccessDenied, NotFound, WebSocketService } from 'graasp-websockets';
 
-import { Chat } from '../interfaces/chat';
-import { ChatMessage } from '../interfaces/chat-message';
-import { ChatTaskManager } from '../interfaces/chat-task-manager';
+import { Chat } from '../chat/interfaces/chat';
+import { ChatMessage } from '../chat/interfaces/chat-message';
+import { ChatTaskManager } from '../chat/interfaces/chat-task-manager';
 import { ItemChatEvent, itemChatTopic } from './events';
 
 export function registerChatWsHooks(

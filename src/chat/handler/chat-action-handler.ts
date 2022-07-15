@@ -5,7 +5,7 @@ import {
   getBaseAction,
 } from 'graasp-plugin-actions';
 
-import { ACTION_TYPES, paths } from '../constants/constants';
+import { ACTION_TYPES, paths } from '../../constants/constants';
 
 declare module 'fastify' {
   export interface FastifyRequest {

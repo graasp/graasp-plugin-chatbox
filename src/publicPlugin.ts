@@ -13,9 +13,10 @@ import fp from 'fastify-plugin';
 import publicPlugin from 'graasp-plugin-public';
 import { WebSocketService } from 'graasp-websockets';
 
-import { ChatService } from './db-service';
-import common, { getChat } from './schemas';
+import { ChatService } from './chat/db-service';
+import common, { getChat } from './chat/schemas';
 import { TaskManager } from './task-manager';
+import { MentionService } from './mentions/db-service';
 
 // hack to force compiler to discover websockets service
 declare module 'fastify' {
@@ -46,10 +47,12 @@ const plugin: FastifyPluginAsync<GraaspChatPluginOptions> = async (fastify) => {
   }
 
   const chatService = new ChatService();
+  const mentionService = new MentionService();
   const taskManager = new TaskManager(
     itemService,
     itemMembershipsService,
     chatService,
+    mentionService,
     iTM,
     iMTM,
   );
