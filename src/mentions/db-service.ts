@@ -33,7 +33,7 @@ export class MentionService {
    * @param memberId Id of the member to retrieve
    * @param transactionHandler database handler
    */
-  async get(
+  async getAll(
     memberId: string,
     transactionHandler: TrxHandler,
   ): Promise<ChatMention[]> {
@@ -50,7 +50,7 @@ export class MentionService {
   }
 
   /**
-   * Retrieves a message of the given chat
+   * Retrieves a mention given the mention id
    * @param mentionId Id of the mention to retrieve
    * @param transactionHandler database handler
    */
@@ -101,22 +101,23 @@ export class MentionService {
   }
 
   /**
-   * Edit a message of the given chat
-   * @param mention Mention
+   * Edit the status of a mention
+   * @param mentionId Mention id to be updated
+   * @param status new status to be set
    * @param transactionHandler database handler
    */
   async patchMention(
-    mention: Partial<ChatMention>,
+    mentionId: string,
+    status: string,
     transactionHandler: TrxHandler,
   ): Promise<ChatMention> {
-    const { messageId, id, status } = mention;
     return transactionHandler
       .query<ChatMention>(
         sql`
             UPDATE ${MentionService.tableName}
             SET status = ${status}
-            WHERE message_id = ${messageId}
-              AND id = ${id} RETURNING ${MentionService.allColumns};
+            WHERE id = ${mentionId}
+               RETURNING ${MentionService.allColumns};
         `,
       )
       .then(({ rows }) => rows[0]);
@@ -148,7 +149,7 @@ export class MentionService {
    * @param memberId Id of the member
    * @param transactionHandler database handler
    */
-  async clearMentions(
+  async clearAllMentions(
     memberId: string,
     transactionHandler: TrxHandler,
   ): Promise<ChatMention[]> {

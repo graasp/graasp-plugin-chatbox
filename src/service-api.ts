@@ -23,7 +23,7 @@ import {
   PartialChatMessage,
   PartialNewChatMessage,
 } from './chat/interfaces/chat-message';
-import common, {
+import commonChat, {
   clearChat,
   getChat,
   patchMessage,
@@ -33,6 +33,12 @@ import common, {
 import { TaskManager } from './task-manager';
 import { registerChatWsHooks } from './ws/hooks';
 import { MentionService } from './mentions/db-service';
+import commonMentions, {
+  clearAllMentions,
+  deleteMention,
+  getMentions,
+  patchMention,
+} from './mentions/schemas';
 
 /**
  * Type definition for plugin options
@@ -70,7 +76,8 @@ const plugin: FastifyPluginAsync<GraaspChatPluginOptions> = async (
 
     fastify.decorate('chat', { dbService: chatService, taskManager });
 
-    fastify.addSchema(common);
+    fastify.addSchema(commonChat);
+    fastify.addSchema(commonMentions);
 
     // register websocket behaviours for chats
     if (websockets) {
@@ -182,6 +189,52 @@ const plugin: FastifyPluginAsync<GraaspChatPluginOptions> = async (
       { schema: clearChat },
       async ({ member, params: { itemId }, log }) => {
         const tasks = taskManager.createClearChatTaskSequence(member, itemId);
+        return runner.runSingleSequence(tasks, log);
+      },
+    );
+
+    // mentions
+    fastify.get(
+      '/mentions',
+      { schema: getMentions },
+      async ({ member, log }) => {
+        const task = taskManager.createGetMemberMentionsTask(member);
+        return runner.runSingle(task, log);
+      },
+    );
+
+    fastify.patch<{ Params: { mentionId: string }; Body: { status: string } }>(
+      '/mentions/:mentionId',
+      { schema: patchMention },
+      async ({ member, params: { mentionId }, body: { status }, log }) => {
+        const tasks = taskManager.createPatchMentionTaskSequence(
+          member,
+          mentionId,
+          status,
+        );
+        return runner.runSingleSequence(tasks, log);
+      },
+    );
+
+    // delete one mention by id
+    fastify.delete<{ Params: { mentionId: string } }>(
+      '/mentions/:mentionId',
+      { schema: deleteMention },
+      async ({ member, params: { mentionId }, log }) => {
+        const tasks = taskManager.createDeleteMentionTaskSequence(
+          member,
+          mentionId,
+        );
+        return runner.runSingleSequence(tasks, log);
+      },
+    );
+
+    // delete all mentions for a user
+    fastify.delete(
+      '/mentions',
+      { schema: clearAllMentions },
+      async ({ member, log }) => {
+        const tasks = taskManager.createClearAllMentionsTaskSequence(member);
         return runner.runSingleSequence(tasks, log);
       },
     );
