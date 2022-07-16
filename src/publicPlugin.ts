@@ -15,7 +15,7 @@ import { WebSocketService } from 'graasp-websockets';
 
 import { ChatService } from './chat/db-service';
 import common, { getChat } from './chat/schemas';
-import { TaskManager } from './task-manager';
+import { TaskManager } from './chat/task-manager';
 import { MentionService } from './mentions/db-service';
 
 // hack to force compiler to discover websockets service

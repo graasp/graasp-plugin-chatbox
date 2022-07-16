@@ -1,41 +1,39 @@
 /**
  * Chat websocket events are registered under these topics
  */
-import { ChatMessage } from '../chat/interfaces/chat-message';
+
+import { ChatMention } from '../interfaces/chat-mention';
 
 // item chat messages
-export const itemChatTopic = 'chat/item';
+export const chatMentionTopic = 'mentions';
 
 /**
  * All websocket events for chats will have this shape
  */
-interface ChatEvent {
-  kind: string;
+interface ChatMentionEvent {
   op: string;
-  message?: ChatMessage;
+  mention?: ChatMention;
 }
 
 /**
  * Events for item chats
  */
-interface ItemChatEvent extends ChatEvent {
-  kind: 'item';
+interface MentionEvent extends ChatMentionEvent {
   op: 'publish' | 'delete' | 'update' | 'clear';
-  message?: ChatMessage;
+  mention?: ChatMention;
 }
 
 /**
  * Factory for ItemChatEvent
  * @param op operation of the event
- * @param message message value
+ * @param mention message value
  * @returns instance of item chat event
  */
 export const ItemChatEvent = (
-  op: ItemChatEvent['op'],
-  message?: ChatMessage,
+  op: MentionEvent['op'],
+  mention?: ChatMention,
 ): // eslint-disable-next-line @typescript-eslint/no-unused-vars
-ItemChatEvent => ({
-  kind: 'item',
+MentionEvent => ({
   op,
-  message,
+  mention,
 });

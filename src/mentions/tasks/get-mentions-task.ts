@@ -1,4 +1,4 @@
-import { Actor, DatabaseTransactionHandler, ItemService } from 'graasp';
+import { Actor, DatabaseTransactionHandler } from 'graasp';
 import { MentionService } from '../db-service';
 import { BaseMentionTask } from './base-mention-task';
 import { ChatMention } from '../interfaces/chat-mention';
@@ -11,12 +11,8 @@ export class GetMemberMentionsTask extends BaseMentionTask<ChatMention[]> {
     return GetMemberMentionsTask.name;
   }
 
-  constructor(
-    member: Actor,
-    itemService: ItemService,
-    mentionService: MentionService,
-  ) {
-    super(member, itemService, mentionService);
+  constructor(member: Actor, mentionService: MentionService) {
+    super(member, mentionService);
     this.targetId = member.id;
   }
 

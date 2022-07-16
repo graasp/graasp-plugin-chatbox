@@ -10,24 +10,18 @@ import {
   Task,
 } from '@graasp/sdk';
 
-import { ChatService } from './chat/db-service';
-import { Chat } from './chat/interfaces/chat';
-import { MessageBodyType } from './chat/interfaces/chat-message';
-import { ChatTaskManager } from './chat/interfaces/chat-task-manager';
-import { GetChatTask } from './chat/tasks/get-chat-task';
-import { PublishMessageTask } from './chat/tasks/publish-message-task';
-import { DeleteMessageTask } from './chat/tasks/delete-message-task';
-import { PatchMessageTask } from './chat/tasks/patch-message-task';
-import { ClearChatTask } from './chat/tasks/clear-chat-task';
-import { GetMessageTask } from './chat/tasks/get-message-task';
-import { CreateMentionsTask } from './mentions/tasks/create-mentions-task';
-import { MentionService } from './mentions/db-service';
-import { GetMemberMentionsTask } from './mentions/tasks/get-mentions-task';
-import { ChatMention } from './mentions/interfaces/chat-mention';
-import { UpdateMentionStatusTask } from './mentions/tasks/update-mention-status-task';
-import { IsOwnMentionTask } from './mentions/tasks/is-own-mention-task';
-import { DeleteMentionTask } from './mentions/tasks/delete-mention-task';
-import { ClearAllMentionsTask } from './mentions/tasks/clear-all-mentions-task';
+import { ChatService } from './db-service';
+import { Chat } from './interfaces/chat';
+import { MessageBodyType } from './interfaces/chat-message';
+import { ChatTaskManager } from './interfaces/chat-task-manager';
+import { GetChatTask } from './tasks/get-chat-task';
+import { PublishMessageTask } from './tasks/publish-message-task';
+import { DeleteMessageTask } from './tasks/delete-message-task';
+import { PatchMessageTask } from './tasks/patch-message-task';
+import { ClearChatTask } from './tasks/clear-chat-task';
+import { GetMessageTask } from './tasks/get-message-task';
+import { CreateMentionsTask } from '../mentions/tasks/create-mentions-task';
+import { MentionService } from '../mentions/db-service';
 
 /**
  * Concrete implementation of the chat task manager
@@ -86,14 +80,6 @@ export class TaskManager implements ChatTaskManager {
     );
   }
 
-  createGetMemberMentionsTask(member: Actor): Task<Actor, ChatMention[]> {
-    return new GetMemberMentionsTask(
-      member,
-      this.itemService,
-      this.mentionService,
-    );
-  }
-
   createGetTaskSequence(
     member: Member,
     objectId: string,
@@ -128,12 +114,9 @@ export class TaskManager implements ChatTaskManager {
       },
     );
     t2.getInput = () => ({ item: t1[0].result as Item });
-    const t3 = new CreateMentionsTask(
-      member,
-      this.itemService,
-      this.mentionService,
-      { mentions },
-    );
+    const t3 = new CreateMentionsTask(member, this.mentionService, {
+      mentions,
+    });
     // supply mention task with item and chat-message id
     t3.getInput = () => ({
       item: t1[0].result as Item,
@@ -165,27 +148,6 @@ export class TaskManager implements ChatTaskManager {
     t2.getInput = () => ({ item: t1[0].result as Item });
 
     return [...t1, t2];
-  }
-
-  createPatchMentionTaskSequence(
-    member: Member,
-    mentionId: string,
-    status: string,
-  ): Task<Actor, unknown>[] {
-    const t1 = new IsOwnMentionTask(
-      member,
-      mentionId,
-      this.itemService,
-      this.mentionService,
-    );
-    const t2 = new UpdateMentionStatusTask(
-      member,
-      mentionId,
-      this.itemService,
-      this.mentionService,
-      { status },
-    );
-    return [t1, t2];
   }
 
   createRemoveMessageTaskSequence(
@@ -227,25 +189,6 @@ export class TaskManager implements ChatTaskManager {
     return [...t1, t2, t3, t4];
   }
 
-  createDeleteMentionTaskSequence(
-    member: Member,
-    mentionId: string,
-  ): Task<Actor, unknown>[] {
-    const t1 = new IsOwnMentionTask(
-      member,
-      mentionId,
-      this.itemService,
-      this.mentionService,
-    );
-    const t2 = new DeleteMentionTask(
-      member,
-      mentionId,
-      this.itemService,
-      this.mentionService,
-    );
-    return [t1, t2];
-  }
-
   createClearChatTaskSequence(
     member: Member,
     chatId: string,
@@ -267,14 +210,5 @@ export class TaskManager implements ChatTaskManager {
     );
 
     return [...t1, t2, t3];
-  }
-
-  createClearAllMentionsTaskSequence(member: Member): Task<Actor, unknown>[] {
-    const t1 = new ClearAllMentionsTask(
-      member,
-      this.itemService,
-      this.mentionService,
-    );
-    return [t1];
   }
 }

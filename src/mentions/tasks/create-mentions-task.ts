@@ -1,5 +1,5 @@
 import { FastifyLoggerInstance } from 'fastify';
-import { DatabaseTransactionHandler, Item, ItemService, Member } from 'graasp';
+import { DatabaseTransactionHandler, Item, Member } from 'graasp';
 import { BaseMentionTask } from './base-mention-task';
 import { ChatMention } from '../interfaces/chat-mention';
 import { MentionService } from '../db-service';
@@ -23,11 +23,10 @@ export class CreateMentionsTask extends BaseMentionTask<ChatMention[]> {
 
   constructor(
     member: Member,
-    itemService: ItemService,
     mentionService: MentionService,
     input: InputType,
   ) {
-    super(member, itemService, mentionService);
+    super(member, mentionService);
     this.input = input;
   }
 

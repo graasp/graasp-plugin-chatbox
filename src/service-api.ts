@@ -30,8 +30,8 @@ import commonChat, {
   publishMessage,
   removeMessage,
 } from './chat/schemas';
-import { TaskManager } from './task-manager';
-import { registerChatWsHooks } from './ws/hooks';
+import { TaskManager as ChatTaskManager } from './chat/task-manager';
+import { registerChatWsHooks } from './chat/ws/hooks';
 import { MentionService } from './mentions/db-service';
 import commonMentions, {
   clearAllMentions,
@@ -39,6 +39,8 @@ import commonMentions, {
   getMentions,
   patchMention,
 } from './mentions/schemas';
+import { TaskManager as MentionsTaskManager } from './mentions/task-manager';
+import { registerChatMentionsWsHooks } from './mentions/ws/hooks';
 
 /**
  * Type definition for plugin options
@@ -65,7 +67,7 @@ const plugin: FastifyPluginAsync<GraaspChatPluginOptions> = async (
 
     const chatService = new ChatService();
     const mentionService = new MentionService();
-    const taskManager = new TaskManager(
+    const taskManager = new ChatTaskManager(
       itemService,
       itemMembershipsService,
       chatService,
@@ -74,7 +76,10 @@ const plugin: FastifyPluginAsync<GraaspChatPluginOptions> = async (
       iMTM,
     );
 
-    fastify.decorate('chat', { dbService: chatService, taskManager });
+    fastify.decorate('chat', {
+      dbService: chatService,
+      taskManager,
+    });
 
     fastify.addSchema(commonChat);
     fastify.addSchema(commonMentions);
@@ -192,6 +197,46 @@ const plugin: FastifyPluginAsync<GraaspChatPluginOptions> = async (
         return runner.runSingleSequence(tasks, log);
       },
     );
+  });
+
+  // isolate plugin content using fastify.register to ensure that the hooks will not be called when other routes match
+  fastify.register(async function (fastify) {
+    const {
+      items: { dbService: itemService, taskManager: iTM },
+      members: { dbService: membersService },
+      itemMemberships: { dbService: itemMembershipsService, taskManager: iMTM },
+      taskRunner: runner,
+      websockets,
+      db,
+    } = fastify;
+
+    const mentionService = new MentionService();
+    const taskManager = new MentionsTaskManager(
+      itemService,
+      itemMembershipsService,
+      mentionService,
+      iTM,
+      iMTM,
+    );
+
+    fastify.decorate('mentions', {
+      dbService: mentionService,
+      taskManager,
+    });
+
+    fastify.addSchema(commonMentions);
+
+    // register websocket behaviours for chats
+    if (websockets) {
+      registerChatMentionsWsHooks(
+        websockets,
+        runner,
+        membersService,
+        itemMembershipsService,
+        taskManager,
+        db.pool,
+      );
+    }
 
     // mentions
     fastify.get(

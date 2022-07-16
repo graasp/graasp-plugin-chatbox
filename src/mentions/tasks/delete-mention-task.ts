@@ -1,4 +1,4 @@
-import { Actor, DatabaseTransactionHandler, ItemService } from 'graasp';
+import { Actor, DatabaseTransactionHandler } from 'graasp';
 import { MentionService } from '../db-service';
 import { BaseMentionTask } from './base-mention-task';
 import { ChatMention } from '../interfaces/chat-mention';
@@ -14,10 +14,9 @@ export class DeleteMentionTask extends BaseMentionTask<ChatMention> {
   constructor(
     member: Actor,
     mentionId: string,
-    itemService: ItemService,
     mentionService: MentionService,
   ) {
-    super(member, itemService, mentionService);
+    super(member, mentionService);
     this.targetId = mentionId;
   }
 
