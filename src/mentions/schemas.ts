@@ -65,9 +65,8 @@ export default {
  * JSON schema on GET mentions route for request and response
  */
 const getMentions = {
-  params: { $ref: 'http://graasp.org/mentions/#/definitions/mentionParam' },
   response: {
-    200: { $ref: 'http://graasp.org/mentions/#/definitions/chatMention' },
+    200: { $ref: 'http://graasp.org/mentions/#/definitions/allMentions' },
   },
 };
 
@@ -96,7 +95,6 @@ const deleteMention = {
  * JSON schema on DELETE clear all mentions route for request and response
  */
 const clearAllMentions = {
-  params: { $ref: 'http://graasp.org/mentions/#/definitions/memberIdParam' },
   response: {
     200: { $ref: 'http://graasp.org/mentions/#/definitions/allMentions' },
   },
