@@ -3,7 +3,6 @@ import {
   Actor,
   DatabaseTransactionHandler,
   IndividualResultType,
-  ItemService,
   PostHookHandlerType,
   PreHookHandlerType,
   Task,
@@ -15,7 +14,6 @@ import { MentionService } from '../db-service';
  * Abstract base task definition for operations on the chat database
  */
 export abstract class BaseMentionTask<R> implements Task<Actor, R> {
-  protected itemService: ItemService;
   protected mentionService: MentionService;
   protected _result: R;
   protected _message: string;
@@ -34,14 +32,9 @@ export abstract class BaseMentionTask<R> implements Task<Actor, R> {
   getInput?: () => unknown;
   getResult?: () => unknown;
 
-  constructor(
-    actor: Actor,
-    itemService: ItemService,
-    mentionService: MentionService,
-  ) {
+  constructor(actor: Actor, mentionService: MentionService) {
     this.actor = actor;
     this.status = 'NEW';
-    this.itemService = itemService;
     this.mentionService = mentionService;
   }
 

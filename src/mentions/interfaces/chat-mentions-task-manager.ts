@@ -1,0 +1,61 @@
+import { Actor, Task } from 'graasp';
+import { ChatMention } from './chat-mention';
+
+/**
+ * Task manager for chat operations
+ */
+export interface ChatMentionsTaskManager<A extends Actor = Actor> {
+  /**
+   * Returns the name of the get mentions task (read)
+   */
+  getGetMemberMentionsTaskName(): string;
+
+  /**
+   * Returns the name of the update mention status task (write)
+   */
+  getUpdateMentionStatusTaskName(): string;
+
+  /**
+   * Returns the name of the delete mention task (write)
+   */
+  getDeleteMentionTaskName(): string;
+
+  /**
+   * Returns the name of the clear all mentions task (write)
+   */
+  getClearAllMentionsTaskName(): string;
+
+  /**
+   * Factory for a task to get all mentions for a member
+   * @param actor User performing the action
+   */
+  createGetMemberMentionsTask(actor: A): Task<A, ChatMention[]>;
+
+  /**
+   * Factory for a task to update a mention
+   * @param actor User performing the action
+   * @param mentionId mention ID
+   * @param status status to update
+   */
+  createPatchMentionTaskSequence(
+    actor: A,
+    mentionId: string,
+    status: string,
+  ): Task<A, unknown>[];
+
+  /**
+   * Factory for a task to update a message in a chat
+   * @param actor User performing the action
+   * @param mentionId Mention ID
+   */
+  createDeleteMentionTaskSequence(
+    actor: A,
+    mentionId: string,
+  ): Task<A, unknown>[];
+
+  /**
+   * Factory for a task to delete all mentions of a member
+   * @param actor User performing the action
+   */
+  createClearAllMentionsTaskSequence(actor: A): Task<A, unknown>[];
+}
