@@ -21,7 +21,7 @@ export default {
       },
     },
 
-    mentions: {
+    allMentions: {
       type: 'object',
       properties: {
         memberId: { $ref: 'http://graasp.org/#/definitions/uuid' },
@@ -98,7 +98,7 @@ const deleteMention = {
 const clearAllMentions = {
   params: { $ref: 'http://graasp.org/mentions/#/definitions/memberIdParam' },
   response: {
-    200: { $ref: 'http://graasp.org/mentions/#/definitions/mentions' },
+    200: { $ref: 'http://graasp.org/mentions/#/definitions/allMentions' },
   },
 };
 
