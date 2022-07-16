@@ -22,14 +22,8 @@ export default {
     },
 
     allMentions: {
-      type: 'object',
-      properties: {
-        memberId: { $ref: 'http://graasp.org/#/definitions/uuid' },
-        mentions: {
-          type: 'array',
-          items: { $ref: '#/definitions/chatMention' },
-        },
-      },
+      type: 'array',
+      items: { $ref: '#/definitions/chatMention' },
     },
 
     chatMention: {
