@@ -15,7 +15,7 @@ import {
   PartialChatMessage,
   PartialNewChatMessage,
 } from './chat/interfaces/chat-message';
-import common, {
+import commonChat, {
   clearChat,
   getChat,
   patchMessage,
@@ -33,7 +33,7 @@ import {
 import { CLIENT_HOSTS } from './constants/constants';
 import { createChatActionHandler } from './chat/handler/chat-action-handler';
 import { MentionService } from './mentions/db-service';
-import {
+import commonMentions, {
   clearAllMentions,
   deleteMention,
   getMentions,
@@ -82,7 +82,8 @@ const plugin: FastifyPluginAsync<GraaspChatPluginOptions> = async (
 
     fastify.decorate('chat', { dbService: chatService, taskManager });
 
-    fastify.addSchema(common);
+    fastify.addSchema(commonChat);
+    fastify.addSchema(commonMentions);
 
     // register websocket behaviours for chats
     if (websockets) {
