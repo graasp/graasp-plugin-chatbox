@@ -2,14 +2,6 @@
  This migration adds the chat mentions table with its triggers.
  */
 
-CREATE FUNCTION trigger_set_mention_as_unread()
-    RETURNS TRIGGER AS $$
-BEGIN
-  NEW.status = 'unread';
-RETURN NEW;
-END;
-$$ LANGUAGE plpgsql;
-
 CREATE TYPE mention_status AS ENUM ('unread', 'read');
 
 CREATE TABLE "chat_mentions"
@@ -32,10 +24,3 @@ CREATE TRIGGER "chat_mentions_set_timestamp"
     ON "chat_mentions"
     FOR EACH ROW
     EXECUTE PROCEDURE trigger_set_timestamp();
-
--- add the trigger to update the updated_at on UPDATE statements
-CREATE TRIGGER "chat_mentions_set_unread"
-    BEFORE UPDATE
-    ON "chat_mentions"
-    FOR EACH ROW
-    EXECUTE PROCEDURE trigger_set_mention_as_unread();
