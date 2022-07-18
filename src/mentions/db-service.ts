@@ -83,7 +83,7 @@ export class MentionService {
     transactionHandler: TrxHandler,
   ): Promise<ChatMention[]> {
     return transactionHandler
-      .query<ChatMention[]>(
+      .query<ChatMention>(
         sql`
             INSERT INTO ${
               MentionService.tableName
@@ -97,7 +97,7 @@ export class MentionService {
                 RETURNING ${MentionService.allColumns}
         `,
       )
-      .then(({ rows }) => rows[0]);
+      .then(({ rows }) => rows.slice(0));
   }
 
   /**
