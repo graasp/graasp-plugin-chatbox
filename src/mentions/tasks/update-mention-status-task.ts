@@ -3,6 +3,7 @@ import { MentionService } from '../db-service';
 import { BaseMentionTask } from './base-mention-task';
 import { ChatMention } from '../interfaces/chat-mention';
 import { MemberCannotEditMention } from '../../util/graasp-item-chat-error';
+import { FastifyLoggerInstance } from 'fastify';
 
 type InputType = {
   status?: string;
@@ -30,7 +31,10 @@ export class UpdateMentionStatusTask extends BaseMentionTask<ChatMention> {
     this.input = input;
   }
 
-  async run(handler: DatabaseTransactionHandler): Promise<void> {
+  async run(
+    handler: DatabaseTransactionHandler,
+    log: FastifyLoggerInstance,
+  ): Promise<void> {
     this.status = 'RUNNING';
 
     const mention = await this.mentionService.getMention(
@@ -45,11 +49,13 @@ export class UpdateMentionStatusTask extends BaseMentionTask<ChatMention> {
 
     const { status } = this.input;
     // patch mention
-    this._result = await this.mentionService.patchMention(
+    const updatedMention = await this.mentionService.patchMention(
       this.targetId,
       status,
       handler,
     );
+    await this.postHookHandler?.(updatedMention, this.actor, { log, handler });
+    this._result = updatedMention;
     this.status = 'OK';
   }
 }
