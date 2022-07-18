@@ -9,6 +9,7 @@ export class MentionService {
   private static allColumns = sql.join(
     [
       'id',
+      ['item_path', 'itemPath'],
       ['message_id', 'messageId'],
       ['member_id', 'memberId'],
       'creator',
@@ -70,14 +71,56 @@ export class MentionService {
   }
 
   /**
+   * Retrieves all mentions having the itemPath or being children of the itemPath
+   * @param itemPath Id of the mention to retrieve
+   * @param transactionHandler database handler
+   */
+  async getMentionsByItemPath(
+    itemPath: string,
+    transactionHandler: TrxHandler,
+  ): Promise<ChatMention[]> {
+    return transactionHandler
+      .query<ChatMention>(
+        sql`
+            SELECT ${MentionService.allColumns}
+            FROM ${MentionService.tableName}
+            WHERE item_path <@ ${itemPath}
+        `,
+      )
+      .then(({ rows }) => rows.slice(0));
+  }
+
+  /**
+   * Retrieves all mentions having the messageId
+   * @param messageId Id of the message
+   * @param transactionHandler database handler
+   */
+  async getMentionsByMessageId(
+    messageId: string,
+    transactionHandler: TrxHandler,
+  ): Promise<ChatMention[]> {
+    return transactionHandler
+      .query<ChatMention>(
+        sql`
+            SELECT ${MentionService.allColumns}
+            FROM ${MentionService.tableName}
+            WHERE message_id = ${messageId}
+        `,
+      )
+      .then(({ rows }) => rows.slice(0));
+  }
+
+  /**
    * Adds mentions for the chat message
    * @param mentions Array of memberIds that are mentioned
+   * @param itemPath path of the item
    * @param messageId id of the chat message where the mention occurs
    * @param creator user creating the message and creating the mentions
    * @param transactionHandler database handler
    */
   async createMentions(
     mentions: string[],
+    itemPath: string,
     messageId: string,
     creator: string,
     transactionHandler: TrxHandler,
@@ -87,10 +130,11 @@ export class MentionService {
         sql`
             INSERT INTO ${
               MentionService.tableName
-            } (message_id, creator, member_id)
+            } (item_path, message_id, creator, member_id)
             VALUES ${sql.join(
               mentions.map(
-                (memberId) => sql`(${messageId}, ${creator}, ${memberId})`,
+                (memberId) =>
+                  sql`(${itemPath}, ${messageId}, ${creator}, ${memberId})`,
               ),
               sql`, `,
             )}

@@ -2,20 +2,28 @@ import { AccessDenied, NotFound, WebSocketService } from 'graasp-websockets';
 import {
   Actor,
   DatabaseTransactionHandler,
+  Item,
   ItemMembershipService,
+  ItemTaskManager,
   MemberService,
   TaskRunner,
 } from 'graasp';
 import { ChatMentionsTaskManager } from '../interfaces/chat-mentions-task-manager';
 import { chatMentionTopic, MentionEvent } from './events';
 import { ChatMention, MemberChatMentions } from '../interfaces/chat-mention';
+import { MentionService } from '../db-service';
+import { ChatTaskManager } from '../../chat/interfaces/chat-task-manager';
+import { ChatMessage } from '../../chat/interfaces/chat-message';
 
 export function registerChatMentionsWsHooks(
   websockets: WebSocketService,
   runner: TaskRunner<Actor>,
+  mentionService: MentionService,
   memberService: MemberService,
   itemMembershipService: ItemMembershipService,
-  chatTaskManager: ChatMentionsTaskManager,
+  itemTaskManager: ItemTaskManager,
+  chatTaskManager: ChatTaskManager,
+  chatMentionsTaskManager: ChatMentionsTaskManager,
   validationDbHandler: DatabaseTransactionHandler,
 ) {
   websockets.register(chatMentionTopic, async (req) => {
@@ -32,7 +40,8 @@ export function registerChatMentionsWsHooks(
   });
 
   // on new chat message published, broadcast the mentions to their channels
-  const createMentionsTaskName = chatTaskManager.getCreateMentionsTaskName();
+  const createMentionsTaskName =
+    chatMentionsTaskManager.getCreateMentionsTaskName();
   runner.setTaskPostHookHandler<ChatMention[]>(
     createMentionsTaskName,
     (mentions) => {
@@ -49,7 +58,7 @@ export function registerChatMentionsWsHooks(
 
   // on update mention, broadcast to member mention channel
   const updateMentionStatusTaskName =
-    chatTaskManager.getUpdateMentionStatusTaskName();
+    chatMentionsTaskManager.getUpdateMentionStatusTaskName();
   runner.setTaskPostHookHandler<ChatMention>(
     updateMentionStatusTaskName,
     (mention) => {
@@ -62,7 +71,8 @@ export function registerChatMentionsWsHooks(
   );
 
   // on delete chat mention, broadcast to member mention channel
-  const deleteMentionTaskName = chatTaskManager.getDeleteMentionTaskName();
+  const deleteMentionTaskName =
+    chatMentionsTaskManager.getDeleteMentionTaskName();
   runner.setTaskPostHookHandler<ChatMention>(
     deleteMentionTaskName,
     (mention) => {
@@ -76,11 +86,47 @@ export function registerChatMentionsWsHooks(
 
   // on clear chat, broadcast to item chat channel
   const clearAllMentionsTaskName =
-    chatTaskManager.getClearAllMentionsTaskName();
+    chatMentionsTaskManager.getClearAllMentionsTaskName();
   runner.setTaskPostHookHandler<MemberChatMentions>(
     clearAllMentionsTaskName,
     ({ memberId }) => {
       websockets.publish(chatMentionTopic, memberId, MentionEvent('clear'));
+    },
+  );
+
+  // on item delete -> pre-hook should remove the mentions from the channel
+  const deleteItemTaskName = itemTaskManager.getDeleteTaskName();
+  runner.setTaskPreHookHandler<Item>(deleteItemTaskName, async (item) => {
+    // get mentions to be deleted
+    const mentions = await mentionService.getMentionsByItemPath(
+      item.id,
+      validationDbHandler,
+    );
+    mentions.map((m) =>
+      websockets.publish(
+        chatMentionTopic,
+        m.memberId,
+        MentionEvent('delete', m),
+      ),
+    );
+  });
+
+  // on message delete -> pre-hook should remove the mentions from the channel
+  const deleteChatMessageTaskName = chatTaskManager.getDeleteMessageTaskName();
+  runner.setTaskPreHookHandler<ChatMessage>(
+    deleteChatMessageTaskName,
+    async (message) => {
+      const mentions = await mentionService.getMentionsByMessageId(
+        message.id,
+        validationDbHandler,
+      );
+      mentions.map((m) =>
+        websockets.publish(
+          chatMentionTopic,
+          m.memberId,
+          MentionEvent('delete', m),
+        ),
+      );
     },
   );
 }
