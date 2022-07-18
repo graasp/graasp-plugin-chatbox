@@ -10,11 +10,12 @@ import {
 import { ChatMentionsTaskManager } from './interfaces/chat-mentions-task-manager';
 import { MentionService } from './db-service';
 import { GetMemberMentionsTask } from './tasks/get-mentions-task';
-import { ChatMention } from './interfaces/chat-mention';
+import { MemberChatMentions } from './interfaces/chat-mention';
 import { UpdateMentionStatusTask } from './tasks/update-mention-status-task';
 import { IsOwnMentionTask } from './tasks/is-own-mention-task';
 import { DeleteMentionTask } from './tasks/delete-mention-task';
 import { ClearAllMentionsTask } from './tasks/clear-all-mentions-task';
+import { CreateMentionsTask } from './tasks/create-mentions-task';
 
 /**
  * Concrete implementation of the chat mention task manager
@@ -40,6 +41,10 @@ export class TaskManager implements ChatMentionsTaskManager {
     this.itemMembershipTaskManager = itemMembershipTaskManager;
   }
 
+  getCreateMentionsTaskName(): string {
+    return CreateMentionsTask.name;
+  }
+
   getGetMemberMentionsTaskName(): string {
     return GetMemberMentionsTask.name;
   }
@@ -56,7 +61,7 @@ export class TaskManager implements ChatMentionsTaskManager {
     return ClearAllMentionsTask.name;
   }
 
-  createGetMemberMentionsTask(member: Actor): Task<Actor, ChatMention[]> {
+  createGetMemberMentionsTask(member: Actor): Task<Actor, MemberChatMentions> {
     return new GetMemberMentionsTask(member, this.mentionService);
   }
 

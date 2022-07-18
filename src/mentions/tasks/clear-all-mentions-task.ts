@@ -1,12 +1,13 @@
 import { Actor, DatabaseTransactionHandler } from 'graasp';
 import { MentionService } from '../db-service';
 import { BaseMentionTask } from './base-mention-task';
-import { ChatMention } from '../interfaces/chat-mention';
+import { MemberChatMentions } from '../interfaces/chat-mention';
+import { FastifyLoggerInstance } from 'fastify';
 
 /**
  * Task to clear all mentions of a member from the database
  */
-export class ClearAllMentionsTask extends BaseMentionTask<ChatMention[]> {
+export class ClearAllMentionsTask extends BaseMentionTask<MemberChatMentions> {
   get name(): string {
     return ClearAllMentionsTask.name;
   }
@@ -16,14 +17,24 @@ export class ClearAllMentionsTask extends BaseMentionTask<ChatMention[]> {
     this.targetId = member.id;
   }
 
-  async run(handler: DatabaseTransactionHandler): Promise<void> {
+  async run(
+    handler: DatabaseTransactionHandler,
+    log: FastifyLoggerInstance,
+  ): Promise<void> {
     this.status = 'RUNNING';
 
     // clear all mentions
-    this._result = await this.mentionService.clearAllMentions(
+    const chatMentions = await this.mentionService.clearAllMentions(
       this.targetId,
       handler,
     );
+    const memberMentions = {
+      memberId: this.targetId,
+      mentions: chatMentions,
+    };
+    await this.postHookHandler?.(memberMentions, this.actor, { log, handler });
+
+    this._result = memberMentions;
     this.status = 'OK';
   }
 }
