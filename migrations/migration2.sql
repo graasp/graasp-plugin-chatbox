@@ -6,13 +6,14 @@ CREATE TYPE mention_status AS ENUM ('unread', 'read');
 
 CREATE TABLE "chat_mentions"
 (
-    "id"         uuid UNIQUE NOT NULL DEFAULT uuid_generate_v4(),
-    "message_id" uuid REFERENCES "chat_message" ("id") ON DELETE CASCADE,   -- delete row if member is deleted
-    "member_id"  uuid REFERENCES "member" ("id") ON DELETE CASCADE,         -- delete row if member is deleted
-    "creator"    uuid        REFERENCES "member" ("id") ON DELETE SET NULL, -- don't remove - set creator to NULL
-    "created_at" timestamp   NOT NULL DEFAULT (NOW() AT TIME ZONE 'utc'),
-    "updated_at" timestamp   NOT NULL DEFAULT (NOW() AT TIME ZONE 'utc'),
-    "status" mention_status NOT NULL DEFAULT 'unread',
+    "id"         uuid UNIQUE    NOT NULL DEFAULT uuid_generate_v4(),
+    "item_path"  ltree REFERENCES "items" ("path") ON DELETE CASCADE,          -- delete row if item is deleted
+    "message_id" uuid REFERENCES "chat_message" ("id") ON DELETE CASCADE,      -- delete row if member is deleted
+    "member_id"  uuid REFERENCES "member" ("id") ON DELETE CASCADE,            -- delete row if member is deleted
+    "creator"    uuid           REFERENCES "member" ("id") ON DELETE SET NULL, -- don't remove - set creator to NULL
+    "created_at" timestamp      NOT NULL DEFAULT (NOW() AT TIME ZONE 'utc'),
+    "updated_at" timestamp      NOT NULL DEFAULT (NOW() AT TIME ZONE 'utc'),
+    "status"     mention_status NOT NULL DEFAULT 'unread',
     PRIMARY KEY ("id")
 );
 

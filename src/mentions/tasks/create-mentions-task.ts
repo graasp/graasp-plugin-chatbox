@@ -36,13 +36,14 @@ export class CreateMentionsTask extends BaseMentionTask<ChatMention[]> {
   ): Promise<void> {
     this.status = 'RUNNING';
 
-    const { messageId, mentions } = this.input;
+    const { messageId, mentions, item } = this.input;
 
     this.targetId = messageId;
 
     // create mentions
     const newChatMentions = await this.mentionService.createMentions(
       mentions,
+      item.path,
       messageId,
       this.actor.id,
       handler,

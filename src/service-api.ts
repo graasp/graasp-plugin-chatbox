@@ -46,6 +46,7 @@ import { registerChatMentionsWsHooks } from './mentions/ws/hooks';
 declare module 'fastify' {
   interface FastifyInstance {
     websockets?: WebSocketService;
+    chat?: { taskManager: ChatTaskManager; dbService: ChatService };
   }
 }
 
@@ -60,30 +61,30 @@ const plugin: FastifyPluginAsync<GraaspChatPluginOptions> = async (
   fastify,
   _options,
 ) => {
+  const {
+    items: { dbService: itemService, taskManager: iTM },
+    itemMemberships: { dbService: itemMembershipsService, taskManager: iMTM },
+    members: { taskManager: memberTM },
+    taskRunner: runner,
+    websockets,
+    db,
+  } = fastify;
+
+  const chatService = new ChatService();
+  const mentionService = new MentionService();
+  const taskManager = new ChatTaskManager(
+    itemService,
+    itemMembershipsService,
+    chatService,
+    mentionService,
+    iTM,
+    iMTM,
+  );
+
+  fastify.decorate('chat', { dbService: chatService, taskManager });
+
   // isolate plugin content using fastify.register to ensure that the hooks will not be called when other routes match
   fastify.register(async function (fastify) {
-    const {
-      items: { dbService: itemService, taskManager: iTM },
-      itemMemberships: { dbService: itemMembershipsService, taskManager: iMTM },
-      members: { taskManager: memberTM },
-      taskRunner: runner,
-      websockets,
-      db,
-    } = fastify;
-
-    const chatService = new ChatService();
-    const mentionService = new MentionService();
-    const taskManager = new ChatTaskManager(
-      itemService,
-      itemMembershipsService,
-      chatService,
-      mentionService,
-      iTM,
-      iMTM,
-    );
-
-    fastify.decorate('chat', { dbService: chatService, taskManager });
-
     fastify.addSchema(commonChat);
     fastify.addSchema(commonMentions);
 
@@ -203,6 +204,7 @@ const plugin: FastifyPluginAsync<GraaspChatPluginOptions> = async (
       items: { dbService: itemService, taskManager: iTM },
       members: { dbService: membersService },
       itemMemberships: { dbService: itemMembershipsService, taskManager: iMTM },
+      chat: { taskManager: chatTaskManager },
       taskRunner: runner,
       websockets,
       db,
@@ -226,8 +228,11 @@ const plugin: FastifyPluginAsync<GraaspChatPluginOptions> = async (
       registerChatMentionsWsHooks(
         websockets,
         runner,
+        mentionService,
         membersService,
         itemMembershipsService,
+        iTM,
+        chatTaskManager,
         taskManager,
         db.pool,
       );
