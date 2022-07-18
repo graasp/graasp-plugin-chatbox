@@ -44,7 +44,6 @@ export class UpdateMentionStatusTask extends BaseMentionTask<ChatMention> {
     }
 
     const { status } = this.input;
-    console.log(status);
     // patch mention
     this._result = await this.mentionService.patchMention(
       this.targetId,
