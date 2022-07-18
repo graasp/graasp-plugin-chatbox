@@ -1,10 +1,15 @@
 import { Actor, Task } from 'graasp';
-import { ChatMention } from './chat-mention';
+import { MemberChatMentions } from './chat-mention';
 
 /**
  * Task manager for chat operations
  */
 export interface ChatMentionsTaskManager<A extends Actor = Actor> {
+  /**
+   * Returns the name of the create mention task (write)
+   */
+  getCreateMentionsTaskName(): string;
+
   /**
    * Returns the name of the get mentions task (read)
    */
@@ -29,7 +34,7 @@ export interface ChatMentionsTaskManager<A extends Actor = Actor> {
    * Factory for a task to get all mentions for a member
    * @param actor User performing the action
    */
-  createGetMemberMentionsTask(actor: A): Task<A, ChatMention[]>;
+  createGetMemberMentionsTask(actor: A): Task<A, MemberChatMentions>;
 
   /**
    * Factory for a task to update a mention

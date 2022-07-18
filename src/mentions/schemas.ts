@@ -21,9 +21,17 @@ export default {
       },
     },
 
-    allMentions: {
-      type: 'array',
-      items: { $ref: '#/definitions/chatMention' },
+    memberMentions: {
+      type: 'object',
+      required: ['memberId', 'mentions'],
+      properties: {
+        memberId: { $ref: 'http://graasp.org/#/definitions/uuid' },
+        mentions: {
+          type: 'array',
+          items: { $ref: '#/definitions/chatMention' },
+        },
+      },
+      additionalProperties: false,
     },
 
     chatMention: {
@@ -60,7 +68,7 @@ export default {
  */
 const getMentions = {
   response: {
-    200: { $ref: 'http://graasp.org/mentions/#/definitions/allMentions' },
+    200: { $ref: 'http://graasp.org/mentions/#/definitions/memberMentions' },
   },
 };
 
@@ -90,7 +98,7 @@ const deleteMention = {
  */
 const clearAllMentions = {
   response: {
-    200: { $ref: 'http://graasp.org/mentions/#/definitions/allMentions' },
+    200: { $ref: 'http://graasp.org/mentions/#/definitions/memberMentions' },
   },
 };
 

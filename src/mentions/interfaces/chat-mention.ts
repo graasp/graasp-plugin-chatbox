@@ -4,7 +4,7 @@ export enum MentionStatus {
 }
 
 /**
- * Shape of chat messages
+ * Shape of a chat mention
  */
 export interface ChatMention {
   id: string;
@@ -14,4 +14,12 @@ export interface ChatMention {
   createdAt: string;
   updatedAt: string;
   status: MentionStatus;
+}
+
+/**
+ * Shape of an object with the mentions of a member
+ */
+export interface MemberChatMentions {
+  memberId: string;
+  mentions: ChatMention[];
 }

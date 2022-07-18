@@ -7,7 +7,8 @@ import {
   TaskRunner,
 } from 'graasp';
 import { ChatMentionsTaskManager } from '../interfaces/chat-mentions-task-manager';
-import { chatMentionTopic } from './events';
+import { chatMentionTopic, MentionEvent } from './events';
+import { ChatMention, MemberChatMentions } from '../interfaces/chat-mention';
 
 export function registerChatMentionsWsHooks(
   websockets: WebSocketService,
@@ -29,49 +30,57 @@ export function registerChatMentionsWsHooks(
       reject(AccessDenied());
     }
   });
-  //
-  // // on new chat message published, broadcast to item chat channel
-  // const publishMessageTaskName = chatTaskManager.getPublishMessageTaskName();
-  // runner.setTaskPostHookHandler<ChatMessage>(
-  //   publishMessageTaskName,
-  //   (message) => {
-  //     websockets.publish(
-  //       itemChatTopic,
-  //       message.chatId,
-  //       ItemChatEvent('publish', message),
-  //     );
-  //   },
-  // );
-  //
-  // // on update chat item, broadcast to item chat channel
-  // const patchMessageTaskName = chatTaskManager.getPatchMessageTaskName();
-  // runner.setTaskPostHookHandler<ChatMessage>(
-  //   patchMessageTaskName,
-  //   (message) => {
-  //     websockets.publish(
-  //       itemChatTopic,
-  //       message.chatId,
-  //       ItemChatEvent('update', message),
-  //     );
-  //   },
-  // );
-  //
-  // // on delete chat item, broadcast to item chat channel
-  // const deleteMessageTaskName = chatTaskManager.getDeleteMessageTaskName();
-  // runner.setTaskPostHookHandler<ChatMessage>(
-  //   deleteMessageTaskName,
-  //   (message) => {
-  //     websockets.publish(
-  //       itemChatTopic,
-  //       message.chatId,
-  //       ItemChatEvent('delete', message),
-  //     );
-  //   },
-  // );
-  //
-  // // on clear chat, broadcast to item chat channel
-  // const clearChatTaskName = chatTaskManager.getClearChatTaskName();
-  // runner.setTaskPostHookHandler<Chat>(clearChatTaskName, (chat) => {
-  //   websockets.publish(itemChatTopic, chat.id, ItemChatEvent('clear'));
-  // });
+
+  // on new chat message published, broadcast the mentions to their channels
+  const createMentionsTaskName = chatTaskManager.getCreateMentionsTaskName();
+  runner.setTaskPostHookHandler<ChatMention[]>(
+    createMentionsTaskName,
+    (mentions) => {
+      // publish each mentions to its respective channel
+      mentions.map((mention) =>
+        websockets.publish(
+          chatMentionTopic,
+          mention.memberId,
+          MentionEvent('publish', mention),
+        ),
+      );
+    },
+  );
+
+  // on update mention, broadcast to member mention channel
+  const updateMentionStatusTaskName =
+    chatTaskManager.getUpdateMentionStatusTaskName();
+  runner.setTaskPostHookHandler<ChatMention>(
+    updateMentionStatusTaskName,
+    (mention) => {
+      websockets.publish(
+        chatMentionTopic,
+        mention.memberId,
+        MentionEvent('update', mention),
+      );
+    },
+  );
+
+  // on delete chat mention, broadcast to member mention channel
+  const deleteMentionTaskName = chatTaskManager.getDeleteMentionTaskName();
+  runner.setTaskPostHookHandler<ChatMention>(
+    deleteMentionTaskName,
+    (mention) => {
+      websockets.publish(
+        chatMentionTopic,
+        mention.memberId,
+        MentionEvent('delete', mention),
+      );
+    },
+  );
+
+  // on clear chat, broadcast to item chat channel
+  const clearAllMentionsTaskName =
+    chatTaskManager.getClearAllMentionsTaskName();
+  runner.setTaskPostHookHandler<MemberChatMentions>(
+    clearAllMentionsTaskName,
+    ({ memberId }) => {
+      websockets.publish(chatMentionTopic, memberId, MentionEvent('clear'));
+    },
+  );
 }

@@ -4,11 +4,11 @@
 
 import { ChatMention } from '../interfaces/chat-mention';
 
-// item chat messages
+// chat mentions topic
 export const chatMentionTopic = 'mentions';
 
 /**
- * All websocket events for chats will have this shape
+ * All websocket events for chat mentions will have this shape
  */
 interface ChatMentionEvent {
   op: string;
@@ -16,7 +16,7 @@ interface ChatMentionEvent {
 }
 
 /**
- * Events for item chats
+ * Events for chat mentions
  */
 interface MentionEvent extends ChatMentionEvent {
   op: 'publish' | 'delete' | 'update' | 'clear';
@@ -24,12 +24,12 @@ interface MentionEvent extends ChatMentionEvent {
 }
 
 /**
- * Factory for ItemChatEvent
+ * Factory for MentionsEvent
  * @param op operation of the event
  * @param mention message value
  * @returns instance of item chat event
  */
-export const ItemChatEvent = (
+export const MentionEvent = (
   op: MentionEvent['op'],
   mention?: ChatMention,
 ): // eslint-disable-next-line @typescript-eslint/no-unused-vars
