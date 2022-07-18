@@ -42,7 +42,7 @@ export const createChatActionHandler = async (
     extra: {
       message: chatData,
     },
-    itemId,
+    itemPath: item.path,
     itemType: item.type,
   };
 

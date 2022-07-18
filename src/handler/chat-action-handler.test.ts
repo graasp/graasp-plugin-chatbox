@@ -4,6 +4,7 @@ import { DatabaseTransactionHandler, ItemService } from 'graasp';
 import { createChatActionHandler } from './chat-action-handler';
 import {
   ITEM_ID,
+  ITEM_PATH,
   ITEM_TYPE,
   MESSAGE_ID,
 } from '../../test/fixtures/mock-constants';
@@ -12,7 +13,7 @@ import { buildChatUrl, checkActionData, GRAASP_ACTOR } from '../../test/utils';
 // dbHandler can be null as we do not use it with the mock itemService
 const dbTransactionHandler = null as unknown as DatabaseTransactionHandler;
 const itemService = {
-  get: jest.fn(() => ({ id: ITEM_ID, type: ITEM_TYPE })),
+  get: jest.fn(() => ({ id: ITEM_ID, type: ITEM_TYPE, path: ITEM_PATH })),
 } as unknown as ItemService;
 const reply = null as unknown as FastifyReply;
 const log = { debug: jest.fn() } as unknown as FastifyLoggerInstance;
