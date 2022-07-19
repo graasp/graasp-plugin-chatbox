@@ -1,24 +1,6 @@
-import { Context } from '@graasp/sdk';
-
 export const PLUGIN_NAME = 'graasp-plugin-chatbox';
 
 export const VIEW_UNKNOWN_NAME = 'unknown';
-
-// todo: get from graasp constants/utils
-export const CLIENT_HOSTS = [
-  {
-    name: Context.BUILDER,
-    hostname: 'builder.graasp.org',
-  },
-  {
-    name: Context.PLAYER,
-    hostname: 'player.graasp.org',
-  },
-  {
-    name: Context.EXPLORER,
-    hostname: 'explorer.graasp.org',
-  },
-];
 
 export enum METHODS {
   GET = 'GET',

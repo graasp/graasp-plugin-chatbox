@@ -7,6 +7,7 @@ import {
   ITEM_PATH,
   ITEM_TYPE,
   MESSAGE_ID,
+  MOCK_HOSTS,
 } from '../../test/fixtures/mock-constants';
 import { GRAASP_ACTOR, buildChatUrl, checkActionData } from '../../test/utils';
 import { ACTION_TYPES, METHODS } from '../constants/constants';
@@ -55,6 +56,7 @@ describe('Build actions', () => {
         ...actionInput,
         request: invalidPathRequest,
       },
+      MOCK_HOSTS,
     );
     // should be empty because no paths matches
     expect(savedActions.length).toEqual(0);
@@ -79,6 +81,7 @@ describe('Build actions', () => {
         ...actionInput,
         request: validPostRequest,
       },
+      MOCK_HOSTS,
     );
     // should contain one action to save
     expect(savedActions.length).toEqual(1);
@@ -108,6 +111,7 @@ describe('Build actions', () => {
         ...actionInput,
         request: validPatchRequest,
       },
+      MOCK_HOSTS,
     );
     // should contain one action to save
     expect(savedActions.length).toEqual(1);
@@ -134,6 +138,7 @@ describe('Build actions', () => {
         ...actionInput,
         request: validDeleteRequest,
       },
+      MOCK_HOSTS,
     );
     // should contain one action to save
     expect(savedActions.length).toEqual(1);
@@ -160,6 +165,7 @@ describe('Build actions', () => {
         ...actionInput,
         request: validClearRequest,
       },
+      MOCK_HOSTS,
     );
     // should contain one action to save
     expect(savedActions.length).toEqual(1);

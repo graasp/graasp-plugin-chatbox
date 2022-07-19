@@ -9,6 +9,7 @@
 import { FastifyPluginAsync } from 'fastify';
 import fp from 'fastify-plugin';
 
+import { Hostname } from '@graasp/sdk';
 import {
   ActionHandlerInput,
   ActionService,
@@ -16,7 +17,6 @@ import {
   BaseAction,
 } from 'graasp-plugin-actions';
 
-import { CLIENT_HOSTS } from './constants/constants';
 import { ChatService } from './db-service';
 import { createChatActionHandler } from './handler/chat-action-handler';
 import { ChatMessage } from './interfaces/chat-message';
@@ -35,11 +35,12 @@ import { registerChatWsHooks } from './ws/hooks';
  */
 export interface GraaspChatPluginOptions {
   prefix?: string;
+  hosts: Hostname[];
 }
 
 const plugin: FastifyPluginAsync<GraaspChatPluginOptions> = async (
   fastify,
-  _options,
+  options,
 ) => {
   // isolate plugin content using fastify.register to ensure that the hooks will not be called when other routes match
   fastify.register(async function (fastify) {
@@ -84,7 +85,7 @@ const plugin: FastifyPluginAsync<GraaspChatPluginOptions> = async (
       iTM,
       iMTM,
       memberTM,
-      CLIENT_HOSTS,
+      options.hosts,
     );
     fastify.addHook('onSend', async (request, reply, payload) => {
       // todo: save public actions?
@@ -94,7 +95,12 @@ const plugin: FastifyPluginAsync<GraaspChatPluginOptions> = async (
         const actionHandler = (
           actionInput: ActionHandlerInput,
         ): Promise<BaseAction[]> =>
-          createChatActionHandler(itemService, payload as string, actionInput);
+          createChatActionHandler(
+            itemService,
+            payload as string,
+            actionInput,
+            options.hosts,
+          );
         const createActionTask = actionTaskManager.createCreateTask(
           request.member,
           {
