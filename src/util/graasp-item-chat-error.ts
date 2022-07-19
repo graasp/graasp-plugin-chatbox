@@ -1,4 +1,4 @@
-import { BaseGraaspError } from '@graasp/sdk';
+import { ErrorFactory } from '@graasp/sdk';
 
 import { PLUGIN_NAME } from '../constants/constants';
 
@@ -6,8 +6,8 @@ import { PLUGIN_NAME } from '../constants/constants';
  * Errors thrown by the chat tasks
  */
 
-export class ItemNotFound extends BaseGraaspError {
-  origin = PLUGIN_NAME;
+export const GraaspError = ErrorFactory(PLUGIN_NAME);
+export class ItemNotFound extends GraaspError {
   constructor(data?: unknown) {
     super(
       { code: 'GICERR001', statusCode: 404, message: 'Item not found' },
@@ -16,8 +16,7 @@ export class ItemNotFound extends BaseGraaspError {
   }
 }
 
-export class MemberCannotReadItem extends BaseGraaspError {
-  origin = PLUGIN_NAME;
+export class MemberCannotReadItem extends GraaspError {
   constructor(data?: unknown) {
     super(
       {
@@ -30,8 +29,7 @@ export class MemberCannotReadItem extends BaseGraaspError {
   }
 }
 
-export class ChatMessageNotFound extends BaseGraaspError {
-  origin = PLUGIN_NAME;
+export class ChatMessageNotFound extends GraaspError {
   constructor(data?: unknown) {
     super(
       {
