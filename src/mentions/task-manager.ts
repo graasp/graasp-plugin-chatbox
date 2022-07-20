@@ -10,7 +10,7 @@ import {
 import { ChatMentionsTaskManager } from './interfaces/chat-mentions-task-manager';
 import { MentionService } from './db-service';
 import { GetMemberMentionsTask } from './tasks/get-mentions-task';
-import { MemberChatMentions } from './interfaces/chat-mention';
+import { ChatMention, MemberChatMentions } from './interfaces/chat-mention';
 import { UpdateMentionStatusTask } from './tasks/update-mention-status-task';
 import { IsOwnMentionTask } from './tasks/is-own-mention-task';
 import { DeleteMentionTask } from './tasks/delete-mention-task';
@@ -77,6 +77,9 @@ export class TaskManager implements ChatMentionsTaskManager {
       this.mentionService,
       { status },
     );
+    t2.getInput = () => ({
+      mention: t1.getResult() as ChatMention,
+    });
     return [t1, t2];
   }
 

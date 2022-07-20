@@ -15,7 +15,6 @@ export class GetMemberMentionsTask extends BaseMentionTask<MemberChatMentions> {
   constructor(member: Actor, mentionService: MentionService) {
     super(member, mentionService);
     this.targetId = member.id;
-    console.log('Member id:', member.id);
   }
 
   async run(
