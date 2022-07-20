@@ -22,10 +22,9 @@ export class MentionService {
         !Array.isArray(c)
           ? sql.identifier([tableName ? tableName : null, c])
           : sql.join(
-              [
-                sql.identifier([tableName ? tableName : null, c[0]]),
-                sql.identifier([c[1]]),
-              ],
+              c.map((cwa) =>
+                sql.identifier([tableName ? tableName : null, cwa]),
+              ),
               sql` AS `,
             ),
       ),
@@ -43,6 +42,7 @@ export class MentionService {
     memberId: string,
     transactionHandler: TrxHandler,
   ): Promise<ChatMention[]> {
+    console.log(MentionService.allColumns('mentions'));
     return transactionHandler
       .query<ChatMention>(
         sql`
