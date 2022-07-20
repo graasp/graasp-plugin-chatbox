@@ -9,7 +9,7 @@ import {
 } from '@graasp/sdk';
 
 import { MentionService } from './db-service';
-import { MemberChatMentions } from './interfaces/chat-mention';
+import { ChatMention, MemberChatMentions } from './interfaces/chat-mention';
 import { ChatMentionsTaskManager } from './interfaces/chat-mentions-task-manager';
 import { ClearAllMentionsTask } from './tasks/clear-all-mentions-task';
 import { CreateMentionsTask } from './tasks/create-mentions-task';
@@ -78,6 +78,9 @@ export class TaskManager implements ChatMentionsTaskManager {
       this.mentionService,
       { status },
     );
+    t2.getInput = () => ({
+      mention: t1.getResult() as ChatMention,
+    });
     return [t1, t2];
   }
 

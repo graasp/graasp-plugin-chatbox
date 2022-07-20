@@ -2,11 +2,11 @@ import { Actor, DatabaseTransactionHandler } from 'graasp';
 import { MentionService } from '../db-service';
 import { BaseMentionTask } from './base-mention-task';
 import { ChatMention } from '../interfaces/chat-mention';
-import { MemberCannotEditMention } from '../../util/graasp-item-chat-error';
 import { FastifyLoggerInstance } from 'fastify';
 
 type InputType = {
   status?: string;
+  mention?: ChatMention;
 };
 
 /**
@@ -37,15 +37,7 @@ export class UpdateMentionStatusTask extends BaseMentionTask<ChatMention> {
   ): Promise<void> {
     this.status = 'RUNNING';
 
-    const mention = await this.mentionService.getMention(
-      this.targetId,
-      handler,
-    );
-
-    // member can only update his own notifications
-    if (this.actor.id !== mention.memberId) {
-      throw new MemberCannotEditMention();
-    }
+    const { mention } = this.input;
 
     const { status } = this.input;
     // patch mention
@@ -54,8 +46,15 @@ export class UpdateMentionStatusTask extends BaseMentionTask<ChatMention> {
       status,
       handler,
     );
-    await this.postHookHandler?.(updatedMention, this.actor, { log, handler });
-    this._result = updatedMention;
+    const updatedMentionWithMessage = {
+      ...mention,
+      ...updatedMention,
+    };
+    await this.postHookHandler?.(updatedMentionWithMessage, this.actor, {
+      log,
+      handler,
+    });
+    this._result = updatedMentionWithMessage;
     this.status = 'OK';
   }
 }

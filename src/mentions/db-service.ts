@@ -94,9 +94,13 @@ export class MentionService {
     return transactionHandler
       .query<ChatMention>(
         sql`
-            SELECT ${MentionService.allColumns}
-            FROM ${MentionService.tableName}
-            WHERE id = ${mentionId}
+            SELECT ${MentionService.allColumnsWithTablePrefix(
+              'mentions',
+            )}, chat.body as message
+            FROM ${MentionService.tableName} mentions, ${
+          ChatService.tableName
+        } as chat
+            WHERE mentions.id = ${mentionId} AND chat.id = mentions.message_id
         `,
       )
       .then(({ rows }) => rows[0]);
