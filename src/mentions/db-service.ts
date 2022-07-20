@@ -20,9 +20,14 @@ export class MentionService {
         'status',
       ].map((c) =>
         !Array.isArray(c)
-          ? sql.identifier([tableName, c])
+          ? sql.identifier([tableName ? tableName : null, c])
           : sql.join(
-              c.map((cwa) => sql.identifier([tableName, cwa])),
+              [
+                // prefix column names with table alias
+                sql.identifier([tableName ? tableName : null, c[0]]),
+                // no prefix here
+                sql.identifier([c[1]]),
+              ],
               sql` AS `,
             ),
       ),
@@ -40,6 +45,16 @@ export class MentionService {
     memberId: string,
     transactionHandler: TrxHandler,
   ): Promise<ChatMention[]> {
+    console.log(sql`
+            SELECT ${MentionService.allColumns(
+              'mentions',
+            )}, chat.body as message
+            FROM ${MentionService.tableName} mentions, ${
+      ChatService.tableName
+    } chat
+            WHERE member_id = ${memberId} AND chat.id = message_id
+            ORDER BY created_at ASC
+        `);
     return transactionHandler
       .query<ChatMention>(
         sql`
@@ -50,7 +65,7 @@ export class MentionService {
           ChatService.tableName
         } chat
             WHERE member_id = ${memberId} AND chat.id = message_id
-            ORDER BY created_at ASC
+            ORDER BY mentions.created_at ASC
         `,
       )
       .then(({ rows }) => rows.slice(0));
