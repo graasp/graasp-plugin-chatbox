@@ -79,7 +79,7 @@ export class TaskManager implements ChatMentionsTaskManager {
       { status },
     );
     t2.getInput = () => ({
-      mention: t1.getResult() as ChatMention,
+      mention: t1.result as ChatMention,
     });
     return [t1, t2];
   }
