@@ -26,6 +26,8 @@ export class ChatService {
     sql`, `,
   );
 
+  static tableName = sql`chat_message`;
+
   /**
    * Retrieves all the messages of the given chat
    * @param chatId Id of chat to retrieve

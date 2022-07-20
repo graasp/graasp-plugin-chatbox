@@ -1,5 +1,6 @@
 import { DatabaseTransactionConnection as TrxHandler, sql } from 'slonik';
 import { ChatMention } from './interfaces/chat-mention';
+import { ChatService } from '../chat/db-service';
 
 /**
  * Database layer for chat storage
@@ -27,7 +28,7 @@ export class MentionService {
     sql`, `,
   );
 
-  private static tableName = sql`chat_mentions`;
+  static tableName = sql`chat_mention`;
 
   /**
    * Retrieves all the mentions for the given memberId
@@ -41,9 +42,9 @@ export class MentionService {
     return transactionHandler
       .query<ChatMention>(
         sql`
-            SELECT ${MentionService.allColumns}
-            FROM ${MentionService.tableName}
-            WHERE member_id = ${memberId}
+            SELECT ${MentionService.allColumns}, chat.body as message
+            FROM ${MentionService.tableName}, ${ChatService.tableName} AS chat
+            WHERE member_id = ${memberId} AND chat.id = message_id
             ORDER BY created_at ASC
         `,
       )

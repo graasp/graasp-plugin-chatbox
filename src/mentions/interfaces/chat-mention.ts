@@ -14,6 +14,7 @@ export interface ChatMention {
   createdAt: string;
   updatedAt: string;
   status: MentionStatus;
+  message?: string;
 }
 
 /**
