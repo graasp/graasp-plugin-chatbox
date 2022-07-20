@@ -22,7 +22,7 @@ export class MentionService {
         !Array.isArray(c)
           ? sql.identifier([tableName, c])
           : sql.join(
-              c.map((cwa) => sql.identifier([tableName, cwa])),
+              [sql.identifier([tableName, c[0]]), sql.identifier([c[1]])],
               sql` AS `,
             ),
       ),
