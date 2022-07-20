@@ -20,9 +20,12 @@ export class MentionService {
         'status',
       ].map((c) =>
         !Array.isArray(c)
-          ? sql.identifier([tableName, c])
+          ? sql.identifier([tableName ? tableName : null, c])
           : sql.join(
-              [sql.identifier([tableName, c[0]]), sql.identifier([c[1]])],
+              [
+                sql.identifier([tableName ? tableName : null, c[0]]),
+                sql.identifier([c[1]]),
+              ],
               sql` AS `,
             ),
       ),
