@@ -7,26 +7,27 @@ import { ChatService } from '../chat/db-service';
  */
 export class MentionService {
   // the 'safe' way to dynamically generate the columns names:
-  private static allColumns = sql.join(
-    [
-      'id',
-      ['item_path', 'itemPath'],
-      ['message_id', 'messageId'],
-      ['member_id', 'memberId'],
-      'creator',
-      ['created_at', 'createdAt'],
-      ['updated_at', 'updatedAt'],
-      'status',
-    ].map((c) =>
-      !Array.isArray(c)
-        ? sql.identifier([c])
-        : sql.join(
-            c.map((cwa) => sql.identifier([cwa])),
-            sql` AS `,
-          ),
-    ),
-    sql`, `,
-  );
+  private static allColumns = (tableName = '') =>
+    sql.join(
+      [
+        'id',
+        ['item_path', 'itemPath'],
+        ['message_id', 'messageId'],
+        ['member_id', 'memberId'],
+        'creator',
+        ['created_at', 'createdAt'],
+        ['updated_at', 'updatedAt'],
+        'status',
+      ].map((c) =>
+        !Array.isArray(c)
+          ? sql.identifier([tableName, c])
+          : sql.join(
+              c.map((cwa) => sql.identifier([tableName, cwa])),
+              sql` AS `,
+            ),
+      ),
+      sql`, `,
+    );
 
   static tableName = sql`chat_mention`;
 
@@ -42,8 +43,12 @@ export class MentionService {
     return transactionHandler
       .query<ChatMention>(
         sql`
-            SELECT ${MentionService.allColumns}, chat.body as message
-            FROM ${MentionService.tableName}, ${ChatService.tableName} AS chat
+            SELECT ${MentionService.allColumns(
+              'mentions',
+            )}, chat.body as message
+            FROM ${MentionService.tableName} mentions, ${
+          ChatService.tableName
+        } chat
             WHERE member_id = ${memberId} AND chat.id = message_id
             ORDER BY created_at ASC
         `,
@@ -63,7 +68,7 @@ export class MentionService {
     return transactionHandler
       .query<ChatMention>(
         sql`
-            SELECT ${MentionService.allColumns}
+            SELECT ${MentionService.allColumns()}
             FROM ${MentionService.tableName}
             WHERE id = ${mentionId}
         `,
@@ -83,7 +88,7 @@ export class MentionService {
     return transactionHandler
       .query<ChatMention>(
         sql`
-            SELECT ${MentionService.allColumns}
+            SELECT ${MentionService.allColumns()}
             FROM ${MentionService.tableName}
             WHERE item_path <@ ${itemPath}
         `,
@@ -103,7 +108,7 @@ export class MentionService {
     return transactionHandler
       .query<ChatMention>(
         sql`
-            SELECT ${MentionService.allColumns}
+            SELECT ${MentionService.allColumns()}
             FROM ${MentionService.tableName}
             WHERE message_id = ${messageId}
         `,
@@ -139,7 +144,7 @@ export class MentionService {
               ),
               sql`, `,
             )}
-                RETURNING ${MentionService.allColumns}
+                RETURNING ${MentionService.allColumns()}
         `,
       )
       .then(({ rows }) => rows.slice(0));
@@ -162,7 +167,7 @@ export class MentionService {
             UPDATE ${MentionService.tableName}
             SET status = ${status}
             WHERE id = ${mentionId}
-               RETURNING ${MentionService.allColumns};
+               RETURNING ${MentionService.allColumns()};
         `,
       )
       .then(({ rows }) => rows[0]);
@@ -183,7 +188,7 @@ export class MentionService {
             DELETE
             FROM ${MentionService.tableName}
             WHERE id = ${mentionId}
-               RETURNING ${MentionService.allColumns}
+               RETURNING ${MentionService.allColumns()}
         `,
       )
       .then(({ rows }) => rows[0]);
@@ -203,7 +208,7 @@ export class MentionService {
         sql`
             DELETE
             FROM ${MentionService.tableName}
-            WHERE member_id = ${memberId} RETURNING ${MentionService.allColumns}
+            WHERE member_id = ${memberId} RETURNING ${MentionService.allColumns()}
         `,
       )
       .then(({ rows }) => rows.slice(0));
