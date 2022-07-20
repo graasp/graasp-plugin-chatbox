@@ -29,6 +29,7 @@ export default {
         mentions: {
           type: 'array',
           items: { $ref: '#/definitions/chatMention' },
+          minItems: 0,
         },
       },
       additionalProperties: false,
