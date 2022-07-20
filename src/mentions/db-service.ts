@@ -45,16 +45,6 @@ export class MentionService {
     memberId: string,
     transactionHandler: TrxHandler,
   ): Promise<ChatMention[]> {
-    console.log(sql`
-            SELECT ${MentionService.allColumns(
-              'mentions',
-            )}, chat.body as message
-            FROM ${MentionService.tableName} mentions, ${
-      ChatService.tableName
-    } chat
-            WHERE member_id = ${memberId} AND chat.id = message_id
-            ORDER BY created_at ASC
-        `);
     return transactionHandler
       .query<ChatMention>(
         sql`
