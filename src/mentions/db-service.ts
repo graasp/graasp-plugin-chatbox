@@ -6,8 +6,29 @@ import { ChatService } from '../chat/db-service';
  * Database layer for chat storage
  */
 export class MentionService {
+  private static allColumns = sql.join(
+    [
+      'id',
+      ['item_path', 'itemPath'],
+      ['message_id', 'messageId'],
+      ['member_id', 'memberId'],
+      'creator',
+      ['created_at', 'createdAt'],
+      ['updated_at', 'updatedAt'],
+      'status',
+    ].map((c) =>
+      !Array.isArray(c)
+        ? sql.identifier([c])
+        : sql.join(
+            c.map((cwa) => sql.identifier([cwa])),
+            sql` AS `,
+          ),
+    ),
+    sql`, `,
+  );
+
   // the 'safe' way to dynamically generate the columns names:
-  private static allColumns = (tableName = '') =>
+  private static allColumnsWithTablePrefix = (tableName) =>
     sql.join(
       [
         'id',
@@ -20,11 +41,11 @@ export class MentionService {
         'status',
       ].map((c) =>
         !Array.isArray(c)
-          ? sql.identifier([tableName ? tableName : null, c])
+          ? sql.identifier([tableName, c])
           : sql.join(
               [
                 // prefix column names with table alias
-                sql.identifier([tableName ? tableName : null, c[0]]),
+                sql.identifier([tableName, c[0]]),
                 // no prefix here
                 sql.identifier([c[1]]),
               ],
@@ -48,7 +69,7 @@ export class MentionService {
     return transactionHandler
       .query<ChatMention>(
         sql`
-            SELECT ${MentionService.allColumns(
+            SELECT ${MentionService.allColumnsWithTablePrefix(
               'mentions',
             )}, chat.body as message
             FROM ${MentionService.tableName} mentions, ${
@@ -73,7 +94,7 @@ export class MentionService {
     return transactionHandler
       .query<ChatMention>(
         sql`
-            SELECT ${MentionService.allColumns()}
+            SELECT ${MentionService.allColumns}
             FROM ${MentionService.tableName}
             WHERE id = ${mentionId}
         `,
@@ -93,7 +114,7 @@ export class MentionService {
     return transactionHandler
       .query<ChatMention>(
         sql`
-            SELECT ${MentionService.allColumns()}
+            SELECT ${MentionService.allColumns}
             FROM ${MentionService.tableName}
             WHERE item_path <@ ${itemPath}
         `,
@@ -113,7 +134,7 @@ export class MentionService {
     return transactionHandler
       .query<ChatMention>(
         sql`
-            SELECT ${MentionService.allColumns()}
+            SELECT ${MentionService.allColumns}
             FROM ${MentionService.tableName}
             WHERE message_id = ${messageId}
         `,
@@ -149,7 +170,7 @@ export class MentionService {
               ),
               sql`, `,
             )}
-                RETURNING ${MentionService.allColumns()}
+                RETURNING ${MentionService.allColumns}
         `,
       )
       .then(({ rows }) => rows.slice(0));
@@ -172,7 +193,7 @@ export class MentionService {
             UPDATE ${MentionService.tableName}
             SET status = ${status}
             WHERE id = ${mentionId}
-               RETURNING ${MentionService.allColumns()};
+               RETURNING ${MentionService.allColumns};
         `,
       )
       .then(({ rows }) => rows[0]);
@@ -193,7 +214,7 @@ export class MentionService {
             DELETE
             FROM ${MentionService.tableName}
             WHERE id = ${mentionId}
-               RETURNING ${MentionService.allColumns()}
+               RETURNING ${MentionService.allColumns}
         `,
       )
       .then(({ rows }) => rows[0]);
@@ -213,7 +234,7 @@ export class MentionService {
         sql`
             DELETE
             FROM ${MentionService.tableName}
-            WHERE member_id = ${memberId} RETURNING ${MentionService.allColumns()}
+            WHERE member_id = ${memberId} RETURNING ${MentionService.allColumns}
         `,
       )
       .then(({ rows }) => rows.slice(0));
