@@ -121,6 +121,7 @@ export class TaskManager implements ChatTaskManager {
     t3.getInput = () => ({
       item: t1[0].result as Item,
       messageId: t2.result.id,
+      message: t2.result.body,
     });
     // make the task return the chat-message and not the mentions
     t3.getResult = () => t2.result;

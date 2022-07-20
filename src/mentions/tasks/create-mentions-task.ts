@@ -8,6 +8,7 @@ type InputType = {
   item?: Item;
   messageId?: string;
   mentions?: string[];
+  message?: string;
 };
 
 /**
@@ -36,7 +37,7 @@ export class CreateMentionsTask extends BaseMentionTask<ChatMention[]> {
   ): Promise<void> {
     this.status = 'RUNNING';
 
-    const { messageId, mentions, item } = this.input;
+    const { messageId, mentions, item, message } = this.input;
 
     this.targetId = messageId;
 
@@ -48,10 +49,17 @@ export class CreateMentionsTask extends BaseMentionTask<ChatMention[]> {
       this.actor.id,
       handler,
     );
-    await this.postHookHandler?.(newChatMentions, this.actor, { log, handler });
+    const newChatMentionsWithMessage = newChatMentions.map((cm) => ({
+      ...cm,
+      message,
+    }));
+    await this.postHookHandler?.(newChatMentionsWithMessage, this.actor, {
+      log,
+      handler,
+    });
 
     // return chat message
-    this._result = newChatMentions;
+    this._result = newChatMentionsWithMessage;
     this.status = 'OK';
   }
 }
