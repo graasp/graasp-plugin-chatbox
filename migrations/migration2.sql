@@ -4,7 +4,7 @@
 
 CREATE TYPE mention_status AS ENUM ('unread', 'read');
 
-CREATE TABLE "chat_mentions"
+CREATE TABLE "chat_mention"
 (
     "id"         uuid UNIQUE    NOT NULL DEFAULT uuid_generate_v4(),
     "item_path"  ltree REFERENCES "item" ("path") ON DELETE CASCADE,          -- delete row if item is deleted
