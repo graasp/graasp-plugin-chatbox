@@ -1,5 +1,5 @@
 import { FastifyLoggerInstance, FastifyReply, FastifyRequest } from 'fastify';
-import { METHODS, ACTION_TYPES } from '../constants/constants';
+import { METHODS, ACTION_TYPES } from '../../constants/constants';
 import { DatabaseTransactionHandler, ItemService } from 'graasp';
 import { createChatActionHandler } from './chat-action-handler';
 import {
@@ -7,8 +7,12 @@ import {
   ITEM_PATH,
   ITEM_TYPE,
   MESSAGE_ID,
-} from '../../test/fixtures/mock-constants';
-import { buildChatUrl, checkActionData, GRAASP_ACTOR } from '../../test/utils';
+} from '../../../test/fixtures/mock-constants';
+import {
+  buildChatUrl,
+  checkActionData,
+  GRAASP_ACTOR,
+} from '../../../test/utils';
 
 // dbHandler can be null as we do not use it with the mock itemService
 const dbTransactionHandler = null as unknown as DatabaseTransactionHandler;

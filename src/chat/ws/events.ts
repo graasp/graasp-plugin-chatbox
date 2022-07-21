@@ -34,7 +34,8 @@ interface ItemChatEvent extends ChatEvent {
 export const ItemChatEvent = (
   op: ItemChatEvent['op'],
   message?: ChatMessage,
-): ItemChatEvent => ({
+): // eslint-disable-next-line @typescript-eslint/no-unused-vars
+ItemChatEvent => ({
   kind: 'item',
   op,
   message,
