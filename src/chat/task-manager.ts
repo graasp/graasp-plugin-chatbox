@@ -117,6 +117,8 @@ export class TaskManager implements ChatTaskManager {
     const t3 = new CreateMentionsTask(member, this.mentionService, {
       mentions,
     });
+    // skip creation task if mention array is empty
+    t3.skip = !mentions || mentions.length === 0;
     // supply mention task with item and chat-message id
     t3.getInput = () => ({
       item: t1[0].result as Item,
