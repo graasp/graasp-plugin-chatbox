@@ -2,13 +2,6 @@ export const PLUGIN_NAME = 'graasp-plugin-chatbox';
 
 export const VIEW_UNKNOWN_NAME = 'unknown';
 
-export enum METHODS {
-  GET = 'GET',
-  POST = 'POST',
-  PATCH = 'PATCH',
-  DELETE = 'DELETE',
-}
-
 export enum ACTION_TYPES {
   CREATE = 'chat_create',
   UPDATE = 'chat_update',

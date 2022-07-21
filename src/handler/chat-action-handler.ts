@@ -1,11 +1,11 @@
-import { Hostname, ItemService, Member } from '@graasp/sdk';
+import { Hostname, HttpMethod, ItemService, Member } from '@graasp/sdk';
 import {
   ActionHandlerInput,
   BaseAction,
   getBaseAction,
 } from 'graasp-plugin-actions';
 
-import { ACTION_TYPES, METHODS, paths } from '../constants/constants';
+import { ACTION_TYPES, paths } from '../constants/constants';
 
 declare module 'fastify' {
   export interface FastifyRequest {
@@ -45,7 +45,7 @@ export const createChatActionHandler = async (
 
   // identify the endpoint with method and url
   switch (method) {
-    case METHODS.POST:
+    case HttpMethod.POST:
       switch (true) {
         case paths.postMessage.test(url):
           actionsToSave.push({
@@ -55,7 +55,7 @@ export const createChatActionHandler = async (
           break;
       }
       break;
-    case METHODS.PATCH:
+    case HttpMethod.PATCH:
       switch (true) {
         case paths.patchMessage.test(url):
           actionsToSave.push({
@@ -65,7 +65,7 @@ export const createChatActionHandler = async (
           break;
       }
       break;
-    case METHODS.DELETE:
+    case HttpMethod.DELETE:
       switch (true) {
         case paths.deleteMessage.test(url):
           actionsToSave.push({

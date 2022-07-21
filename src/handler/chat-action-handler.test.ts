@@ -1,6 +1,10 @@
 import { FastifyLoggerInstance, FastifyReply, FastifyRequest } from 'fastify';
 
-import { DatabaseTransactionHandler, ItemService } from '@graasp/sdk';
+import {
+  DatabaseTransactionHandler,
+  HttpMethod,
+  ItemService,
+} from '@graasp/sdk';
 
 import {
   ITEM_ID,
@@ -10,7 +14,7 @@ import {
   MOCK_HOSTS,
 } from '../../test/fixtures/mock-constants';
 import { GRAASP_ACTOR, buildChatUrl, checkActionData } from '../../test/utils';
-import { ACTION_TYPES, METHODS } from '../constants/constants';
+import { ACTION_TYPES } from '../constants/constants';
 import { createChatActionHandler } from './chat-action-handler';
 
 // dbHandler can be null as we do not use it with the mock itemService
@@ -22,7 +26,7 @@ const reply = null as unknown as FastifyReply;
 const log = { debug: jest.fn() } as unknown as FastifyLoggerInstance;
 const request = {
   url: buildChatUrl(ITEM_ID),
-  method: METHODS.POST,
+  method: HttpMethod.POST,
   member: GRAASP_ACTOR,
   params: { itemId: ITEM_ID },
   query: {},
@@ -66,7 +70,7 @@ describe('Build actions', () => {
     const messageBody = 'Ding here is a message !';
     const validPostRequest = {
       ...request,
-      method: METHODS.POST,
+      method: HttpMethod.POST,
       url: buildChatUrl(ITEM_ID),
       body: messageBody,
     };
@@ -95,7 +99,7 @@ describe('Build actions', () => {
     const newMessageBody = 'Updated content';
     const validPatchRequest = {
       ...request,
-      method: METHODS.PATCH,
+      method: HttpMethod.PATCH,
       url: buildChatUrl(ITEM_ID, MESSAGE_ID),
       body: newMessageBody,
     };
@@ -124,7 +128,7 @@ describe('Build actions', () => {
   it('DELETE chat message', async () => {
     const validDeleteRequest = {
       ...request,
-      method: METHODS.DELETE,
+      method: HttpMethod.DELETE,
       url: buildChatUrl(ITEM_ID, MESSAGE_ID),
     };
     const deletePayload = {
@@ -151,7 +155,7 @@ describe('Build actions', () => {
   it('CLEAR chat', async () => {
     const validClearRequest = {
       ...request,
-      method: METHODS.DELETE,
+      method: HttpMethod.DELETE,
       url: buildChatUrl(ITEM_ID),
     };
     const clearPayload = {
