@@ -1,4 +1,5 @@
 import { FastifyLoggerInstance } from 'fastify';
+
 import {
   Actor,
   DatabaseTransactionHandler,
@@ -9,7 +10,8 @@ import {
   PreHookHandlerType,
   Task,
   TaskStatus,
-} from 'graasp';
+} from '@graasp/sdk';
+
 import { ChatService } from '../db-service';
 
 /**
@@ -43,7 +45,7 @@ export abstract class BaseChatTask<R> implements Task<Actor, R> {
     chatService: ChatService,
   ) {
     this.actor = actor;
-    this.status = 'NEW';
+    this.status = TaskStatus.NEW;
     this.itemService = itemService;
     this.itemMembershipService = itemMembershipService;
     this.chatService = chatService;

@@ -6,12 +6,12 @@
  * Implements back-end functionalities for chatboxes
  * in Graasp as a fastify server plugin
  */
-
-import { WebSocketService } from 'graasp-websockets';
 import { FastifyPluginAsync } from 'fastify';
 import fp from 'fastify-plugin';
+
 // import this plugin to apply fastify declaration (public)
 import publicPlugin from 'graasp-plugin-public';
+import { WebSocketService } from 'graasp-websockets';
 
 import { ChatService } from './db-service';
 import common, { getChat } from './schemas';

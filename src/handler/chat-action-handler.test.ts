@@ -1,14 +1,21 @@
 import { FastifyLoggerInstance, FastifyReply, FastifyRequest } from 'fastify';
-import { METHODS, ACTION_TYPES } from '../constants/constants';
-import { DatabaseTransactionHandler, ItemService } from 'graasp';
-import { createChatActionHandler } from './chat-action-handler';
+
+import {
+  DatabaseTransactionHandler,
+  HttpMethod,
+  ItemService,
+} from '@graasp/sdk';
+
 import {
   ITEM_ID,
   ITEM_PATH,
   ITEM_TYPE,
   MESSAGE_ID,
+  MOCK_HOSTS,
 } from '../../test/fixtures/mock-constants';
-import { buildChatUrl, checkActionData, GRAASP_ACTOR } from '../../test/utils';
+import { GRAASP_ACTOR, buildChatUrl, checkActionData } from '../../test/utils';
+import { ACTION_TYPES } from '../constants/constants';
+import { createChatActionHandler } from './chat-action-handler';
 
 // dbHandler can be null as we do not use it with the mock itemService
 const dbTransactionHandler = null as unknown as DatabaseTransactionHandler;
@@ -19,7 +26,7 @@ const reply = null as unknown as FastifyReply;
 const log = { debug: jest.fn() } as unknown as FastifyLoggerInstance;
 const request = {
   url: buildChatUrl(ITEM_ID),
-  method: METHODS.POST,
+  method: HttpMethod.POST,
   member: GRAASP_ACTOR,
   params: { itemId: ITEM_ID },
   query: {},
@@ -53,6 +60,7 @@ describe('Build actions', () => {
         ...actionInput,
         request: invalidPathRequest,
       },
+      MOCK_HOSTS,
     );
     // should be empty because no paths matches
     expect(savedActions.length).toEqual(0);
@@ -62,7 +70,7 @@ describe('Build actions', () => {
     const messageBody = 'Ding here is a message !';
     const validPostRequest = {
       ...request,
-      method: METHODS.POST,
+      method: HttpMethod.POST,
       url: buildChatUrl(ITEM_ID),
       body: messageBody,
     };
@@ -77,6 +85,7 @@ describe('Build actions', () => {
         ...actionInput,
         request: validPostRequest,
       },
+      MOCK_HOSTS,
     );
     // should contain one action to save
     expect(savedActions.length).toEqual(1);
@@ -90,7 +99,7 @@ describe('Build actions', () => {
     const newMessageBody = 'Updated content';
     const validPatchRequest = {
       ...request,
-      method: METHODS.PATCH,
+      method: HttpMethod.PATCH,
       url: buildChatUrl(ITEM_ID, MESSAGE_ID),
       body: newMessageBody,
     };
@@ -106,6 +115,7 @@ describe('Build actions', () => {
         ...actionInput,
         request: validPatchRequest,
       },
+      MOCK_HOSTS,
     );
     // should contain one action to save
     expect(savedActions.length).toEqual(1);
@@ -118,7 +128,7 @@ describe('Build actions', () => {
   it('DELETE chat message', async () => {
     const validDeleteRequest = {
       ...request,
-      method: METHODS.DELETE,
+      method: HttpMethod.DELETE,
       url: buildChatUrl(ITEM_ID, MESSAGE_ID),
     };
     const deletePayload = {
@@ -132,6 +142,7 @@ describe('Build actions', () => {
         ...actionInput,
         request: validDeleteRequest,
       },
+      MOCK_HOSTS,
     );
     // should contain one action to save
     expect(savedActions.length).toEqual(1);
@@ -144,7 +155,7 @@ describe('Build actions', () => {
   it('CLEAR chat', async () => {
     const validClearRequest = {
       ...request,
-      method: METHODS.DELETE,
+      method: HttpMethod.DELETE,
       url: buildChatUrl(ITEM_ID),
     };
     const clearPayload = {
@@ -158,6 +169,7 @@ describe('Build actions', () => {
         ...actionInput,
         request: validClearRequest,
       },
+      MOCK_HOSTS,
     );
     // should contain one action to save
     expect(savedActions.length).toEqual(1);

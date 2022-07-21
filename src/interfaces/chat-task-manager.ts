@@ -1,4 +1,5 @@
-import { Actor, Task } from 'graasp';
+import { Actor, Task } from '@graasp/sdk';
+
 import { Chat } from './chat';
 import { ChatMessage } from './chat-message';
 

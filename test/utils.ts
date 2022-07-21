@@ -1,5 +1,5 @@
 import { VIEW_UNKNOWN_NAME } from '../src/constants/constants';
-import { ITEM_TYPE, ITEM_PATH } from './fixtures/mock-constants';
+import { ITEM_PATH, ITEM_TYPE } from './fixtures/mock-constants';
 
 export const buildChatUrl = (itemId, messageId?) => {
   let url = `/items/${itemId}/chat`;

@@ -6,19 +6,20 @@ import {
   ItemService,
   ItemTaskManager,
   Member,
+  PermissionLevel,
   Task,
-} from 'graasp';
+} from '@graasp/sdk';
+
 import { ChatService } from './db-service';
 import { Chat } from './interfaces/chat';
 import { ChatMessage } from './interfaces/chat-message';
 import { ChatTaskManager } from './interfaces/chat-task-manager';
-import { GetChatTask } from './tasks/get-chat-task';
-import { PublishMessageTask } from './tasks/publish-message-task';
-import { DeleteMessageTask } from './tasks/delete-message-task';
-import { PatchMessageTask } from './tasks/patch-message-task';
 import { ClearChatTask } from './tasks/clear-chat-task';
+import { DeleteMessageTask } from './tasks/delete-message-task';
+import { GetChatTask } from './tasks/get-chat-task';
 import { GetMessageTask } from './tasks/get-message-task';
-import { PermissionLevel } from './constants/constants';
+import { PatchMessageTask } from './tasks/patch-message-task';
+import { PublishMessageTask } from './tasks/publish-message-task';
 
 /**
  * Concrete implementation of the chat task manager
