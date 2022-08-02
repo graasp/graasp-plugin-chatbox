@@ -3,7 +3,9 @@ import {
   DatabaseTransactionHandler,
   ItemMembershipService,
   ItemService,
-} from 'graasp';
+  TaskStatus,
+} from '@graasp/sdk';
+
 import { ChatService } from '../db-service';
 import { Chat } from '../interfaces/chat';
 import { BaseChatTask } from './base-chat-task';
@@ -28,7 +30,7 @@ export class GetChatTask extends BaseChatTask<Chat> {
   }
 
   async run(handler: DatabaseTransactionHandler): Promise<void> {
-    this.status = 'RUNNING';
+    this.status = TaskStatus.RUNNING;
 
     // get chat
     const messages = await this.chatService.get(this.targetId, handler);
@@ -36,6 +38,6 @@ export class GetChatTask extends BaseChatTask<Chat> {
 
     // return chat
     this._result = chat;
-    this.status = 'OK';
+    this.status = TaskStatus.OK;
   }
 }

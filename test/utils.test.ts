@@ -1,6 +1,6 @@
-import { buildChatUrl } from './utils';
-import { ITEM_ID, MESSAGE_ID } from './fixtures/mock-constants';
 import { paths } from '../src/constants/constants';
+import { ITEM_ID, MESSAGE_ID } from './fixtures/mock-constants';
+import { buildChatUrl } from './utils';
 
 describe('Utils test', () => {
   it('should build the chat url', () => {

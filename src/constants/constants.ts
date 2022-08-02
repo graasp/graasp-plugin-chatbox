@@ -1,38 +1,6 @@
+export const PLUGIN_NAME = 'graasp-plugin-chatbox';
+
 export const VIEW_UNKNOWN_NAME = 'unknown';
-
-export enum ITEM_TYPES {
-  CHAT = 'chat',
-}
-
-// todo: get from graasp constants/utils
-export const CLIENT_HOSTS = [
-  {
-    name: 'builder',
-    hostname: 'builder.graasp.org',
-  },
-  {
-    name: 'player',
-    hostname: 'player.graasp.org',
-  },
-  {
-    name: 'explorer',
-    hostname: 'explorer.graasp.org',
-  },
-];
-
-// todo: get from graasp constants/utils
-export enum PermissionLevel {
-  Read = 'read',
-  Write = 'write',
-  Admin = 'admin',
-}
-
-export enum METHODS {
-  GET = 'GET',
-  POST = 'POST',
-  PATCH = 'PATCH',
-  DELETE = 'DELETE',
-}
 
 export enum ACTION_TYPES {
   CREATE = 'chat_create',

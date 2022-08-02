@@ -4,11 +4,13 @@ import {
   Item,
   ItemMembershipService,
   ItemService,
-} from 'graasp';
+  TaskStatus,
+} from '@graasp/sdk';
+
 import { ChatService } from '../db-service';
-import { BaseChatTask } from './base-chat-task';
 import { ChatMessage } from '../interfaces/chat-message';
 import { ChatMessageNotFound } from '../util/graasp-item-chat-error';
+import { BaseChatTask } from './base-chat-task';
 
 type InputType = {
   item?: Item;
@@ -38,7 +40,7 @@ export class GetMessageTask extends BaseChatTask<ChatMessage> {
   }
 
   async run(handler: DatabaseTransactionHandler): Promise<void> {
-    this.status = 'RUNNING';
+    this.status = TaskStatus.RUNNING;
 
     const { item, messageId } = this.input;
 
@@ -52,6 +54,6 @@ export class GetMessageTask extends BaseChatTask<ChatMessage> {
 
     // return chat
     this._result = message;
-    this.status = 'OK';
+    this.status = TaskStatus.OK;
   }
 }

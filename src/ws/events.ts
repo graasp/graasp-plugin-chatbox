@@ -1,7 +1,6 @@
 /**
  * Chat websocket events are registered under these topics
  */
-
 import { ChatMessage } from '../interfaces/chat-message';
 
 // item chat messages

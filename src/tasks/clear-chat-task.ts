@@ -1,14 +1,17 @@
 import { FastifyLoggerInstance } from 'fastify';
+
 import {
   DatabaseTransactionHandler,
   Item,
   ItemMembershipService,
   ItemService,
   Member,
-} from 'graasp';
+  TaskStatus,
+} from '@graasp/sdk';
+
 import { ChatService } from '../db-service';
-import { BaseChatTask } from './base-chat-task';
 import { Chat } from '../interfaces/chat';
+import { BaseChatTask } from './base-chat-task';
 
 type InputType = {
   item?: Item;
@@ -41,7 +44,7 @@ export class ClearChatTask extends BaseChatTask<Chat> {
     handler: DatabaseTransactionHandler,
     log: FastifyLoggerInstance,
   ): Promise<void> {
-    this.status = 'RUNNING';
+    this.status = TaskStatus.RUNNING;
 
     const { chatId } = this.input;
 
@@ -54,6 +57,6 @@ export class ClearChatTask extends BaseChatTask<Chat> {
 
     // return chat message
     this._result = clearedChat;
-    this.status = 'OK';
+    this.status = TaskStatus.OK;
   }
 }

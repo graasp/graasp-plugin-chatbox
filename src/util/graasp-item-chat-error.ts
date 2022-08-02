@@ -1,30 +1,14 @@
-import { GraaspError, GraaspErrorDetails } from 'graasp';
+import { ErrorFactory } from '@graasp/sdk';
+
+import { PLUGIN_NAME } from '../constants/constants';
 
 /**
  * Errors thrown by the chat tasks
  */
-export class GraaspItemChatError implements GraaspError {
-  name: string;
-  code: string;
-  message: string;
-  statusCode?: number;
-  data?: unknown;
-  origin: 'core' | 'plugin';
 
-  constructor(
-    { code, statusCode, message }: GraaspErrorDetails,
-    data?: unknown,
-  ) {
-    this.name = code;
-    this.code = code;
-    this.message = message;
-    this.statusCode = statusCode;
-    this.data = data;
-    this.origin = 'plugin';
-  }
-}
+export const GraaspChatboxError = ErrorFactory(PLUGIN_NAME);
 
-export class ItemNotFound extends GraaspItemChatError {
+export class ItemNotFound extends GraaspChatboxError {
   constructor(data?: unknown) {
     super(
       { code: 'GICERR001', statusCode: 404, message: 'Item not found' },
@@ -33,7 +17,7 @@ export class ItemNotFound extends GraaspItemChatError {
   }
 }
 
-export class MemberCannotReadItem extends GraaspItemChatError {
+export class MemberCannotReadItem extends GraaspChatboxError {
   constructor(data?: unknown) {
     super(
       {
@@ -46,7 +30,7 @@ export class MemberCannotReadItem extends GraaspItemChatError {
   }
 }
 
-export class ChatMessageNotFound extends GraaspItemChatError {
+export class ChatMessageNotFound extends GraaspChatboxError {
   constructor(data?: unknown) {
     super(
       {
