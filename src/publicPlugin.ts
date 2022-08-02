@@ -35,6 +35,7 @@ const plugin: FastifyPluginAsync<GraaspChatPluginOptions> = async (fastify) => {
   const {
     items: { dbService: itemService, taskManager: iTM },
     itemMemberships: { dbService: itemMembershipsService, taskManager: iMTM },
+    members: { taskManager: memberTM },
     taskRunner: runner,
     public: {
       items: { taskManager: pITM },
@@ -55,6 +56,7 @@ const plugin: FastifyPluginAsync<GraaspChatPluginOptions> = async (fastify) => {
     mentionService,
     iTM,
     iMTM,
+    memberTM,
   );
 
   fastify.addSchema(common);
@@ -65,6 +67,9 @@ const plugin: FastifyPluginAsync<GraaspChatPluginOptions> = async (fastify) => {
     async ({ params: { itemId }, log }) => {
       const t1 = pITM.createGetPublicItemTask(graaspActor, { itemId });
       const t2 = taskManager.createGetTask(graaspActor, itemId);
+      // todo: remove when core uses sdk
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
       return runner.runSingleSequence([t1, t2], log);
     },
   );
