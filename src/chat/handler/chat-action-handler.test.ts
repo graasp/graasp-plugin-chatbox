@@ -20,15 +20,19 @@ import { createChatActionHandler } from './chat-action-handler';
 // dbHandler can be null as we do not use it with the mock itemService
 const dbTransactionHandler = null as unknown as DatabaseTransactionHandler;
 const itemService = {
-  get: jest.fn(() => ({ id: ITEM_ID, type: ITEM_TYPE, path: ITEM_PATH })),
+  get: jest.fn(() => ({
+    id: ITEM_ID,
+    type: ITEM_TYPE,
+    path: ITEM_PATH,
+  })),
 } as unknown as ItemService;
 const reply = null as unknown as FastifyReply;
-const log = { debug: jest.fn() } as unknown as FastifyLoggerInstance;
+const log = {debug: jest.fn()} as unknown as FastifyLoggerInstance;
 const request = {
   url: buildChatUrl(ITEM_ID),
   method: HttpMethod.POST,
   member: GRAASP_ACTOR,
-  params: { itemId: ITEM_ID },
+  params: {itemId: ITEM_ID},
   query: {},
   ip: '',
   headers: {},

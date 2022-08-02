@@ -1,4 +1,5 @@
-import { Actor, Task } from 'graasp';
+import { Actor, Task } from '@graasp/sdk';
+
 import { MemberChatMentions } from './chat-mention';
 
 /**

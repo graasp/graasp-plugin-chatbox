@@ -1,7 +1,6 @@
 /**
  * Chat websocket events are registered under these topics
  */
-
 import { ChatMention } from '../interfaces/chat-mention';
 
 // chat mentions topic

@@ -1,8 +1,10 @@
-import { Actor, DatabaseTransactionHandler } from 'graasp';
-import { MentionService } from '../db-service';
-import { BaseMentionTask } from './base-mention-task';
-import { MemberChatMentions } from '../interfaces/chat-mention';
 import { FastifyLoggerInstance } from 'fastify';
+
+import { Actor, DatabaseTransactionHandler, TaskStatus } from '@graasp/sdk';
+
+import { MentionService } from '../db-service';
+import { MemberChatMentions } from '../interfaces/chat-mention';
+import { BaseMentionTask } from './base-mention-task';
 
 /**
  * Task to retrieve all mentions of a member from the database
@@ -21,7 +23,7 @@ export class GetMemberMentionsTask extends BaseMentionTask<MemberChatMentions> {
     handler: DatabaseTransactionHandler,
     log: FastifyLoggerInstance,
   ): Promise<void> {
-    this.status = 'RUNNING';
+    this.status = TaskStatus.RUNNING;
 
     // get all mentions
     const mentions = await this.mentionService.getAll(this.targetId, handler);
@@ -32,6 +34,6 @@ export class GetMemberMentionsTask extends BaseMentionTask<MemberChatMentions> {
     await this.postHookHandler?.(memberMentions, this.actor, { log, handler });
 
     this._result = memberMentions;
-    this.status = 'OK';
+    this.status = TaskStatus.OK;
   }
 }

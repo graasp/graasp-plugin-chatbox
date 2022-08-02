@@ -9,9 +9,9 @@ import {
   TaskStatus,
 } from '@graasp/sdk';
 
+import { ChatMessageNotFound } from '../../util/graasp-item-chat-error';
 import { ChatService } from '../db-service';
 import { ChatMessage } from '../interfaces/chat-message';
-import { ChatMessageNotFound } from '../../util/graasp-item-chat-error';
 import { BaseChatTask } from './base-chat-task';
 
 type InputType = {
@@ -65,7 +65,10 @@ export class PatchMessageTask extends BaseChatTask<ChatMessage> {
     // action returns no entries which means the message was not found
     // do not run the post hook
     if (res) {
-      await this.postHookHandler?.(res, this.actor, { log, handler });
+      await this.postHookHandler?.(res, this.actor, {
+        log,
+        handler,
+      });
     } else {
       throw new ChatMessageNotFound(messageId);
     }

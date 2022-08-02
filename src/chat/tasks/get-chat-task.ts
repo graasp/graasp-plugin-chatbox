@@ -34,10 +34,11 @@ export class GetChatTask extends BaseChatTask<Chat> {
 
     // get chat
     const messages = await this.chatService.get(this.targetId, handler);
-    const chat: Chat = { id: this.targetId, messages };
-
     // return chat
-    this._result = chat;
+    this._result = {
+      id: this.targetId,
+      messages,
+    };
     this.status = TaskStatus.OK;
   }
 }

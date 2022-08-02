@@ -1,8 +1,10 @@
-import { Actor, DatabaseTransactionHandler } from 'graasp';
-import { MentionService } from '../db-service';
-import { BaseMentionTask } from './base-mention-task';
-import { ChatMention } from '../interfaces/chat-mention';
 import { FastifyLoggerInstance } from 'fastify';
+
+import { Actor, DatabaseTransactionHandler, TaskStatus } from '@graasp/sdk';
+
+import { MentionService } from '../db-service';
+import { ChatMention } from '../interfaces/chat-mention';
+import { BaseMentionTask } from './base-mention-task';
 
 type InputType = {
   status?: string;
@@ -35,7 +37,7 @@ export class UpdateMentionStatusTask extends BaseMentionTask<ChatMention> {
     handler: DatabaseTransactionHandler,
     log: FastifyLoggerInstance,
   ): Promise<void> {
-    this.status = 'RUNNING';
+    this.status = TaskStatus.RUNNING;
 
     const { mention } = this.input;
 
@@ -55,6 +57,6 @@ export class UpdateMentionStatusTask extends BaseMentionTask<ChatMention> {
       handler,
     });
     this._result = updatedMentionWithMessage;
-    this.status = 'OK';
+    this.status = TaskStatus.OK;
   }
 }

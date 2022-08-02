@@ -1,8 +1,10 @@
-import { Actor, DatabaseTransactionHandler } from 'graasp';
-import { MentionService } from '../db-service';
-import { BaseMentionTask } from './base-mention-task';
-import { ChatMention } from '../interfaces/chat-mention';
 import { FastifyLoggerInstance } from 'fastify';
+
+import { Actor, DatabaseTransactionHandler, TaskStatus } from '@graasp/sdk';
+
+import { MentionService } from '../db-service';
+import { ChatMention } from '../interfaces/chat-mention';
+import { BaseMentionTask } from './base-mention-task';
 
 /**
  * Task to delete a mention from the database
@@ -25,7 +27,7 @@ export class DeleteMentionTask extends BaseMentionTask<ChatMention> {
     handler: DatabaseTransactionHandler,
     log: FastifyLoggerInstance,
   ): Promise<void> {
-    this.status = 'RUNNING';
+    this.status = TaskStatus.RUNNING;
 
     // delete mention
     const chatMention = await this.mentionService.deleteMention(
@@ -35,6 +37,6 @@ export class DeleteMentionTask extends BaseMentionTask<ChatMention> {
     await this.postHookHandler?.(chatMention, this.actor, { log, handler });
 
     this._result = chatMention;
-    this.status = 'OK';
+    this.status = TaskStatus.OK;
   }
 }

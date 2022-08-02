@@ -43,7 +43,7 @@ export class ChatMessageNotFound extends GraaspChatboxError {
   }
 }
 
-export class MemberCannotEditMention extends GraaspItemChatError {
+export class MemberCannotEditMention extends GraaspChatboxError {
   constructor(data?: unknown) {
     super(
       {

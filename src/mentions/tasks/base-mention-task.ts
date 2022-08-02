@@ -1,4 +1,5 @@
 import { FastifyLoggerInstance } from 'fastify';
+
 import {
   Actor,
   DatabaseTransactionHandler,
@@ -7,7 +8,8 @@ import {
   PreHookHandlerType,
   Task,
   TaskStatus,
-} from 'graasp';
+} from '@graasp/sdk';
+
 import { MentionService } from '../db-service';
 
 /**
@@ -34,7 +36,7 @@ export abstract class BaseMentionTask<R> implements Task<Actor, R> {
 
   constructor(actor: Actor, mentionService: MentionService) {
     this.actor = actor;
-    this.status = 'NEW';
+    this.status = TaskStatus.NEW;
     this.mentionService = mentionService;
   }
 

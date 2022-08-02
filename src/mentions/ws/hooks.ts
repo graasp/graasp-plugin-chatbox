@@ -1,4 +1,3 @@
-import { AccessDenied, NotFound, WebSocketService } from 'graasp-websockets';
 import {
   Actor,
   DatabaseTransactionHandler,
@@ -7,13 +6,15 @@ import {
   ItemTaskManager,
   MemberService,
   TaskRunner,
-} from 'graasp';
-import { ChatMentionsTaskManager } from '../interfaces/chat-mentions-task-manager';
-import { chatMentionTopic, MentionEvent } from './events';
-import { ChatMention, MemberChatMentions } from '../interfaces/chat-mention';
-import { MentionService } from '../db-service';
-import { ChatTaskManager } from '../../chat/interfaces/chat-task-manager';
+} from '@graasp/sdk';
+import { AccessDenied, NotFound, WebSocketService } from 'graasp-websockets';
+
 import { ChatMessage } from '../../chat/interfaces/chat-message';
+import { ChatTaskManager } from '../../chat/interfaces/chat-task-manager';
+import { MentionService } from '../db-service';
+import { ChatMention, MemberChatMentions } from '../interfaces/chat-mention';
+import { ChatMentionsTaskManager } from '../interfaces/chat-mentions-task-manager';
+import { MentionEvent, chatMentionTopic } from './events';
 
 export function registerChatMentionsWsHooks(
   websockets: WebSocketService,

@@ -1,6 +1,7 @@
 import { DatabaseTransactionConnection as TrxHandler, sql } from 'slonik';
-import { ChatMention } from './interfaces/chat-mention';
+
 import { ChatService } from '../chat/db-service';
+import { ChatMention } from './interfaces/chat-mention';
 
 /**
  * Database layer for chat storage

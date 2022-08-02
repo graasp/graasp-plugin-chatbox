@@ -1,8 +1,9 @@
-import { Actor, DatabaseTransactionHandler } from 'graasp';
-import { MentionService } from '../db-service';
-import { BaseMentionTask } from './base-mention-task';
-import { ChatMention } from '../interfaces/chat-mention';
+import { Actor, DatabaseTransactionHandler, TaskStatus } from '@graasp/sdk';
+
 import { MemberCannotEditMention } from '../../util/graasp-item-chat-error';
+import { MentionService } from '../db-service';
+import { ChatMention } from '../interfaces/chat-mention';
+import { BaseMentionTask } from './base-mention-task';
 
 /**
  * Task to check if the actor is requesting his own mentions
@@ -22,7 +23,7 @@ export class IsOwnMentionTask extends BaseMentionTask<ChatMention> {
   }
 
   async run(handler: DatabaseTransactionHandler): Promise<void> {
-    this.status = 'RUNNING';
+    this.status = TaskStatus.RUNNING;
 
     this._result = await this.mentionService.getMention(this.targetId, handler);
 
@@ -31,6 +32,6 @@ export class IsOwnMentionTask extends BaseMentionTask<ChatMention> {
       throw new MemberCannotEditMention();
     }
 
-    this.status = 'OK';
+    this.status = TaskStatus.OK;
   }
 }
