@@ -914,12 +914,13 @@ __metadata:
   linkType: hard
 
 "@fastify/cookie@npm:^7.0.0":
-  version: 7.0.0
-  resolution: "@fastify/cookie@npm:7.0.0"
+  version: 7.3.1
+  resolution: "@fastify/cookie@npm:7.3.1"
   dependencies:
+    cookie: ^0.5.0
     cookie-signature: ^1.1.0
-    fastify-plugin: ^3.0.1
-  checksum: abc6f2276831824d6bf1719d42f3c9fe90298468543e2cb2b1fe47928b9fac5989d135204c5ae08f200edc74c74c6519d8bf24395ec42d040fd1d417c934b8e9
+    fastify-plugin: ^4.0.0
+  checksum: 406261a263333f7e63aee7c3c76c31d136976fddb60d277bf681d45e682d681b45edeab7ea9c630dfa9fa3d0916114ac4c9aaf4d1847cb9a709b7ebba0486119
   languageName: node
   linkType: hard
 
@@ -950,9 +951,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@graasp/sdk@github:graasp/graasp-sdk":
+"@graasp/sdk@github:graasp/graasp-sdk#22/addItemUrlBuilder":
   version: 0.1.0
-  resolution: "@graasp/sdk@https://github.com/graasp/graasp-sdk.git#commit=7e3491095507f6dfd129d318a87e6c63f0eb486e"
+  resolution: "@graasp/sdk@https://github.com/graasp/graasp-sdk.git#commit=13adb580e1c6894c5f40af6cc7c06be1e8fb9f7d"
   dependencies:
     "@fastify/secure-session": 5.2.0
     aws-sdk: 2.1111.0
@@ -962,7 +963,7 @@ __metadata:
     qs: 6.11.0
     slonik: 28.1.1
     uuid: 8.3.2
-  checksum: 1fdf3b5c52945769005bb6a83620a09f8995f5d16b2115675a7cf745b2a02e07758b3ed1a77b9357b0a9d6ab984e5427a18e4a5353e04f4d02ce16c2010e9785
+  checksum: 0ba7f4e8852f3b2cf104d79f753eb928e0f65317405c727bd21b989ed3281441099efb173d905f39d712e005cddbc1e35381fb9298ef4072a21e8dc6b4c5aa50
   languageName: node
   linkType: hard
 
@@ -2676,6 +2677,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"cookie@npm:^0.5.0":
+  version: 0.5.0
+  resolution: "cookie@npm:0.5.0"
+  checksum: 1f4bd2ca5765f8c9689a7e8954183f5332139eb72b6ff783d8947032ec1fdf43109852c178e21a953a30c0dd42257828185be01b49d1eb1a67fd054ca588a180
+  languageName: node
+  linkType: hard
+
 "core-util-is@npm:~1.0.0":
   version: 1.0.3
   resolution: "core-util-is@npm:1.0.3"
@@ -3448,6 +3456,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"fastify-plugin@npm:^4.0.0":
+  version: 4.0.0
+  resolution: "fastify-plugin@npm:4.0.0"
+  checksum: b929f94e70e3815643842cd50bdfecd26ca2c34ef7a31b1570bd3fe7437174858e9bc4dfa70c2984340d5450c24b830d37fe4789c103ef80565dcc9037ae987a
+  languageName: node
+  linkType: hard
+
 "fastify-polyglot@npm:1.0.0":
   version: 1.0.0
   resolution: "fastify-polyglot@npm:1.0.0"
@@ -3920,6 +3935,21 @@ __metadata:
   languageName: node
   linkType: hard
 
+"graasp-mailer@github:graasp/graasp-mailer#27/addMentionTemplate":
+  version: 0.1.0
+  resolution: "graasp-mailer@https://github.com/graasp/graasp-mailer.git#commit=59a9cd6104b69c822cfb406a25aace56c0b97460"
+  dependencies:
+    cpy-cli: 4.1.0
+    eta: ^1.12.3
+    fastify-nodemailer: ^5.0.0
+    fastify-plugin: ^3.0.1
+    fastify-polyglot: 1.0.0
+    i18n: 0.14.2
+    point-of-view: ^5.2.0
+  checksum: 1a0cc1fe668c1eb34498bad26d17adcce25e7547677409886cbcb7370046f821385bc22055b8d0862eaee4ff8aa65d350b33a67658d7d04f0e0bface0b969a5e
+  languageName: node
+  linkType: hard
+
 "graasp-plugin-actions@github:graasp/graasp-plugin-actions":
   version: 0.1.0
   resolution: "graasp-plugin-actions@https://github.com/graasp/graasp-plugin-actions.git#commit=ab24b475f83f4cead2e3acb3b0a968f2822e2b0d"
@@ -3941,7 +3971,7 @@ __metadata:
   dependencies:
     "@commitlint/cli": 17.0.3
     "@commitlint/config-conventional": 17.0.3
-    "@graasp/sdk": "github:graasp/graasp-sdk"
+    "@graasp/sdk": "github:graasp/graasp-sdk#22/addItemUrlBuilder"
     "@trivago/prettier-plugin-sort-imports": 3.2.0
     "@types/jest": 28.1.5
     "@typescript-eslint/eslint-plugin": 5.30.6
@@ -3952,6 +3982,7 @@ __metadata:
     fastify: ^3.29.1
     fastify-plugin: ^3.0.0
     geoip-lite: 1.4.2
+    graasp-mailer: "github:graasp/graasp-mailer#27/addMentionTemplate"
     graasp-plugin-actions: "github:graasp/graasp-plugin-actions"
     graasp-plugin-public: "github:graasp/graasp-plugin-public"
     graasp-websockets: "github:graasp/graasp-websockets"

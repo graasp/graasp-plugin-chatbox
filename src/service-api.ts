@@ -9,7 +9,9 @@
 import { FastifyPluginAsync } from 'fastify';
 import fp from 'fastify-plugin';
 
-import { Hostname } from '@graasp/sdk';
+import { Hostname, Member } from '@graasp/sdk';
+import { buildItemLinkForBuilder } from '@graasp/sdk/dist/utils/navigation';
+import mailerPlugin from 'graasp-mailer';
 import {
   ActionHandlerInput,
   ActionService,
@@ -20,6 +22,7 @@ import {
 import { ChatService } from './chat/db-service';
 import { createChatActionHandler } from './chat/handler/chat-action-handler';
 import {
+  ChatMessage,
   PartialChatMessage,
   PartialNewChatMessage,
 } from './chat/interfaces/chat-message';
@@ -55,6 +58,7 @@ declare module 'fastify' {
 export interface GraaspChatPluginOptions {
   prefix?: string;
   hosts: Hostname[];
+  hostname?: string;
 }
 
 const plugin: FastifyPluginAsync<GraaspChatPluginOptions> = async (
@@ -68,7 +72,12 @@ const plugin: FastifyPluginAsync<GraaspChatPluginOptions> = async (
     taskRunner: runner,
     websockets,
     db,
+    mailer,
   } = fastify;
+
+  if (!mailerPlugin) {
+    throw new Error('Mailer plugin is not defined');
+  }
 
   const chatService = new ChatService();
   const mentionService = new MentionService();
@@ -79,9 +88,13 @@ const plugin: FastifyPluginAsync<GraaspChatPluginOptions> = async (
     mentionService,
     iTM,
     iMTM,
+    memberTM,
   );
 
-  fastify.decorate('chat', { dbService: chatService, taskManager });
+  fastify.decorate('chat', {
+    dbService: chatService,
+    taskManager,
+  });
 
   // isolate plugin content using fastify.register to ensure that the hooks will not be called when other routes match
   fastify.register(async function (fastify) {
@@ -99,6 +112,28 @@ const plugin: FastifyPluginAsync<GraaspChatPluginOptions> = async (
         db.pool,
       );
     }
+
+    const sendMentionNotificationEmail = ({ item, member, log }) => {
+      const itemLink = buildItemLinkForBuilder({
+        host: options.hostname,
+        itemId: item.id,
+        chatOpen: true,
+      });
+      const lang = member?.extra?.lang as string;
+
+      mailer
+        .sendChatMentionNotificationEmail(
+          member,
+          itemLink,
+          item.name,
+          member.name,
+          lang,
+        )
+        .catch((err) => {
+          log.warn(err, `mailer failed. invitation link: ${itemLink}`);
+          log.warn(err, `${member}, ${item}, ${lang}`);
+        });
+    };
 
     // add actions
     const actionService = new ActionService();
@@ -156,7 +191,24 @@ const plugin: FastifyPluginAsync<GraaspChatPluginOptions> = async (
           itemId,
           body.body,
         );
-        return runner.runSingleSequence(tasks, log);
+
+        const { message, mentionedUsers } = (await runner.runSingleSequence(
+          tasks,
+          log,
+        )) as { message: ChatMessage; mentionedUsers: (Member | Error)[] };
+        if (mentionedUsers && mentionedUsers.length > 0) {
+          const { result: item } = tasks[0];
+          mentionedUsers.forEach((mentionedUser) => {
+            if (!(mentionedUser instanceof Error)) {
+              sendMentionNotificationEmail({
+                item,
+                member: mentionedUser,
+                log,
+              });
+            }
+          });
+        }
+        return message;
       },
     );
 

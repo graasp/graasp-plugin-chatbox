@@ -6,22 +6,23 @@ import {
   ItemService,
   ItemTaskManager,
   Member,
+  MemberTaskManager,
   PermissionLevel,
   Task,
 } from '@graasp/sdk';
 
+import { MentionService } from '../mentions/db-service';
+import { CreateMentionsTask } from '../mentions/tasks/create-mentions-task';
 import { ChatService } from './db-service';
 import { Chat } from './interfaces/chat';
 import { MessageBodyType } from './interfaces/chat-message';
 import { ChatTaskManager } from './interfaces/chat-task-manager';
-import { GetChatTask } from './tasks/get-chat-task';
-import { PublishMessageTask } from './tasks/publish-message-task';
-import { DeleteMessageTask } from './tasks/delete-message-task';
-import { PatchMessageTask } from './tasks/patch-message-task';
 import { ClearChatTask } from './tasks/clear-chat-task';
+import { DeleteMessageTask } from './tasks/delete-message-task';
+import { GetChatTask } from './tasks/get-chat-task';
 import { GetMessageTask } from './tasks/get-message-task';
-import { CreateMentionsTask } from '../mentions/tasks/create-mentions-task';
-import { MentionService } from '../mentions/db-service';
+import { PatchMessageTask } from './tasks/patch-message-task';
+import { PublishMessageTask } from './tasks/publish-message-task';
 
 /**
  * Concrete implementation of the chat task manager
@@ -33,6 +34,7 @@ export class TaskManager implements ChatTaskManager {
   private mentionService: MentionService;
   private itemTaskManager: ItemTaskManager;
   private itemMembershipTaskManager: ItemMembershipTaskManager;
+  private memberTaskManager: MemberTaskManager;
 
   constructor(
     itemService: ItemService,
@@ -41,6 +43,7 @@ export class TaskManager implements ChatTaskManager {
     mentionService: MentionService,
     itemTaskManager: ItemTaskManager,
     itemMembershipTaskManager: ItemMembershipTaskManager,
+    memberTaskManager: MemberTaskManager,
   ) {
     this.itemService = itemService;
     this.itemMembershipService = itemMembershipService;
@@ -48,6 +51,7 @@ export class TaskManager implements ChatTaskManager {
     this.mentionService = mentionService;
     this.itemTaskManager = itemTaskManager;
     this.itemMembershipTaskManager = itemMembershipTaskManager;
+    this.memberTaskManager = memberTaskManager;
   }
 
   getGetChatTaskName(): string {
@@ -117,17 +121,26 @@ export class TaskManager implements ChatTaskManager {
     const t3 = new CreateMentionsTask(member, this.mentionService, {
       mentions,
     });
-    // skip creation task if mention array is empty
-    t3.skip = !mentions || mentions.length === 0;
+
     // supply mention task with item and chat-message id
     t3.getInput = () => ({
       item: t1[0].result as Item,
       messageId: t2.result.id,
       message: t2.result.body,
     });
-    // make the task return the chat-message and not the mentions
-    t3.getResult = () => t2.result;
-    return [...t1, t2, t3];
+    const t4 = this.memberTaskManager.createGetManyTask(member, mentions);
+    // skip creation task if mention array is empty
+    if (!mentions || mentions.length === 0) {
+      // skip message creation
+      t3.skip = true;
+      t4.skip = true;
+    }
+    // make the task return an object combining the chat-message and the mentions
+    t4.getResult = () => ({
+      message: t2.result,
+      mentionedUsers: t4.result,
+    });
+    return [...t1, t2, t3, t4];
   }
 
   createPatchMessageTaskSequence(
