@@ -9,23 +9,40 @@
 import { FastifyPluginAsync } from 'fastify';
 import fp from 'fastify-plugin';
 
-
-
-import { Hostname } from '@graasp/sdk';
+import { Hostname, Member, buildItemLinkForBuilder } from '@graasp/sdk';
 import mailerPlugin from 'graasp-mailer';
-
-
+import {
+  ActionHandlerInput,
+  ActionService,
+  ActionTaskManager,
+  BaseAction,
+} from 'graasp-plugin-actions';
 
 import { ChatService } from './chat/db-service';
-import { ChatMessage, PartialChatMessage, PartialNewChatMessage } from './chat/interfaces/chat-message';
-import commonChat, { clearChat, getChat, patchMessage, publishMessage, removeMessage } from './chat/schemas';
+import { createChatActionHandler } from './chat/handler/chat-action-handler';
+import {
+  ChatMessage,
+  PartialChatMessage,
+  PartialNewChatMessage,
+} from './chat/interfaces/chat-message';
+import commonChat, {
+  clearChat,
+  getChat,
+  patchMessage,
+  publishMessage,
+  removeMessage,
+} from './chat/schemas';
 import { TaskManager as ChatTaskManager } from './chat/task-manager';
 import { registerChatWsHooks } from './chat/ws/hooks';
 import { MentionService } from './mentions/db-service';
-import commonMentions, { clearAllMentions, deleteMention, getMentions, patchMention } from './mentions/schemas';
+import commonMentions, {
+  clearAllMentions,
+  deleteMention,
+  getMentions,
+  patchMention,
+} from './mentions/schemas';
 import { TaskManager as MentionsTaskManager } from './mentions/task-manager';
 import { registerChatMentionsWsHooks } from './mentions/ws/hooks';
-
 
 // hack to force compiler to discover websockets service
 declare module 'fastify' {
@@ -112,8 +129,7 @@ const plugin: FastifyPluginAsync<GraaspChatPluginOptions> = async (
           lang,
         )
         .catch((err) => {
-          log.warn(err, `mailer failed. invitation link: ${itemLink}`);
-          log.warn(err, `${member}, ${item}, ${lang}`);
+          log.warn(err, `mailer failed. notification link: ${itemLink}`);
         });
     };
 
