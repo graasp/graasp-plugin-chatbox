@@ -17,11 +17,11 @@ CREATE TABLE "chat_mention"
     PRIMARY KEY ("id")
 );
 
-CREATE INDEX ON "chat_mentions" ("member_id"); -- optimize lookup by member_id
+CREATE INDEX ON "chat_mention" ("member_id"); -- optimize lookup by member_id
 
 -- add the trigger to update the updated_at on UPDATE statements
-CREATE TRIGGER "chat_mentions_set_timestamp"
+CREATE TRIGGER "chat_mention_set_timestamp"
     BEFORE UPDATE
-    ON "chat_mentions"
+    ON "chat_mention"
     FOR EACH ROW
     EXECUTE PROCEDURE trigger_set_timestamp();
