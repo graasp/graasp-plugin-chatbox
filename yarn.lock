@@ -833,7 +833,7 @@ __metadata:
 
 "@graasp/sdk@github:graasp/graasp-sdk#22/addItemUrlBuilder":
   version: 0.1.0
-  resolution: "@graasp/sdk@https://github.com/graasp/graasp-sdk.git#commit=d7ca0b62c85004e44c138dc31a004fe7f901b485"
+  resolution: "@graasp/sdk@https://github.com/graasp/graasp-sdk.git#commit=13adb580e1c6894c5f40af6cc7c06be1e8fb9f7d"
   dependencies:
     "@fastify/secure-session": 5.2.0
     aws-sdk: 2.1111.0
@@ -843,7 +843,7 @@ __metadata:
     qs: 6.11.0
     slonik: 28.1.1
     uuid: 8.3.2
-  checksum: 0aa725a9ad3fa42c4f09d3a0448009162ded2e836eaa8305e37401213877ae10c2cd09bb621e1189629916e495be0f223006b55219cce79217ccd7588a213f17
+  checksum: 0ba7f4e8852f3b2cf104d79f753eb928e0f65317405c727bd21b989ed3281441099efb173d905f39d712e005cddbc1e35381fb9298ef4072a21e8dc6b4c5aa50
   languageName: node
   linkType: hard
 
