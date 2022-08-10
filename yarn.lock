@@ -831,9 +831,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@graasp/sdk@github:graasp/graasp-sdk#22/addItemUrlBuilder":
+"@graasp/sdk@github:graasp/graasp-sdk":
   version: 0.1.0
-  resolution: "@graasp/sdk@https://github.com/graasp/graasp-sdk.git#commit=13adb580e1c6894c5f40af6cc7c06be1e8fb9f7d"
+  resolution: "@graasp/sdk@https://github.com/graasp/graasp-sdk.git#commit=1d659edd460e7b29168ab67285f312c8b4862881"
   dependencies:
     "@fastify/secure-session": 5.2.0
     aws-sdk: 2.1111.0
@@ -3840,21 +3840,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"graasp-mailer@github:graasp/graasp-mailer#27/addMentionTemplate":
-  version: 0.1.0
-  resolution: "graasp-mailer@https://github.com/graasp/graasp-mailer.git#commit=c11d7a60985c21b94063f5a1abdddfac237ea694"
-  dependencies:
-    cpy-cli: 4.1.0
-    eta: ^1.12.3
-    fastify-nodemailer: ^5.0.0
-    fastify-plugin: ^3.0.1
-    fastify-polyglot: 1.0.0
-    i18n: 0.14.2
-    point-of-view: ^5.2.0
-  checksum: 8b92fa4496967a4239dc716d134e1efc6de73936a4209be072ddd27aeea27dbd0d0eb04425debd99999a66afc4f733c588866fd92110f38bfd3c22edfd0aafb1
-  languageName: node
-  linkType: hard
-
 "graasp-plugin-actions@github:graasp/graasp-plugin-actions":
   version: 0.1.0
   resolution: "graasp-plugin-actions@https://github.com/graasp/graasp-plugin-actions.git#commit=ab24b475f83f4cead2e3acb3b0a968f2822e2b0d"
@@ -3876,7 +3861,7 @@ __metadata:
   dependencies:
     "@commitlint/cli": 17.0.3
     "@commitlint/config-conventional": 17.0.3
-    "@graasp/sdk": "github:graasp/graasp-sdk#22/addItemUrlBuilder"
+    "@graasp/sdk": "github:graasp/graasp-sdk"
     "@trivago/prettier-plugin-sort-imports": 3.2.0
     "@types/jest": 28.1.5
     "@typescript-eslint/eslint-plugin": 5.30.6
@@ -3886,8 +3871,7 @@ __metadata:
     eslint-plugin-jest: 26.5.3
     fastify: ^3.29.1
     fastify-plugin: ^3.0.0
-    geoip-lite: 1.4.2
-    graasp-mailer: "github:graasp/graasp-mailer#27/addMentionTemplate"
+    graasp-mailer: "github:graasp/graasp-mailer"
     graasp-plugin-actions: "github:graasp/graasp-plugin-actions"
     graasp-plugin-public: "github:graasp/graasp-plugin-public"
     graasp-websockets: "github:graasp/graasp-websockets"

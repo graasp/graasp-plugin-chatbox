@@ -30,11 +30,10 @@
     "post-commit": "git status"
   },
   "dependencies": {
-    "@graasp/sdk": "github:graasp/graasp-sdk#22/addItemUrlBuilder",
+    "@graasp/sdk": "github:graasp/graasp-sdk",
     "fastify": "^3.29.1",
     "fastify-plugin": "^3.0.0",
-    "geoip-lite": "1.4.2",
-    "graasp-mailer": "github:graasp/graasp-mailer#27/addMentionTemplate",
+    "graasp-mailer": "github:graasp/graasp-mailer",
     "graasp-plugin-actions": "github:graasp/graasp-plugin-actions",
     "graasp-plugin-public": "github:graasp/graasp-plugin-public",
     "graasp-websockets": "github:graasp/graasp-websockets"
