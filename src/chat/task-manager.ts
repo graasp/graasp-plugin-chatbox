@@ -121,9 +121,6 @@ export class TaskManager implements ChatTaskManager {
       },
     );
     t2.getInput = () => ({ item: t1[0].result as Item });
-    t2.getResult = () => ({
-      message: t2.result,
-    });
     tasks.push(t2);
 
     // create mentions only when there are mentions
