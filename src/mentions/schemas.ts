@@ -2,7 +2,7 @@
  * JSON schema definitions to validate requests and responses
  * through Fastify's AJV instance
  */
-import { MentionStatus } from './interfaces/chat-mention';
+import { MentionStatus } from '@graasp/sdk';
 
 export default {
   $id: 'http://graasp.org/mentions/',

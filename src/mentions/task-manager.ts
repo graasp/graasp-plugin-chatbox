@@ -5,15 +5,12 @@ import {
   ItemService,
   ItemTaskManager,
   Member,
+  MentionStatus,
   Task,
 } from '@graasp/sdk';
 
 import { MentionService } from './db-service';
-import {
-  ChatMention,
-  MemberChatMentions,
-  MentionStatus,
-} from './interfaces/chat-mention';
+import { ChatMention, MemberChatMentions } from './interfaces/chat-mention';
 import { ChatMentionsTaskManager } from './interfaces/chat-mentions-task-manager';
 import { ClearAllMentionsTask } from './tasks/clear-all-mentions-task';
 import { CreateMentionsTask } from './tasks/create-mentions-task';

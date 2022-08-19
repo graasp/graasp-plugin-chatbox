@@ -1,9 +1,14 @@
 import { FastifyLoggerInstance } from 'fastify';
 
-import { Actor, DatabaseTransactionHandler, TaskStatus } from '@graasp/sdk';
+import {
+  Actor,
+  DatabaseTransactionHandler,
+  MentionStatus,
+  TaskStatus,
+} from '@graasp/sdk';
 
 import { MentionService } from '../db-service';
-import { ChatMention, MentionStatus } from '../interfaces/chat-mention';
+import { ChatMention } from '../interfaces/chat-mention';
 import { BaseMentionTask } from './base-mention-task';
 
 type InputType = {

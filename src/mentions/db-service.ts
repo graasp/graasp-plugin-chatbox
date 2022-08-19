@@ -1,7 +1,9 @@
 import { DatabaseTransactionConnection as TrxHandler, sql } from 'slonik';
 
+import { MentionStatus } from '@graasp/sdk';
+
 import { ChatService } from '../chat/db-service';
-import { ChatMention, MentionStatus } from './interfaces/chat-mention';
+import { ChatMention } from './interfaces/chat-mention';
 
 /**
  * Database layer for chat storage

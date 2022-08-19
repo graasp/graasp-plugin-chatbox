@@ -1,11 +1,8 @@
-export enum MentionStatus {
-  UNREAD = 'unread',
-  READ = 'read',
-}
-
 /**
  * Shape of a chat mention
  */
+import { MentionStatus } from '@graasp/sdk';
+
 export interface ChatMention {
   id: string;
   messageId: string;

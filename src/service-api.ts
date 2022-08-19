@@ -9,7 +9,7 @@
 import { FastifyPluginAsync } from 'fastify';
 import fp from 'fastify-plugin';
 
-import { Hostname } from '@graasp/sdk';
+import { Hostname, MentionStatus } from '@graasp/sdk';
 import mailerPlugin from 'graasp-mailer';
 import {
   ActionHandlerInput,
@@ -34,7 +34,6 @@ import commonChat, {
 import { TaskManager as ChatTaskManager } from './chat/task-manager';
 import { registerChatWsHooks } from './chat/ws/hooks';
 import { MentionService } from './mentions/db-service';
-import { MentionStatus } from './mentions/interfaces/chat-mention';
 import { registerChatMentionsMailerHooks } from './mentions/mailer-hooks';
 import commonMentions, {
   clearAllMentions,
