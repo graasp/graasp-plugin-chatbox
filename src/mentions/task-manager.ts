@@ -9,7 +9,11 @@ import {
 } from '@graasp/sdk';
 
 import { MentionService } from './db-service';
-import { ChatMention, MemberChatMentions } from './interfaces/chat-mention';
+import {
+  ChatMention,
+  MemberChatMentions,
+  MentionStatus,
+} from './interfaces/chat-mention';
 import { ChatMentionsTaskManager } from './interfaces/chat-mentions-task-manager';
 import { ClearAllMentionsTask } from './tasks/clear-all-mentions-task';
 import { CreateMentionsTask } from './tasks/create-mentions-task';
@@ -69,7 +73,7 @@ export class TaskManager implements ChatMentionsTaskManager {
   createPatchMentionTaskSequence(
     member: Member,
     mentionId: string,
-    status: string,
+    status: MentionStatus,
   ): Task<Actor, unknown>[] {
     const t1 = new IsOwnMentionTask(member, mentionId, this.mentionService);
     const t2 = new UpdateMentionStatusTask(
@@ -93,8 +97,7 @@ export class TaskManager implements ChatMentionsTaskManager {
     return [t1, t2];
   }
 
-  createClearAllMentionsTaskSequence(member: Member): Task<Actor, unknown>[] {
-    const t1 = new ClearAllMentionsTask(member, this.mentionService);
-    return [t1];
+  createClearAllMentionsTaskSingle(member: Member): Task<Actor, unknown> {
+    return new ClearAllMentionsTask(member, this.mentionService);
   }
 }

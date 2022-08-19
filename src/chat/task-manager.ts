@@ -9,6 +9,7 @@ import {
   MemberTaskManager,
   PermissionLevel,
   Task,
+  isError,
 } from '@graasp/sdk';
 
 import { MentionService } from '../mentions/db-service';
@@ -105,8 +106,10 @@ export class TaskManager implements ChatTaskManager {
     chatId: string,
     chatBody: MessageBodyType,
   ): Task<Actor, unknown>[] {
-    const { message, mentions } = chatBody;
+    const { message, mentions: mentionedUserIds } = chatBody;
     const t1 = this.itemTaskManager.createGetTaskSequence(member, chatId);
+    // create tasks array and spread the task sequence from itemTaskManager
+    const tasks = [...t1];
     const t2 = new PublishMessageTask(
       member,
       this.itemService,
@@ -118,29 +121,34 @@ export class TaskManager implements ChatTaskManager {
       },
     );
     t2.getInput = () => ({ item: t1[0].result as Item });
-    const t3 = new CreateMentionsTask(member, this.mentionService, {
-      mentions,
-    });
-
-    // supply mention task with item and chat-message id
-    t3.getInput = () => ({
-      item: t1[0].result as Item,
-      messageId: t2.result.id,
-      message: t2.result.body,
-    });
-    const t4 = this.memberTaskManager.createGetManyTask(member, mentions);
-    // skip creation task if mention array is empty
-    if (!mentions || mentions.length === 0) {
-      // skip message creation
-      t3.skip = true;
-      t4.skip = true;
-    }
-    // make the task return an object combining the chat-message and the mentions
-    t4.getResult = () => ({
+    t2.getResult = () => ({
       message: t2.result,
-      mentionedUsers: t4.result,
     });
-    return [...t1, t2, t3, t4];
+    tasks.push(t2);
+
+    // create mentions only when there are mentions
+    if (mentionedUserIds && mentionedUserIds.length > 0) {
+      // get Member object associated to each mentioned user
+      const t3 = this.memberTaskManager.createGetManyTask(
+        member,
+        mentionedUserIds,
+      );
+      tasks.push(t3);
+
+      const t4 = new CreateMentionsTask(member, this.mentionService, {});
+      // supply create mention task with item, chat-message id, message and mentioned users
+      t4.getInput = () => ({
+        item: t1[0].result as Item,
+        messageId: t2.result.id,
+        message: t2.result.body,
+        // filter returned members and only return the ones that are valid
+        mentionedUsers: t3.result.filter((m) => !isError(m)) as Member[],
+      });
+      // make the task sequence return the message that was posted
+      t4.getResult = () => t2.result;
+      tasks.push(t4);
+    }
+    return tasks;
   }
 
   createPatchMessageTaskSequence(

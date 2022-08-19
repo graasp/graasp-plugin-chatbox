@@ -67,9 +67,6 @@ const plugin: FastifyPluginAsync<GraaspChatPluginOptions> = async (fastify) => {
     async ({ params: { itemId }, log }) => {
       const t1 = pITM.createGetPublicItemTask(graaspActor, { itemId });
       const t2 = taskManager.createGetTask(graaspActor, itemId);
-      // todo: remove when core uses sdk
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
       return runner.runSingleSequence([t1, t2], log);
     },
   );

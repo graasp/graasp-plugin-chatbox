@@ -4,6 +4,7 @@ import {
   DatabaseTransactionHandler,
   Item,
   Member,
+  PostHookHandlerType,
   TaskStatus,
 } from '@graasp/sdk';
 
@@ -14,8 +15,8 @@ import { BaseMentionTask } from './base-mention-task';
 type InputType = {
   item?: Item;
   messageId?: string;
-  mentions?: string[];
   message?: string;
+  mentionedUsers?: Member[];
 };
 
 /**
@@ -24,6 +25,12 @@ type InputType = {
 export class CreateMentionsTask extends BaseMentionTask<ChatMention[]> {
   input?: InputType;
   getInput?: () => InputType;
+
+  // adapt types of post-hook for this special use case
+  postHookHandler: PostHookHandlerType<
+    ChatMention[],
+    { mentionedUsers: Member[]; item: Item }
+  >;
 
   get name(): string {
     return CreateMentionsTask.name;
@@ -44,13 +51,16 @@ export class CreateMentionsTask extends BaseMentionTask<ChatMention[]> {
   ): Promise<void> {
     this.status = TaskStatus.RUNNING;
 
-    const { messageId, mentions, item, message } = this.input;
+    const { messageId, item, message, mentionedUsers } = this.input;
 
     this.targetId = messageId;
 
+    // create only the mentions where the user exists
+    const mentionedUserIds = mentionedUsers.map((m) => m.id);
+
     // create mentions
     const newChatMentions = await this.mentionService.createMentions(
-      mentions,
+      mentionedUserIds,
       item.path,
       messageId,
       this.actor.id,
@@ -60,10 +70,18 @@ export class CreateMentionsTask extends BaseMentionTask<ChatMention[]> {
       ...cm,
       message,
     }));
-    await this.postHookHandler?.(newChatMentionsWithMessage, this.actor, {
-      log,
-      handler,
-    });
+    await this.postHookHandler?.(
+      newChatMentionsWithMessage,
+      this.actor,
+      {
+        log,
+        handler,
+      },
+      {
+        mentionedUsers,
+        item,
+      },
+    );
 
     // return chat message
     this._result = newChatMentionsWithMessage;

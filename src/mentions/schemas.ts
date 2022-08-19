@@ -2,6 +2,8 @@
  * JSON schema definitions to validate requests and responses
  * through Fastify's AJV instance
  */
+import { MentionStatus } from './interfaces/chat-mention';
+
 export default {
   $id: 'http://graasp.org/mentions/',
   definitions: {
@@ -45,7 +47,10 @@ export default {
         creator: { $ref: 'http://graasp.org/#/definitions/uuid' },
         createdAt: { type: 'string' },
         updatedAt: { type: 'string' },
-        status: { type: 'string' },
+        status: {
+          type: 'string',
+          enum: Object.values(MentionStatus),
+        },
         message: { type: 'string' },
       },
       additionalProperties: false,
@@ -58,7 +63,7 @@ export default {
       properties: {
         status: {
           type: 'string',
-          enum: ['read', 'unread'],
+          enum: Object.values(MentionStatus),
         },
       },
       additionalProperties: false,

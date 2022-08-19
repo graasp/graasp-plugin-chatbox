@@ -63,5 +63,5 @@ export interface ChatMentionsTaskManager<A extends Actor = Actor> {
    * Factory for a task to delete all mentions of a member
    * @param actor User performing the action
    */
-  createClearAllMentionsTaskSequence(actor: A): Task<A, unknown>[];
+  createClearAllMentionsTaskSingle(actor: A): Task<A, unknown>;
 }

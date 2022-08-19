@@ -1,7 +1,7 @@
 import { DatabaseTransactionConnection as TrxHandler, sql } from 'slonik';
 
 import { ChatService } from '../chat/db-service';
-import { ChatMention } from './interfaces/chat-mention';
+import { ChatMention, MentionStatus } from './interfaces/chat-mention';
 
 /**
  * Database layer for chat storage
@@ -71,13 +71,13 @@ export class MentionService {
       .query<ChatMention>(
         sql`
             SELECT ${MentionService.allColumnsWithTablePrefix(
-              'mentions',
-            )}, chat.body as message
-            FROM ${MentionService.tableName} mentions, ${
+              'chat_mention',
+            )}, chat_message.body as message
+            FROM ${MentionService.tableName} chat_mention, ${
           ChatService.tableName
-        } chat
-            WHERE member_id = ${memberId} AND chat.id = message_id
-            ORDER BY mentions.created_at ASC
+        } chat_message
+            WHERE member_id = ${memberId} AND chat_message.id = message_id
+            ORDER BY chat_mention.created_at ASC
         `,
       )
       .then(({ rows }) => rows.slice(0));
@@ -189,7 +189,7 @@ export class MentionService {
    */
   async patchMention(
     mentionId: string,
-    status: string,
+    status: MentionStatus,
     transactionHandler: TrxHandler,
   ): Promise<ChatMention> {
     return transactionHandler

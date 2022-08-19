@@ -25,8 +25,8 @@ export abstract class BaseMentionTask<R> implements Task<Actor, R> {
   status: TaskStatus;
   targetId: string;
   data: Partial<IndividualResultType<R>>;
-  preHookHandler: PreHookHandlerType<R>;
-  postHookHandler: PostHookHandlerType<R | string>;
+  preHookHandler?: PreHookHandlerType<R>;
+  postHookHandler?: PostHookHandlerType<R | string>;
 
   input?: unknown;
   skip?: boolean;

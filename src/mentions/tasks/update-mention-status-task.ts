@@ -3,11 +3,11 @@ import { FastifyLoggerInstance } from 'fastify';
 import { Actor, DatabaseTransactionHandler, TaskStatus } from '@graasp/sdk';
 
 import { MentionService } from '../db-service';
-import { ChatMention } from '../interfaces/chat-mention';
+import { ChatMention, MentionStatus } from '../interfaces/chat-mention';
 import { BaseMentionTask } from './base-mention-task';
 
 type InputType = {
-  status?: string;
+  status?: MentionStatus;
   mention?: ChatMention;
 };
 
@@ -39,9 +39,8 @@ export class UpdateMentionStatusTask extends BaseMentionTask<ChatMention> {
   ): Promise<void> {
     this.status = TaskStatus.RUNNING;
 
-    const { mention } = this.input;
+    const { mention, status } = this.input;
 
-    const { status } = this.input;
     // patch mention
     const updatedMention = await this.mentionService.patchMention(
       this.targetId,
