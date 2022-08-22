@@ -833,7 +833,7 @@ __metadata:
 
 "@graasp/sdk@github:graasp/graasp-sdk#38/addMentionStatusEnum":
   version: 0.1.0
-  resolution: "@graasp/sdk@https://github.com/graasp/graasp-sdk.git#commit=79a41775addb6993ec95af290e9030e2c791d9ce"
+  resolution: "@graasp/sdk@https://github.com/graasp/graasp-sdk.git#commit=f52381160e722e1e09a64c4bee4c07a0d9e96c6a"
   dependencies:
     "@fastify/secure-session": 5.2.0
     aws-sdk: 2.1111.0
@@ -844,7 +844,7 @@ __metadata:
     qs: 6.11.0
     slonik: 28.1.1
     uuid: 8.3.2
-  checksum: 5355e06f05741cb5ade1e90128d2fb154ee8c1ca2f730b2f90e2154f3eac135a1a200e4141daccdadf1afc632b579fa2db878157bc48fe8228f05ff75b763d16
+  checksum: 4548423660f7c7d57f07ae1fa3d243e80d516f03bddd04c23df707aabe9302b671f22e17f318c48414960921a3fd9ee5144e0f0da057d070879923f1a0389edf
   languageName: node
   linkType: hard
 
