@@ -11,7 +11,7 @@ import {
 
 import { ChatService } from '../db-service';
 import { ChatMessage } from '../interfaces/chat-message';
-import { ChatMessageNotFound } from '../util/graasp-item-chat-error';
+import { ChatMessageNotFound } from '../../util/graasp-item-chat-error';
 import { BaseChatTask } from './base-chat-task';
 
 type InputType = {

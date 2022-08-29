@@ -9,6 +9,7 @@ import {
   TaskStatus,
 } from '@graasp/sdk';
 
+import { ChatMessageNotFound } from '../../util/graasp-item-chat-error';
 import { ChatService } from '../db-service';
 import { ChatMessage } from '../interfaces/chat-message';
 import { BaseChatTask } from './base-chat-task';
@@ -16,18 +17,19 @@ import { BaseChatTask } from './base-chat-task';
 type InputType = {
   item?: Item;
   chatId?: string;
-  chatMessage?: Partial<ChatMessage>;
+  messageId?: string;
+  message?: string;
 };
 
 /**
  * Task to publish a message on a given chat
  */
-export class PublishMessageTask extends BaseChatTask<ChatMessage> {
+export class PatchMessageTask extends BaseChatTask<ChatMessage> {
   input?: InputType;
   getInput?: () => InputType;
 
   get name(): string {
-    return PublishMessageTask.name;
+    return PatchMessageTask.name;
   }
 
   constructor(
@@ -47,24 +49,32 @@ export class PublishMessageTask extends BaseChatTask<ChatMessage> {
   ): Promise<void> {
     this.status = TaskStatus.RUNNING;
 
-    const { chatId, chatMessage, item } = this.input;
+    const { messageId, message, item } = this.input;
 
-    this.targetId = chatId;
+    this.targetId = messageId;
 
-    // set chatId and author
-    chatMessage.chatId = item.id;
-    chatMessage.creator = this.actor.id;
+    // set chatMessage fields
+    const chatMessage: Partial<ChatMessage> = {
+      id: messageId,
+      chatId: item.id,
+      body: message,
+    };
 
-    // publish message
-    await this.preHookHandler?.(chatMessage, this.actor, { log, handler });
-    const newChatMessage = await this.chatService.publishMessage(
-      chatMessage,
-      handler,
-    );
-    await this.postHookHandler?.(newChatMessage, this.actor, { log, handler });
+    // patch message
+    const res = await this.chatService.patchMessage(chatMessage, handler);
+    // action returns no entries which means the message was not found
+    // do not run the post hook
+    if (res) {
+      await this.postHookHandler?.(res, this.actor, {
+        log,
+        handler,
+      });
+    } else {
+      throw new ChatMessageNotFound(messageId);
+    }
 
     // return chat message
-    this._result = newChatMessage;
+    this._result = res;
     this.status = TaskStatus.OK;
   }
 }

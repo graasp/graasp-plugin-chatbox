@@ -42,3 +42,16 @@ export class ChatMessageNotFound extends GraaspChatboxError {
     );
   }
 }
+
+export class MemberCannotEditMention extends GraaspChatboxError {
+  constructor(data?: unknown) {
+    super(
+      {
+        code: 'GICERR004',
+        statusCode: 401,
+        message: 'Member can only edit own mentions',
+      },
+      data,
+    );
+  }
+}

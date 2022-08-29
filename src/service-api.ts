@@ -9,7 +9,8 @@
 import { FastifyPluginAsync } from 'fastify';
 import fp from 'fastify-plugin';
 
-import { Hostname } from '@graasp/sdk';
+import { Hostname, MentionStatus } from '@graasp/sdk';
+import mailerPlugin from 'graasp-mailer';
 import {
   ActionHandlerInput,
   ActionService,
@@ -17,18 +18,38 @@ import {
   BaseAction,
 } from 'graasp-plugin-actions';
 
-import { ChatService } from './db-service';
-import { createChatActionHandler } from './handler/chat-action-handler';
-import { ChatMessage } from './interfaces/chat-message';
-import common, {
+import { ChatService } from './chat/db-service';
+import { createChatActionHandler } from './chat/handler/chat-action-handler';
+import {
+  PartialChatMessage,
+  PartialNewChatMessage,
+} from './chat/interfaces/chat-message';
+import commonChat, {
   clearChat,
   getChat,
   patchMessage,
   publishMessage,
   removeMessage,
-} from './schemas';
-import { TaskManager } from './task-manager';
-import { registerChatWsHooks } from './ws/hooks';
+} from './chat/schemas';
+import { TaskManager as ChatTaskManager } from './chat/task-manager';
+import { registerChatWsHooks } from './chat/ws/hooks';
+import { MentionService } from './mentions/db-service';
+import { registerChatMentionsMailerHooks } from './mentions/mailer-hooks';
+import commonMentions, {
+  clearAllMentions,
+  deleteMention,
+  getMentions,
+  patchMention,
+} from './mentions/schemas';
+import { TaskManager as MentionsTaskManager } from './mentions/task-manager';
+import { registerChatMentionsWsHooks } from './mentions/ws/hooks';
+
+// hack to force compiler to discover websockets service
+declare module 'fastify' {
+  interface FastifyInstance {
+    chat?: { taskManager: ChatTaskManager; dbService: ChatService };
+  }
+}
 
 /**
  * Type definition for plugin options
@@ -42,29 +63,37 @@ const plugin: FastifyPluginAsync<GraaspChatPluginOptions> = async (
   fastify,
   options,
 ) => {
+  const {
+    items: { dbService: itemService, taskManager: iTM },
+    itemMemberships: { dbService: itemMembershipsService, taskManager: iMTM },
+    members: { taskManager: memberTM },
+    taskRunner: runner,
+    websockets,
+    db,
+  } = fastify;
+
+  const chatService = new ChatService();
+  const mentionService = new MentionService();
+  const taskManager = new ChatTaskManager(
+    itemService,
+    itemMembershipsService,
+    chatService,
+    mentionService,
+    iTM,
+    iMTM,
+    memberTM,
+  );
+
+  fastify.decorate('chat', {
+    dbService: chatService,
+    taskManager,
+  });
+
   // isolate plugin content using fastify.register to ensure that the hooks will not be called when other routes match
+  // routes associated with mentions should not trigger the action hook
   fastify.register(async function (fastify) {
-    const {
-      items: { dbService: itemService, taskManager: iTM },
-      itemMemberships: { dbService: itemMembershipsService, taskManager: iMTM },
-      members: { taskManager: memberTM },
-      taskRunner: runner,
-      websockets,
-      db,
-    } = fastify;
-
-    const chatService = new ChatService();
-    const taskManager = new TaskManager(
-      itemService,
-      itemMembershipsService,
-      chatService,
-      iTM,
-      iMTM,
-    );
-
-    fastify.decorate('chat', { dbService: chatService, taskManager });
-
-    fastify.addSchema(common);
+    fastify.addSchema(commonChat);
+    fastify.addSchema(commonMentions);
 
     // register websocket behaviours for chats
     if (websockets) {
@@ -122,21 +151,28 @@ const plugin: FastifyPluginAsync<GraaspChatPluginOptions> = async (
       },
     );
 
-    fastify.post<{ Params: { itemId: string }; Body: Partial<ChatMessage> }>(
+    fastify.post<{
+      Params: { itemId: string };
+      Body: Partial<PartialNewChatMessage>;
+    }>(
       '/:itemId/chat',
       { schema: publishMessage },
       async ({ member, params: { itemId }, body, log }) => {
         const tasks = taskManager.createPublishMessageTaskSequence(
           member,
           itemId,
-          body,
+          body.body,
         );
+
         return runner.runSingleSequence(tasks, log);
       },
     );
 
     // patch message
-    fastify.patch<{ Params: { itemId: string; messageId: string } }>(
+    fastify.patch<{
+      Params: { itemId: string; messageId: string };
+      Body: Partial<PartialChatMessage>;
+    }>(
       '/:itemId/chat/:messageId',
       { schema: patchMessage },
       async ({ member, params: { itemId, messageId }, body, log }) => {
@@ -144,7 +180,7 @@ const plugin: FastifyPluginAsync<GraaspChatPluginOptions> = async (
           member,
           itemId,
           messageId,
-          body,
+          body.body,
         );
         return runner.runSingleSequence(tasks, log);
       },
@@ -171,6 +207,106 @@ const plugin: FastifyPluginAsync<GraaspChatPluginOptions> = async (
       async ({ member, params: { itemId }, log }) => {
         const tasks = taskManager.createClearChatTaskSequence(member, itemId);
         return runner.runSingleSequence(tasks, log);
+      },
+    );
+  });
+
+  // isolate plugin content using fastify.register to ensure that the action hook from chat_message will not be called when using mention routes
+  fastify.register(async function (fastify) {
+    const {
+      items: { dbService: itemService, taskManager: iTM },
+      members: { dbService: membersService },
+      itemMemberships: { dbService: itemMembershipsService, taskManager: iMTM },
+      chat: { taskManager: chatTaskManager },
+      taskRunner: runner,
+      websockets,
+      db,
+    } = fastify;
+
+    const mentionService = new MentionService();
+    const taskManager = new MentionsTaskManager(
+      itemService,
+      itemMembershipsService,
+      mentionService,
+      iTM,
+      iMTM,
+    );
+
+    if (!mailerPlugin) {
+      throw new Error('Mailer plugin is not defined');
+    }
+
+    // register mail hooks
+    registerChatMentionsMailerHooks(fastify, taskManager, options.hosts);
+
+    fastify.decorate('mentions', {
+      dbService: mentionService,
+      taskManager,
+    });
+
+    fastify.addSchema(commonMentions);
+
+    // register websocket behaviours for chats
+    if (websockets) {
+      registerChatMentionsWsHooks(
+        websockets,
+        runner,
+        mentionService,
+        membersService,
+        itemMembershipsService,
+        iTM,
+        chatTaskManager,
+        taskManager,
+        db.pool,
+      );
+    }
+
+    // mentions
+    fastify.get(
+      '/mentions',
+      { schema: getMentions },
+      async ({ member, log }) => {
+        const task = taskManager.createGetMemberMentionsTask(member);
+        return runner.runSingle(task, log);
+      },
+    );
+
+    fastify.patch<{
+      Params: { mentionId: string };
+      Body: { status: MentionStatus };
+    }>(
+      '/mentions/:mentionId',
+      { schema: patchMention },
+      async ({ member, params: { mentionId }, body: { status }, log }) => {
+        const tasks = taskManager.createPatchMentionTaskSequence(
+          member,
+          mentionId,
+          status,
+        );
+        return runner.runSingleSequence(tasks, log);
+      },
+    );
+
+    // delete one mention by id
+    fastify.delete<{ Params: { mentionId: string } }>(
+      '/mentions/:mentionId',
+      { schema: deleteMention },
+      async ({ member, params: { mentionId }, log }) => {
+        const tasks = taskManager.createDeleteMentionTaskSequence(
+          member,
+          mentionId,
+        );
+        return runner.runSingleSequence(tasks, log);
+      },
+    );
+
+    // delete all mentions for a user
+    fastify.delete(
+      '/mentions',
+      { schema: clearAllMentions },
+      async ({ member, log }) => {
+        const task = taskManager.createClearAllMentionsTaskSingle(member);
+        return runner.runSingle(task, log);
       },
     );
   });
