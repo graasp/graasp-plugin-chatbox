@@ -221,7 +221,6 @@ const plugin: FastifyPluginAsync<GraaspChatPluginOptions> = async (
       taskRunner: runner,
       websockets,
       db,
-      mailer,
     } = fastify;
 
     const mentionService = new MentionService();
@@ -238,7 +237,7 @@ const plugin: FastifyPluginAsync<GraaspChatPluginOptions> = async (
     }
 
     // register mail hooks
-    registerChatMentionsMailerHooks(runner, taskManager, mailer, options.hosts);
+    registerChatMentionsMailerHooks(fastify, taskManager, options.hosts);
 
     fastify.decorate('mentions', {
       dbService: mentionService,
