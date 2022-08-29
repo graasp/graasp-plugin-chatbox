@@ -52,8 +52,12 @@ export class UpdateMentionStatusTask extends BaseMentionTask<ChatMention> {
       status,
       handler,
     );
+
+    // add the 'message' key (without needing a join since it is not modified when changing the mention status)
     const updatedMentionWithMessage = {
+      // contains the message string from the join with 'chat_message' table
       ...mention,
+      // has updated values of 'chat_mention' table but without the 'message' key
       ...updatedMention,
     };
     await this.postHookHandler?.(updatedMentionWithMessage, this.actor, {
