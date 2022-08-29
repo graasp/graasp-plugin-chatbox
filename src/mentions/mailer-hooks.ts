@@ -1,12 +1,10 @@
 import { FastifyInstance, FastifyLoggerInstance } from 'fastify';
 
 import {
-  Actor,
   Context,
   Hostname,
   Item,
   Member,
-  TaskRunner,
   buildItemLinkForBuilder,
 } from '@graasp/sdk';
 
@@ -14,11 +12,11 @@ import { ChatMention } from './interfaces/chat-mention';
 import { ChatMentionsTaskManager } from './interfaces/chat-mentions-task-manager';
 
 export function registerChatMentionsMailerHooks(
-  runner: TaskRunner<Actor>,
+  fastify: FastifyInstance,
   chatMentionsTaskManager: ChatMentionsTaskManager,
-  mailer: FastifyInstance['mailer'],
   hosts?: Hostname[],
 ) {
+  const { taskRunner: runner, mailer } = fastify;
   const host = hosts.find((h) => h.name === Context.BUILDER)?.hostname;
 
   const sendMentionNotificationEmail = ({
