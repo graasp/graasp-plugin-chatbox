@@ -7,13 +7,13 @@ import {
 } from '@graasp/sdk';
 
 import { ChatService } from '../db-service';
-import { Chat } from '../interfaces/chat';
+import { ExportedChat } from '../interfaces/chat';
 import { BaseChatTask } from './base-chat-task';
 
 /**
  * Task to export a chat from the database
  */
-export class ExportChatTask extends BaseChatTask<Chat> {
+export class ExportChatTask extends BaseChatTask<ExportedChat> {
   get name(): string {
     return ExportChatTask.name;
   }

@@ -1,6 +1,6 @@
 import { DatabaseTransactionConnection as TrxHandler, sql } from 'slonik';
 
-import { ChatMessage } from './interfaces/chat-message';
+import { ChatMessage, ExportedChatMessage } from './interfaces/chat-message';
 
 /**
  * Database layer for chat storage
@@ -84,9 +84,9 @@ export class ChatService {
   async export(
     chatId: string,
     transactionHandler: TrxHandler,
-  ): Promise<ChatMessage[]> {
+  ): Promise<ExportedChatMessage[]> {
     return transactionHandler
-      .query<ChatMessage>(
+      .query<ExportedChatMessage>(
         sql`
             SELECT ${ChatService.allColumnsWithTablePrefix(
               'chat_message',
