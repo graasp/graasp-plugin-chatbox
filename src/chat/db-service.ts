@@ -90,7 +90,7 @@ export class ChatService {
         sql`
             SELECT ${ChatService.allColumnsWithTablePrefix(
               'chat_message',
-            )}, member.name AS creatorName
+            )}, member.name AS ${sql.identifier(['creatorName'])}
             FROM chat_message, member
             WHERE chat_message.chat_id = ${chatId}
             AND chat_message.creator = member.id
