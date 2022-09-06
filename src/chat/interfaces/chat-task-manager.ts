@@ -39,7 +39,7 @@ export interface ChatTaskManager<A extends Actor = Actor> {
    */
   createGetTask(actor: A, objectId: string): Task<A, Chat>;
 
-  createGetTaskSequence(actor: A, objectId: string): Task<Actor, unknown>[];
+  createGetTaskSequence(actor: A, objectId: string): Task<A, unknown>[];
 
   /**
    * Factory for a task to publish a message in a chat

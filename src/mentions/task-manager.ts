@@ -1,5 +1,4 @@
 import {
-  Actor,
   ItemMembershipService,
   ItemMembershipTaskManager,
   ItemService,
@@ -63,7 +62,9 @@ export class TaskManager implements ChatMentionsTaskManager {
     return ClearAllMentionsTask.name;
   }
 
-  createGetMemberMentionsTask(member: Actor): Task<Actor, MemberChatMentions> {
+  createGetMemberMentionsTask(
+    member: Member,
+  ): Task<Member, MemberChatMentions> {
     return new GetMemberMentionsTask(member, this.mentionService);
   }
 
@@ -71,7 +72,7 @@ export class TaskManager implements ChatMentionsTaskManager {
     member: Member,
     mentionId: string,
     status: MentionStatus,
-  ): Task<Actor, unknown>[] {
+  ): Task<Member, unknown>[] {
     const t1 = new IsOwnMentionTask(member, mentionId, this.mentionService);
     const t2 = new UpdateMentionStatusTask(
       member,
@@ -88,13 +89,13 @@ export class TaskManager implements ChatMentionsTaskManager {
   createDeleteMentionTaskSequence(
     member: Member,
     mentionId: string,
-  ): Task<Actor, unknown>[] {
+  ): Task<Member, unknown>[] {
     const t1 = new IsOwnMentionTask(member, mentionId, this.mentionService);
     const t2 = new DeleteMentionTask(member, mentionId, this.mentionService);
     return [t1, t2];
   }
 
-  createClearAllMentionsTaskSingle(member: Member): Task<Actor, unknown> {
+  createClearAllMentionsTaskSingle(member: Member): Task<Member, unknown> {
     return new ClearAllMentionsTask(member, this.mentionService);
   }
 }

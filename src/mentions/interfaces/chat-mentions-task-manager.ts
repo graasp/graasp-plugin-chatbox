@@ -1,11 +1,11 @@
-import { Actor, Task } from '@graasp/sdk';
+import { Member, Task } from '@graasp/sdk';
 
 import { MemberChatMentions } from './chat-mention';
 
 /**
  * Task manager for chat operations
  */
-export interface ChatMentionsTaskManager<A extends Actor = Actor> {
+export interface ChatMentionsTaskManager<A extends Member = Member> {
   /**
    * Returns the name of the create mention task (write)
    */

@@ -1,6 +1,6 @@
 import { FastifyLoggerInstance } from 'fastify';
 
-import { Actor, DatabaseTransactionHandler, TaskStatus } from '@graasp/sdk';
+import { DatabaseTransactionHandler, Member, TaskStatus } from '@graasp/sdk';
 
 import { MentionService } from '../db-service';
 import { ChatMention } from '../interfaces/chat-mention';
@@ -15,7 +15,7 @@ export class DeleteMentionTask extends BaseMentionTask<ChatMention> {
   }
 
   constructor(
-    member: Actor,
+    member: Member,
     mentionId: string,
     mentionService: MentionService,
   ) {

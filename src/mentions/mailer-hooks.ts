@@ -22,10 +22,12 @@ export function registerChatMentionsMailerHooks(
   const sendMentionNotificationEmail = ({
     item,
     member,
+    mentionCreator,
     log,
   }: {
     item: Item;
     member: Member;
+    mentionCreator: Member;
     log: FastifyLoggerInstance;
   }) => {
     const itemLink = buildItemLinkForBuilder({
@@ -40,7 +42,7 @@ export function registerChatMentionsMailerHooks(
         member,
         itemLink,
         item.name,
-        member.name,
+        mentionCreator.name,
         lang,
       )
       .catch((err) => {
@@ -55,15 +57,19 @@ export function registerChatMentionsMailerHooks(
     createMentionsTaskName,
     (
       _,
-      __,
+      mentionCreator,
       { log },
       { mentionedUsers, item }: { mentionedUsers: Member[]; item: Item },
     ) => {
+      // casting here because the runner assumes the passed argument is a simple actor
+      // but with mentions the user is always logged in so it resolves to a Member
+      const creator = mentionCreator as Member;
       // send email to notify users
       mentionedUsers.forEach((mentionedUser) => {
         sendMentionNotificationEmail({
           item,
           member: mentionedUser,
+          mentionCreator: creator,
           log,
         });
       });
