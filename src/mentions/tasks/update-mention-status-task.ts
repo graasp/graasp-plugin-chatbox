@@ -1,8 +1,8 @@
 import { FastifyLoggerInstance } from 'fastify';
 
 import {
-  Actor,
   DatabaseTransactionHandler,
+  Member,
   MentionStatus,
   TaskStatus,
 } from '@graasp/sdk';
@@ -28,7 +28,7 @@ export class UpdateMentionStatusTask extends BaseMentionTask<ChatMention> {
   }
 
   constructor(
-    member: Actor,
+    member: Member,
     mentionId: string,
     mentionService: MentionService,
     input: InputType,

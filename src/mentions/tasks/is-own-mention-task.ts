@@ -1,4 +1,4 @@
-import { Actor, DatabaseTransactionHandler, TaskStatus } from '@graasp/sdk';
+import { DatabaseTransactionHandler, Member, TaskStatus } from '@graasp/sdk';
 
 import { MemberCannotEditMention } from '../../util/graasp-item-chat-error';
 import { MentionService } from '../db-service';
@@ -14,7 +14,7 @@ export class IsOwnMentionTask extends BaseMentionTask<ChatMention> {
   }
 
   constructor(
-    member: Actor,
+    member: Member,
     mentionId: string,
     mentionService: MentionService,
   ) {
