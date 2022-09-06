@@ -94,7 +94,7 @@ export class ChatService {
             FROM chat_message, member
             WHERE chat_message.chat_id = ${chatId}
             AND chat_message.creator = member.id
-            ORDER BY created_at ASC
+            ORDER BY chat_message.created_at ASC
         `,
       )
       .then(({ rows }) => rows.slice(0));
