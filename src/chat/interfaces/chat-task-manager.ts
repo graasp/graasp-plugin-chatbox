@@ -13,6 +13,11 @@ export interface ChatTaskManager<A extends Actor = Actor> {
   getGetChatTaskName(): string;
 
   /**
+   * Returns the name of the export chat task (read)
+   */
+  getExportChatTaskName(): string;
+
+  /**
    * Returns the name of the publish message in chat task (write)
    */
   getPublishMessageTaskName(): string;
@@ -40,6 +45,13 @@ export interface ChatTaskManager<A extends Actor = Actor> {
   createGetTask(actor: A, objectId: string): Task<A, Chat>;
 
   createGetTaskSequence(actor: A, objectId: string): Task<A, unknown>[];
+
+  /**
+   * Factory for a task to export a chat
+   * @param actor User performing the operation
+   * @param objectId Chat id
+   */
+  createExportChatTaskSequence(actor: A, objectId: string): Task<A, unknown>[];
 
   /**
    * Factory for a task to publish a message in a chat

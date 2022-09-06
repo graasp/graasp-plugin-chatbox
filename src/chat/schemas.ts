@@ -70,6 +70,32 @@ export default {
       },
       additionalProperties: false,
     },
+
+    chatMessageWithMemberName: {
+      type: 'object',
+      properties: {
+        id: { $ref: 'http://graasp.org/#/definitions/uuid' },
+        chatId: { $ref: 'http://graasp.org/#/definitions/uuid' },
+        creator: { $ref: 'http://graasp.org/#/definitions/uuid' },
+        creatorName: { type: 'string' },
+        createdAt: { type: 'string' },
+        updatedAt: { type: 'string' },
+        body: { type: 'string' },
+      },
+      additionalProperties: false,
+    },
+
+    // export chat with creatorName
+    exportedChat: {
+      type: 'object',
+      properties: {
+        id: { $ref: 'http://graasp.org/#/definitions/uuid' },
+        messages: {
+          type: 'array',
+          items: { $ref: '#/definitions/chatMessageWithMemberName' },
+        },
+      },
+    },
   },
 };
 
@@ -80,6 +106,16 @@ const getChat = {
   params: { $ref: 'http://graasp.org/chat/#/definitions/itemIdParam' },
   response: {
     200: { $ref: 'http://graasp.org/chat/#/definitions/chat' },
+  },
+};
+
+/**
+ * JSON schema on GET chat route for request and response
+ */
+const exportChat = {
+  params: { $ref: 'http://graasp.org/chat/#/definitions/itemIdParam' },
+  response: {
+    200: { $ref: 'http://graasp.org/chat/#/definitions/exportedChat' },
   },
 };
 
@@ -125,4 +161,11 @@ const clearChat = {
   },
 };
 
-export { getChat, publishMessage, patchMessage, removeMessage, clearChat };
+export {
+  getChat,
+  exportChat,
+  publishMessage,
+  patchMessage,
+  removeMessage,
+  clearChat,
+};
