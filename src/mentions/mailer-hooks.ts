@@ -47,7 +47,6 @@ export function registerChatMentionsMailerHooks(
       )
       .catch((err) => {
         log.warn(err, `mailer failed. notification link: ${itemLink}`);
-        console.log(member, 'mentioned by', mentionCreator);
       });
   };
 
@@ -62,6 +61,8 @@ export function registerChatMentionsMailerHooks(
       { log },
       { mentionedUsers, item }: { mentionedUsers: Member[]; item: Item },
     ) => {
+      // casting here because the runner assumes the passed argument is a simple actor
+      // but with mentions the user is always logged in so it resolves to a Member
       const creator = mentionCreator as Member;
       // send email to notify users
       mentionedUsers.forEach((mentionedUser) => {
