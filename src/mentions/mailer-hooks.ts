@@ -47,6 +47,7 @@ export function registerChatMentionsMailerHooks(
       )
       .catch((err) => {
         log.warn(err, `mailer failed. notification link: ${itemLink}`);
+        log.warn(member, 'mentioned by', mentionCreator);
       });
   };
 
