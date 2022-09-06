@@ -34,9 +34,7 @@ export class ExportChatTask extends BaseChatTask<ExportedChat> {
 
     // get chat with member names
     const messages = await this.chatService.export(this.targetId, handler);
-    console.log(messages);
-
-    // return chat
+    // return exported chat
     this._result = {
       id: this.targetId,
       messages,
