@@ -153,7 +153,7 @@ const plugin: FastifyPluginAsync<GraaspChatPluginOptions> = async (
     );
 
     fastify.get<{ Params: { itemId: string } }>(
-      '/:itemId/chat/export',
+      '/:itemId/export/chat',
       { schema: exportChat },
       async ({ member, params: { itemId }, log }) => {
         const tasks = taskManager.createExportChatTaskSequence(member, itemId);
