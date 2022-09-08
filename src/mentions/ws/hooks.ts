@@ -100,7 +100,7 @@ export function registerChatMentionsWsHooks(
   runner.setTaskPreHookHandler<Item>(deleteItemTaskName, async (item) => {
     // get mentions to be deleted
     const mentions = await mentionService.getMentionsByItemPath(
-      item.id,
+      item.path,
       validationDbHandler,
     );
     mentions.map((m) =>
