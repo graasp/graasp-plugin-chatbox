@@ -831,9 +831,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@graasp/sdk@github:graasp/graasp-sdk#44/emailFreqEnum":
+"@graasp/sdk@github:graasp/graasp-sdk":
   version: 0.1.0
-  resolution: "@graasp/sdk@https://github.com/graasp/graasp-sdk.git#commit=43bb134d771cb1bf24ee8a8500e0ca1450832c70"
+  resolution: "@graasp/sdk@https://github.com/graasp/graasp-sdk.git#commit=4fa31e8d473b13bfa0bad3e10da9e7b9ca4f20d5"
   dependencies:
     "@fastify/secure-session": 5.2.0
     aws-sdk: 2.1111.0
@@ -3862,7 +3862,7 @@ __metadata:
   dependencies:
     "@commitlint/cli": 17.0.3
     "@commitlint/config-conventional": 17.0.3
-    "@graasp/sdk": "github:graasp/graasp-sdk#44/emailFreqEnum"
+    "@graasp/sdk": "github:graasp/graasp-sdk"
     "@trivago/prettier-plugin-sort-imports": 3.2.0
     "@types/jest": 28.1.5
     "@typescript-eslint/eslint-plugin": 5.30.6

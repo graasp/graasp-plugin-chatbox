@@ -30,7 +30,7 @@
     "post-commit": "git status"
   },
   "dependencies": {
-    "@graasp/sdk": "github:graasp/graasp-sdk#44/emailFreqEnum",
+    "@graasp/sdk": "github:graasp/graasp-sdk",
     "fastify": "^3.29.1",
     "fastify-plugin": "^3.0.0",
     "graasp-mailer": "github:graasp/graasp-mailer",
