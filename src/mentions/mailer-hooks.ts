@@ -2,6 +2,7 @@ import { FastifyInstance, FastifyLoggerInstance } from 'fastify';
 
 import {
   Context,
+  EmailFrequency,
   Hostname,
   Item,
   Member,
@@ -36,6 +37,13 @@ export function registerChatMentionsMailerHooks(
       chatOpen: true,
     });
     const lang = member?.extra?.lang as string;
+    const emailFreq = member?.extra?.emailFreq as string;
+
+    // do not send the email if the user has emailFreq set to "never"
+    if (emailFreq === EmailFrequency.NEVER) {
+      log.warn(`email not sent because of user preference`);
+      return;
+    }
 
     mailer
       .sendChatMentionNotificationEmail(
