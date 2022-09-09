@@ -26,6 +26,7 @@ import {
 } from './chat/interfaces/chat-message';
 import commonChat, {
   clearChat,
+  exportChat,
   getChat,
   patchMessage,
   publishMessage,
@@ -147,6 +148,15 @@ const plugin: FastifyPluginAsync<GraaspChatPluginOptions> = async (
       { schema: getChat },
       async ({ member, params: { itemId }, log }) => {
         const tasks = taskManager.createGetTaskSequence(member, itemId);
+        return runner.runSingleSequence(tasks, log);
+      },
+    );
+
+    fastify.get<{ Params: { itemId: string } }>(
+      '/:itemId/export/chat',
+      { schema: exportChat },
+      async ({ member, params: { itemId }, log }) => {
+        const tasks = taskManager.createExportChatTaskSequence(member, itemId);
         return runner.runSingleSequence(tasks, log);
       },
     );

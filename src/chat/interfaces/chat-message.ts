@@ -31,3 +31,16 @@ export interface ChatMessage {
   updatedAt: string;
   body: string;
 }
+
+/**
+ * Shape of chat messages to be exported
+ */
+export interface ExportedChatMessage {
+  id: string;
+  chatId: string;
+  creator: string;
+  creatorName: string;
+  createdAt: string;
+  updatedAt: string;
+  body: string;
+}

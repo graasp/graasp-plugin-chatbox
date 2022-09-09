@@ -1,6 +1,6 @@
 import { DatabaseTransactionConnection as TrxHandler, sql } from 'slonik';
 
-import { ChatMessage } from './interfaces/chat-message';
+import { ChatMessage, ExportedChatMessage } from './interfaces/chat-message';
 
 /**
  * Database layer for chat storage
@@ -26,6 +26,32 @@ export class ChatService {
     sql`, `,
   );
 
+  // the 'safe' way to dynamically generate the columns names:
+  private static allColumnsWithTablePrefix = (tableName) =>
+    sql.join(
+      [
+        'id',
+        ['chat_id', 'chatId'],
+        'creator',
+        ['created_at', 'createdAt'],
+        ['updated_at', 'updatedAt'],
+        'body',
+      ].map((c) =>
+        !Array.isArray(c)
+          ? sql.identifier([tableName, c])
+          : sql.join(
+              [
+                // prefix column names with table alias
+                sql.identifier([tableName, c[0]]),
+                // no prefix here
+                sql.identifier([c[1]]),
+              ],
+              sql` AS `,
+            ),
+      ),
+      sql`, `,
+    );
+
   static tableName = sql`chat_message`;
 
   /**
@@ -44,6 +70,31 @@ export class ChatService {
             FROM chat_message
             WHERE chat_id = ${chatId}
             ORDER BY created_at ASC
+        `,
+      )
+      .then(({ rows }) => rows.slice(0));
+  }
+
+  /**
+   * Retrieves all the messages of the given chat
+   * with the member names
+   * @param chatId Id of chat to retrieve
+   * @param transactionHandler database handler
+   */
+  async export(
+    chatId: string,
+    transactionHandler: TrxHandler,
+  ): Promise<ExportedChatMessage[]> {
+    return transactionHandler
+      .query<ExportedChatMessage>(
+        sql`
+            SELECT ${ChatService.allColumnsWithTablePrefix(
+              'chat_message',
+            )}, member.name AS ${sql.identifier(['creatorName'])}
+            FROM chat_message, member
+            WHERE chat_message.chat_id = ${chatId}
+            AND chat_message.creator = member.id
+            ORDER BY chat_message.created_at ASC
         `,
       )
       .then(({ rows }) => rows.slice(0));

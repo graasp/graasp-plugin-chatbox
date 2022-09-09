@@ -20,6 +20,7 @@ import { MessageBodyType } from './interfaces/chat-message';
 import { ChatTaskManager } from './interfaces/chat-task-manager';
 import { ClearChatTask } from './tasks/clear-chat-task';
 import { DeleteMessageTask } from './tasks/delete-message-task';
+import { ExportChatTask } from './tasks/export-chat-task';
 import { GetChatTask } from './tasks/get-chat-task';
 import { GetMessageTask } from './tasks/get-message-task';
 import { PatchMessageTask } from './tasks/patch-message-task';
@@ -57,6 +58,10 @@ export class TaskManager implements ChatTaskManager {
 
   getGetChatTaskName(): string {
     return GetChatTask.name;
+  }
+
+  getExportChatTaskName(): string {
+    return ExportChatTask.name;
   }
 
   getPublishMessageTaskName(): string {
@@ -99,6 +104,27 @@ export class TaskManager implements ChatTaskManager {
     );
 
     return [...t1, t2];
+  }
+
+  createExportChatTaskSequence(
+    member: Member,
+    chatId: string,
+  ): Task<Actor, unknown>[] {
+    const t1 = this.itemTaskManager.createGetTaskSequence(member, chatId);
+    const t2 = this.itemMembershipTaskManager.createGetMemberItemMembershipTask(
+      member,
+      { validatePermission: PermissionLevel.Admin },
+    );
+    t2.getInput = () => ({ item: t1[0].result as Item });
+    const t3 = new ExportChatTask(
+      member,
+      chatId,
+      this.itemService,
+      this.itemMembershipService,
+      this.chatService,
+    );
+
+    return [...t1, t2, t3];
   }
 
   createPublishMessageTaskSequence(
