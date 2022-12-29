@@ -97,12 +97,12 @@ export function registerChatMentionsWsHooks(
 
   // on item delete -> pre-hook should remove the mentions from the channel
   const deleteItemTaskName = itemTaskManager.getDeleteTaskName();
-  runner.setTaskPreHookHandler<Item>(deleteItemTaskName, async (item) => {
+  runner.setTaskPreHookHandler<Item>(deleteItemTaskName, async (item, actor, { handler }) => {
     // get mentions to be deleted
     if (item.path) {
       const mentions = await mentionService.getMentionsByItemPath(
         item.path,
-        validationDbHandler,
+        handler,
       );
       mentions.map((m) =>
         websockets.publish(
@@ -118,10 +118,10 @@ export function registerChatMentionsWsHooks(
   const deleteChatMessageTaskName = chatTaskManager.getDeleteMessageTaskName();
   runner.setTaskPreHookHandler<ChatMessage>(
     deleteChatMessageTaskName,
-    async (message) => {
+    async (message, actor, { handler }) => {
       const mentions = await mentionService.getMentionsByMessageId(
         message.id,
-        validationDbHandler,
+        handler,
       );
       mentions.map((m) =>
         websockets.publish(
