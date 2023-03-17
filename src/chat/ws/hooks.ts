@@ -4,8 +4,9 @@ import {
   ItemMembershipService,
   ItemService,
   TaskRunner,
+  Websocket,
+  WebsocketService,
 } from '@graasp/sdk';
-import { AccessDenied, NotFound, WebSocketService } from 'graasp-websockets';
 
 import { Chat } from '../interfaces/chat';
 import { ChatMessage } from '../interfaces/chat-message';
@@ -13,7 +14,7 @@ import { ChatTaskManager } from '../interfaces/chat-task-manager';
 import { ItemChatEvent, itemChatTopic } from './events';
 
 export function registerChatWsHooks(
-  websockets: WebSocketService,
+  websockets: WebsocketService,
   runner: TaskRunner<Actor>,
   itemService: ItemService,
   itemMembershipService: ItemMembershipService,
@@ -25,7 +26,7 @@ export function registerChatWsHooks(
     // item must exist
     const item = await itemService.get(itemId, validationDbHandler);
     if (!item) {
-      reject(NotFound());
+      reject(new Websocket.NotFoundError());
     }
     // member must have at least read access to item
     const allowed = await itemMembershipService.canRead(
@@ -34,7 +35,7 @@ export function registerChatWsHooks(
       validationDbHandler,
     );
     if (!allowed) {
-      reject(AccessDenied());
+      reject(new Websocket.AccessDeniedError());
     }
   });
 

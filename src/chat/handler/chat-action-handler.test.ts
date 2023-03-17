@@ -13,7 +13,11 @@ import {
   MESSAGE_ID,
   MOCK_HOSTS,
 } from '../../../test/fixtures/mock-constants';
-import { GRAASP_ACTOR, buildChatUrl, checkActionData } from '../../../test/utils';
+import {
+  GRAASP_ACTOR,
+  buildChatUrl,
+  checkActionData,
+} from '../../../test/utils';
 import { ACTION_TYPES } from '../../constants/constants';
 import { createChatActionHandler } from './chat-action-handler';
 
@@ -27,12 +31,12 @@ const itemService = {
   })),
 } as unknown as ItemService;
 const reply = null as unknown as FastifyReply;
-const log = {debug: jest.fn()} as unknown as FastifyLoggerInstance;
+const log = { debug: jest.fn() } as unknown as FastifyLoggerInstance;
 const request = {
   url: buildChatUrl(ITEM_ID),
   method: HttpMethod.POST,
   member: GRAASP_ACTOR,
-  params: {itemId: ITEM_ID},
+  params: { itemId: ITEM_ID },
   query: {},
   ip: '',
   headers: {},

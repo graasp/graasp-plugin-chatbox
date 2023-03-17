@@ -6,8 +6,9 @@ import {
   ItemTaskManager,
   MemberService,
   TaskRunner,
+  Websocket,
+  WebsocketService,
 } from '@graasp/sdk';
-import { AccessDenied, NotFound, WebSocketService } from 'graasp-websockets';
 
 import { ChatMessage } from '../../chat/interfaces/chat-message';
 import { ChatTaskManager } from '../../chat/interfaces/chat-task-manager';
@@ -17,7 +18,7 @@ import { ChatMentionsTaskManager } from '../interfaces/chat-mentions-task-manage
 import { MentionEvent, chatMentionTopic } from './events';
 
 export function registerChatMentionsWsHooks(
-  websockets: WebSocketService,
+  websockets: WebsocketService,
   runner: TaskRunner<Actor>,
   mentionService: MentionService,
   memberService: MemberService,
@@ -32,11 +33,11 @@ export function registerChatMentionsWsHooks(
     // member must exist
     const memberFromDb = await memberService.get(memberId, validationDbHandler);
     if (!memberFromDb) {
-      reject(NotFound());
+      reject(new Websocket.NotFoundError());
     }
     // member must request his own channel
     if (memberId !== member.id) {
-      reject(AccessDenied());
+      reject(new Websocket.AccessDeniedError());
     }
   });
 
@@ -97,22 +98,25 @@ export function registerChatMentionsWsHooks(
 
   // on item delete -> pre-hook should remove the mentions from the channel
   const deleteItemTaskName = itemTaskManager.getDeleteTaskName();
-  runner.setTaskPreHookHandler<Item>(deleteItemTaskName, async (item, actor, { handler }) => {
-    // get mentions to be deleted
-    if (item.path) {
-      const mentions = await mentionService.getMentionsByItemPath(
-        item.path,
-        handler,
-      );
-      mentions.map((m) =>
-        websockets.publish(
-          chatMentionTopic,
-          m.memberId,
-          MentionEvent('delete', m),
-        ),
-      );
-    }
-  });
+  runner.setTaskPreHookHandler<Item>(
+    deleteItemTaskName,
+    async (item, actor, { handler }) => {
+      // get mentions to be deleted
+      if (item.path) {
+        const mentions = await mentionService.getMentionsByItemPath(
+          item.path,
+          handler,
+        );
+        mentions.map((m) =>
+          websockets.publish(
+            chatMentionTopic,
+            m.memberId,
+            MentionEvent('delete', m),
+          ),
+        );
+      }
+    },
+  );
 
   // on message delete -> pre-hook should remove the mentions from the channel
   const deleteChatMessageTaskName = chatTaskManager.getDeleteMessageTaskName();

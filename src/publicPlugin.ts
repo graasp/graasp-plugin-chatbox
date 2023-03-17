@@ -9,9 +9,9 @@
 import { FastifyPluginAsync } from 'fastify';
 import fp from 'fastify-plugin';
 
+import { WebsocketService } from '@graasp/sdk';
 // import this plugin to apply fastify declaration (public)
 import publicPlugin from 'graasp-plugin-public';
-import { WebSocketService } from 'graasp-websockets';
 
 import { ChatService } from './chat/db-service';
 import common, { getChat } from './chat/schemas';
@@ -21,7 +21,7 @@ import { MentionService } from './mentions/db-service';
 // hack to force compiler to discover websockets service
 declare module 'fastify' {
   interface FastifyInstance {
-    websockets?: WebSocketService;
+    websockets?: WebsocketService;
   }
 }
 /**
