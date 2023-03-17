@@ -1,11 +1,11 @@
 {
-  "name": "graasp-plugin-chatbox",
+  "name": "@graasp/plugin-chatbox",
   "version": "1.0.0",
-  "description": "A chatbox back-end plugin for graasp",
+  "description": "A plugin for the graasp chatbox",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "repository": "git@github.com:graasp/graasp-plugin-chatbox.git",
-  "author": "React EPFL",
+  "author": "Graasp",
   "contributors": [
     "Alexandre Chau",
     "Juan Carlos Farah",
