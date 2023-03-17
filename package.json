@@ -30,31 +30,31 @@
     "post-commit": "git status"
   },
   "dependencies": {
-    "@graasp/sdk": "github:graasp/graasp-sdk",
-    "fastify": "^3.29.1",
-    "fastify-plugin": "^3.0.0",
+    "@graasp/plugin-websockets": "1.0.0",
+    "@graasp/sdk": "0.9.2",
+    "fastify": "3.29.5",
+    "fastify-plugin": "3.0.1",
     "graasp-mailer": "github:graasp/graasp-mailer",
     "graasp-plugin-actions": "github:graasp/graasp-plugin-actions",
-    "graasp-plugin-public": "github:graasp/graasp-plugin-public",
-    "graasp-websockets": "github:graasp/graasp-websockets"
+    "graasp-plugin-public": "github:graasp/graasp-plugin-public"
   },
   "devDependencies": {
-    "@commitlint/cli": "17.0.3",
-    "@commitlint/config-conventional": "17.0.3",
-    "@trivago/prettier-plugin-sort-imports": "3.2.0",
-    "@types/jest": "28.1.5",
-    "@typescript-eslint/eslint-plugin": "5.30.6",
-    "@typescript-eslint/parser": "5.30.6",
-    "eslint": "8.19.0",
-    "eslint-config-prettier": "8.5.0",
-    "eslint-plugin-jest": "26.5.3",
-    "husky": "8.0.1",
-    "jest": "28.1.3",
-    "prettier": "2.7.1",
+    "@commitlint/cli": "17.4.4",
+    "@commitlint/config-conventional": "17.4.4",
+    "@trivago/prettier-plugin-sort-imports": "4.1.1",
+    "@types/jest": "29.5.0",
+    "@typescript-eslint/eslint-plugin": "5.55.0",
+    "@typescript-eslint/parser": "5.55.0",
+    "eslint": "8.36.0",
+    "eslint-config-prettier": "8.7.0",
+    "eslint-plugin-jest": "27.2.1",
+    "husky": "8.0.3",
+    "jest": "29.5.0",
+    "prettier": "2.8.4",
     "shx": "0.3.4",
-    "slonik": "28.1.1",
-    "ts-jest": "28.0.6",
-    "typescript": "4.7.4"
+    "slonik": "28.2.0",
+    "ts-jest": "29.0.5",
+    "typescript": "5.0.2"
   },
   "packageManager": "yarn@3.2.1"
 }
