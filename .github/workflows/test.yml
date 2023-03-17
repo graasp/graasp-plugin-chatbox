@@ -4,6 +4,10 @@ on: [push]
 
 jobs:
   build-node:
+    concurrency:
+      group: ${{ github.workflow }}-${{ github.head_ref || github.ref }}
+      cancel-in-progress: true
+
     runs-on: ubuntu-latest
 
     steps:
@@ -25,5 +29,5 @@ jobs:
       - name: yarn install, build, and test
         run: |
           yarn
-          yarn build 
+          yarn build
           yarn test
