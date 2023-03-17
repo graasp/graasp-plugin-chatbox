@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.1](https://github.com/graasp/graasp-plugin-chatbox/compare/v1.0.0...v1.0.1) (2023-03-17)
+
+
+### Bug Fixes
+
+* rename package and author ([#52](https://github.com/graasp/graasp-plugin-chatbox/issues/52)) ([0bc6b21](https://github.com/graasp/graasp-plugin-chatbox/commit/0bc6b21c5f437e9e927d9095f89bbbde878eaaf8))
+
 ## 1.0.0 (2023-03-17)
 
 
